@@ -1,1 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MHP Estimator V15</title>
+
+<style>
+body {
+font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+background: #f6f7f8;
+color: #222;
+margin: 0;
+padding: 30px 0;
+}
+
+.container {
+max-width: 1050px;
+margin: 0 auto;
+padding: 0 20px;
+}
+
+h1 {
+font-size: 26px;
+margin-bottom: 20px;
+}
+
+h2 {
+font-size: 18px;
+margin-bottom: 10px;
+border-bottom: 1px solid #ddd;
+padding-bottom: 6px;
+}
+
+.card {
+background: #ffffff;
+border: 1px solid #ddd;
+border-radius: 6px;
+padding: 18px 20px;
+margin-bottom: 20px;
+}
+
+.grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 16px;
+}
+
+.grid-2 {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 20px;
+}
+
+label {
+font-size: 13px;
+font-weight: 600;
+display: block;
+margin-bottom: 6px;
+}
+
+/* ===== Tooltip styles (ADDED) ===== */
+.label-with-tooltip {
+display: inline-flex;
+align-items: center;
+gap: 6px;
+}
+
+.tooltip-icon {
+position: relative;
+cursor: pointer;
+font-size: 13px;
+color: #555;
+user-select: none;
+}
+
+.tooltip-text {
+visibility: hidden;
+opacity: 0;
+width: 300px;
+background-color: #222;
+color: #fff;
+text-align: left;
+border-radius: 6px;
+padding: 10px;
+position: absolute;
+z-index: 999;
+bottom: 130%;
+left: 50%;
+transform: translateX(-50%);
+transition: opacity 0.2s ease;
+font-size: 12px;
+line-height: 1.4;
+}
+
+.tooltip-text::after {
+content: "";
+position: absolute;
+top: 100%;
+left: 50%;
+transform: translateX(-50%);
+border-width: 6px;
+border-style: solid;
+border-color: #222 transparent transparent transparent;
+}
+
+.tooltip-text.show {
+visibility: visible;
+opacity: 1;
+}
+/* ===== End tooltip styles ===== */
+
+input, select, button {
+width: 100%;
+padding: 8px 10px;
+font-size: 14px;
+}
+
+button {
+background: #1f4fd8;
+color: #fff;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+
+button:hover {
+background: #183fb0;
+}
+
+.highlight {
+font-size: 32px;
+font-weight: 700;
+margin: 8px 0;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-size: 14px;
+}
+
+th, td {
+padding: 8px 6px;
+}
+
+th {
+border-bottom: 1px solid #ccc;
+text-align: left;
+}
+
+td {
+border-bottom: 1px solid #eee;
+}
+
+.right {
+text-align: right;
+}
+
+.center {
+text-align: center;
+}
+
+.mono {
+font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.pos { color: #1a7f37; font-weight: 600; }
+.neg { color: #c92c2c; font-weight: 600; }
+
+.disclaimer {
+font-size: 12px;
+color: #666;
+text-align: center;
+margin-top: 30px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>Maximum Home Price Estimator</h1>
+
+<div style="display: flex; justify-content: flex-end">
+  <div>MHP-Estimator&#169;2025</div>
+</div>
+
+<!-- USER INPUTS -->
+<div class="card">
+<h2>User Inputs</h2>
+<div class="grid">
+  <div>
+    <label class="label-with-tooltip">
+      Maximum monthly housing payment
+      <span class="tooltip-icon">ⓘ
+        <span class="tooltip-text">
+          Some properties such as Condos, require Association Fees. If for example, you were interested in Condos and the aveage Association Fee is approx. $400 / mo. and your wanted a Maxium Housing Payment of $2,900, then you should enter $2,500 as your Maximum Housing Payment.
+        </span>
+      </span>
+    </label>
+    <input id="maxPayment" type="text" inputmode="numeric" value="4,000">
+  </div>
+  <div>
+    <label class="label-with-tooltip">
+      Maximum funds available to use
+      <span class="tooltip-icon">ⓘ
+        <span class="tooltip-text">
+          This estimator assumes a minimum of 5% down payment on a conventional loan. If your goal is a down payment of less then 5%, this estimator will not help you.
+        </span>
+      </span>
+    </label>
+    <input id="maxCash" type="text" inputmode="numeric" value="200,000">
+  </div>
+  <div>
+    <label>State</label>
+    <select id="state"></select>
+  </div>
+</div>
+<br>
+<button onclick="runCalculator()">Run Estimation</button>
+</div>
+
+<div id="output"></div>
+
+<div class="disclaimer">
+For entertainment purposes only.
+</div>
+
+</div>
+
+<script>
+"use strict";
+
+/* =====================
+INPUT COMMA FORMATTING (OPTIONAL)
+===================== */
+function formatNumber(value) {
+if (!value) return "";
+const n = value.toString().replace(/,/g, "");
+if (isNaN(n)) return "";
+return Number(n).toLocaleString("en-US");
+}
+
+function getNumericValue(id) {
+const raw = document.getElementById(id).value.replace(/,/g, "");
+return Number(raw) || 0;
+}
+
+["maxPayment", "maxCash"].forEach(id => {
+const el = document.getElementById(id);
+el.addEventListener("focus", () => {
+el.value = el.value.replace(/,/g, "");
+});
+el.addEventListener("blur", () => {
+el.value = formatNumber(el.value);
+});
+});
+
+/* ===== Tooltip click handling (ADDED) ===== */
+document.addEventListener("click", function (e) {
+document.querySelectorAll(".tooltip-icon").forEach(icon => {
+  const tip = icon.querySelector(".tooltip-text");
+  if (icon.contains(e.target)) {
+    tip.classList.toggle("show");
+  } else {
+    tip.classList.remove("show");
+  }
+});
+});
+/* ===== End tooltip handling ===== */
+
+/* =====================
+FIXED ASSUMPTIONS
+===================== */
+const BASE_RATE = 0.0615;
+const TERM_MONTHS = 360;
+const MIN_DP_PCT = 0.05;
+ 
+// PMI factors
+const LBPMI = 0.0034;
+const HBPMI = 0.0115;
+ 
+/* =====================
+STATE DATA (editable later)
+===================== */
+ 
+const STATE_DATA = {
+  AL:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  AK:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  AZ:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  AR:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  CA:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2400 },
+  CO:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  CT:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  DE:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  FL:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  GA:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  HI:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  ID:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  IL:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  IN:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  IA:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  KS:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  KY:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  LA:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  ME:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  MD:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  MA:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  MI:{ tax:0.0125, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  MN:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  MS:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  MO:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  MT:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  NE:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  NV:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  NH:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  NJ:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  NM:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  NY:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  NC:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  ND:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  OH:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  OK:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  OR:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  PA:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  RI:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  SC:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  SD:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  TN:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  TX:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  UT:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  VT:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  VA:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  WA:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  WV:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  WI:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 },
+  WY:{ tax:0.0115, cc:0.035, hoiBaseCoverage:300000, hoiBaseAnnual:2200 }
+};
+ 
+const stateSelect = document.getElementById("state");
+Object.keys(STATE_DATA).forEach(s=>{
+const opt=document.createElement("option");
+opt.value=s;
+opt.textContent=s;
+stateSelect.appendChild(opt);
+});
+stateSelect.value="MI";
+ 
+/* =====================
+RATE GRID
+===================== */
+const RATE_INCREMENT = 0.00125;
+const GRID_BASE_RATE = Math.floor(BASE_RATE / RATE_INCREMENT) * RATE_INCREMENT;
+const RATE_START = GRID_BASE_RATE - 0.005;
+const RATE_END = GRID_BASE_RATE + 0.005;
+ 
+/* =====================
+CORE ENGINE
+===================== */
+function calculateMHP(rate, maxPmt, maxCash, state) {
+ const monthlyRate = rate / 12;
+ const PIF =
+   (monthlyRate * Math.pow(1 + monthlyRate, TERM_MONTHS)) /
+   (Math.pow(1 + monthlyRate, TERM_MONTHS) - 1);
+ 
+ let hp = 50000;
+ let lastValid = null;
+ 
+ while (true) {
+   const cc = hp * STATE_DATA[state].cc;
+   const dp = maxCash - cc;
+   if (dp < hp * MIN_DP_PCT) break;
+ 
+   const la = hp - dp;
+   const ltv = la / hp;
+ 
+   const pi = la * PIF;
+   const tax = (hp * STATE_DATA[state].tax) / 12;
+ 
+   const hoiCoverage = Math.max(la, 0.8 * hp);
+   const hoiAnnual =
+     STATE_DATA[state].hoiBaseAnnual *
+     (hoiCoverage / STATE_DATA[state].hoiBaseCoverage);
+   const hoi = hoiAnnual / 12;
+ 
+   let pmi = 0;
+   let pmiFactor = 0;
+   if (ltv > 0.8) {
+     if (ltv >= 0.95) {
+       pmiFactor = HBPMI;
+     } else {
+       const slope = (HBPMI - LBPMI) / (0.95 - 0.8001);
+       pmiFactor = LBPMI + slope * (ltv - 0.8001);
+     }
+     pmi = (la * pmiFactor) / 12;
+   }
+ 
+   const pmt = pi + tax + hoi + pmi;
+   const ctc = dp + cc;
+ 
+   if (pmt <= maxPmt && ctc <= maxCash) {
+     lastValid = { hp, la, dp, cc, ltv, pi, tax, hoi, pmi, pmt, ctc, pmiFactor };
+     hp += 1000;
+   } else {
+     break;
+   }
+ }
+ 
+ return lastValid ? { rate, ...lastValid } : null;
+}
+ 
+/* =====================
+RUN + RENDER
+===================== */
+function money(x) {
+ return x.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+ 
+function runCalculator() {
+ const maxPmt = getNumericValue("maxPayment"); 
+ const maxCash = getNumericValue("maxCash");
+ const state = document.getElementById("state").value;
+ 
+ const base = calculateMHP(BASE_RATE, maxPmt, maxCash, state);
+ if (!base) return;
+ 
+ let sensitivityRows = "";
+ for (let r = RATE_START; r <= RATE_END + 1e-9; r += RATE_INCREMENT) {
+   const res = calculateMHP(r, maxPmt, maxCash, state);
+   if (!res) continue;
+   const delta = res.hp - base.hp;
+   sensitivityRows += `
+     <tr>
+       <td>${(r * 100).toFixed(3)}%</td>
+       <td class="right">$${res.hp.toLocaleString()}</td>
+       <td class="right ${delta >= 0 ? "pos" : "neg"}">
+         ${delta >= 0 ? "+" : "−"}$${Math.abs(delta).toLocaleString()}
+       </td>
+     </tr>`;
+ }
+ 
+ document.getElementById("output").innerHTML = `
+ <div class="card">
+   <div>Using your inputs and an "example" interest rate of <b> ${(BASE_RATE * 100).toFixed(3)}%</b>*, the<div>
+   <div class="highlight">Maximum Home Price = $${base.hp.toLocaleString()}</div>
+   <div>with a Loan Amount of <b>$${base.la.toLocaleString()}</b>.</div>
+ </div>
+ 
+ <div class="card">
+   <h2>Payment Breakdown</h2>
+   <table class="mono">
+     <tr><th>Payment</th><th class="right">/ Month</th><th class="right">Factor*</th></tr>
+     <tr><td>Pricipal &amp; Interest (P&amp;I)</td><td class="right">$${money(base.pi)}</td><td></td></tr>
+     <tr><td>Property Tax</td><td class="right">+ ${money(base.tax)}</td><td class="right">${(STATE_DATA[state].tax * 100).toFixed(3)}%</td></tr>
+     <tr><td>Homeowners Insurance</td><td class="right">+ ${money(base.hoi)}</td><td class="right">$${STATE_DATA[state].hoiBaseAnnual.toLocaleString()} / $${STATE_DATA[state].hoiBaseCoverage.toLocaleString()}</td></tr>
+     <tr><td>PMI</td><td class="right">+ ${money(base.pmi)}</td><td class="right">${(base.pmiFactor * 100).toFixed(2)}%</td></tr>
+     <tr><th>Total</th><th class="right">= $${money(base.pmt)}</th><th></th></tr>
+   </table>
+ </div>
+ 
+ <div class="card">
+   <h2>Transaction Details</h2>
+   <table class="mono">
+     <tr><th>Amount</th><th class="right">Value</th><th class="right">Factor*</th></tr>
+     <tr><td>Maximum Home Price (MHP)</td><td class="right">$${base.hp.toLocaleString()}</td></td></tr>
+     <tr><td>Loan Amount</td><td class="right">- ${base.la.toLocaleString()}</td><td class="right">LTV = ${(base.ltv * 100).toFixed(2)}%</td></tr>
+     <tr><td>Down Payment</td><td class="right">= $${base.dp.toLocaleString()}</td><td class="right">${(base.dp / base.hp * 100).toFixed(2)}%</td></tr>
+     <tr><td>Closing Costs</td><td class="right">+ $${base.cc.toLocaleString()}</td><td class="right">${(base.cc / base.hp * 100).toFixed(2)}%<td></tr>
+     <tr><th>Total Cash to Close</th><th class="right">= $${base.ctc.toLocaleString()}</th><th></th></tr>
+   </table>
+ </div>
+ 
+ <div class="card">
+   <h2>Interest Rate Sensitivity</h2>
+<div class="mono">How much would the Maximum Home Price change if interest rate increased or decreased from ${(BASE_RATE * 100).toFixed(3)}% used in the estimate.</div>
+   <table class="mono">
+     <tr><th>Interest Rate Example</th><th class="right">Maximum Home Price</th><th class="right">vs $${base.hp.toLocaleString()}E.</th></tr>
+     ${sensitivityRows}
+   </table>
+ </div>`;
+}
+ 
+runCalculator();
+</script>
+</body>
+</html>
 
