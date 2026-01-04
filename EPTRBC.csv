@@ -66,14 +66,14 @@ Alabama,Walker County,0.0027,0.035,300000,3114
 Alabama,Washington County,0.0023,0.035,300000,3114
 Alabama,Wilcox County,0.0037,0.035,300000,3114
 Alabama,Winston County,0.0033,0.035,300000,1035
-Alaska,Aleutians East Borough,,0.035,300000,1035
+Alaska,Aleutians East Borough,0.0091,0.035,300000,1035
 Alaska,Aleutians West Census Area,0.0071,0.035,300000,1035
 Alaska,Anchorage Municipality,0.0129,0.035,300000,1035
-Alaska,Bethel Census Area,,0.035,300000,1035
+Alaska,Bethel Census Area,0.0091,0.035,300000,1035
 Alaska,Bristol Bay Borough,0.0072,0.035,300000,1035
 Alaska,Chugach Census Area,0.0092,0.035,300000,1035
 Alaska,Copper River Census Area,0.0008,0.035,300000,1035
-Alaska,Denali Borough,,0.035,300000,1035
+Alaska,Denali Borough,0.0091,0.035,300000,1035
 Alaska,Dillingham Census Area,0.0176,0.035,300000,1035
 Alaska,Fairbanks North Star Borough,0.0126,0.035,300000,1035
 Alaska,Haines Borough,0.008,0.035,300000,1035
@@ -83,7 +83,7 @@ Alaska,Kenai Peninsula Borough,0.0066,0.035,300000,1035
 Alaska,Ketchikan Gateway Borough,0.0068,0.035,300000,1035
 Alaska,Kodiak Island Borough,0.0092,0.035,300000,1035
 Alaska,Kusilvak Census Area,0.0027,0.035,300000,1035
-Alaska,Lake and Peninsula Borough,,0.035,300000,1035
+Alaska,Lake and Peninsula Borough,0.0091,0.035,300000,1035
 Alaska,Matanuska-Susitna Borough,0.011,0.035,300000,1035
 Alaska,Nome Census Area,0.0155,0.035,300000,1035
 Alaska,North Slope Borough,0.0095,0.035,300000,1035
@@ -549,7 +549,7 @@ Georgia,Wilkinson County,0.0088,0.035,300000,2041
 Georgia,Worth County,0.0109,0.035,300000,2041
 Hawaii,Hawaii County,0.0029,0.035,300000,1296
 Hawaii,Honolulu County,0.0028,0.035,300000,1296
-Hawaii,Kalawao County,,0.035,300000,1296
+Hawaii,Kalawao County,0.0032,0.035,300000,1296
 Hawaii,Kauai County,0.0023,0.035,300000,1296
 Hawaii,Maui County,0.0017,0.035,300000,1296
 Idaho,Ada County,0.0056,0.035,300000,1409
@@ -1753,7 +1753,7 @@ Nevada,Clark County,0.005,0.035,300000,1074
 Nevada,Douglas County,0.0045,0.035,300000,1074
 Nevada,Elko County,0.0051,0.035,300000,1074
 Nevada,Esmeralda County,0.0059,0.035,300000,1074
-Nevada,Eureka County,,0.035,300000,1074
+Nevada,Eureka County,0.0049,0.035,300000,1074
 Nevada,Humboldt County,0.0051,0.035,300000,1074
 Nevada,Lander County,0.0063,0.035,300000,1074
 Nevada,Lincoln County,0.0054,0.035,300000,1074
@@ -2397,7 +2397,7 @@ South Dakota,Harding County,0.0093,0.035,300000,3152
 South Dakota,Hughes County,0.0114,0.035,300000,3152
 South Dakota,Hutchinson County,0.0112,0.035,300000,3152
 South Dakota,Hyde County,0.0123,0.035,300000,3152
-South Dakota,Jackson County,,0.035,300000,3152
+South Dakota,Jackson County,0.0099,0.035,300000,3152
 South Dakota,Jerauld County,0.0095,0.035,300000,3152
 South Dakota,Jones County,0.0116,0.035,300000,3152
 South Dakota,Kingsbury County,0.01,0.035,300000,3152
@@ -2674,7 +2674,7 @@ Texas,Limestone County,0.0119,0.035,300000,3899
 Texas,Lipscomb County,0.0136,0.035,300000,3899
 Texas,Live Oak County,0.0088,0.035,300000,3899
 Texas,Llano County,0.008,0.035,300000,3899
-Texas,Loving County,,0.035,300000,3899
+Texas,Loving County,0.0136,0.035,300000,3899
 Texas,Lubbock County,0.0156,0.035,300000,3899
 Texas,Lynn County,0.0173,0.035,300000,3899
 Texas,McCulloch County,0.0137,0.035,300000,3899
@@ -2716,7 +2716,7 @@ Texas,Presidio County,0.0158,0.035,300000,3899
 Texas,Rains County,0.0109,0.035,300000,3899
 Texas,Randall County,0.0158,0.035,300000,3899
 Texas,Reagan County,0.0111,0.035,300000,3899
-Texas,Real County,,0.035,300000,3899
+Texas,Real County,0.0136,0.035,300000,3899
 Texas,Red River County,0.0098,0.035,300000,3899
 Texas,Reeves County,0.0118,0.035,300000,3899
 Texas,Refugio County,0.014,0.035,300000,3899
