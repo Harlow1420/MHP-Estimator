@@ -53,10 +53,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 <body>
 <div class="container">
 
-<div></div><h1>Maximum Home Price Estimator</h1></div>div>
-<div style="display: flex; justify-content: flex-end">
-  <div>MHP-Estimator&#169;2025</div>
-
+<h1>Maximum Home Price Estimator</h1>
 
 <div class="card">
 <h2>User Inputs</h2>
@@ -101,7 +98,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 
 <div id="output"></div>
 
-<div class="disclaimer">For entertainment purposes only</div>
+<div class="disclaimer">*** For entertainment purposes only ***</div>
 </div>
 
 <script>
@@ -202,9 +199,8 @@ function runCalculator(){
 
   output.innerHTML=`
   <div class="card">
-<div>Using your inputs and an "example" interest rate of <b> ${(BASE_RATE * 100).toFixed(3)}%</b>*, the<div>
-    <div class="highlight">Maximum Housing Payment (MHP) = $${base.hp.toLocaleString()}</div>
-    <div>with a maximum Loan Amount of<b>$${base.la.toLocaleString()}</b></div>
+    <div class="highlight">$${base.hp.toLocaleString()}</div>
+    <div>Loan Amount: <b>$${base.la.toLocaleString()}</b></div>
   </div>
 
   <div class="card">
@@ -221,8 +217,8 @@ function runCalculator(){
   <div class="card">
     <h2>Transaction Details</h2>
     <table class="mono">
-      <tr><td>Down Payment</td><td class="right">$${base.dp.toLocaleString()}<td> (${(base.dp/base.hp*100).toFixed(2)}%)</td></tr>
-      <tr><td>Closing Costs</td><td class="right">$${base.cc.toLocaleString()}<td> (${(base.cc/base.hp*100).toFixed(2)}%)</td></tr>
+      <tr><td>Down Payment</td><td class="right">$${base.dp.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td></tr>
+      <tr><td>Closing Costs</td><td class="right">$${base.cc.toLocaleString()} (${(base.cc/base.hp*100).toFixed(2)}%)</td></tr>
       <tr><td>LTV</td><td class="right">${(base.ltv*100).toFixed(2)}%</td></tr>
     </table>
   </div>
