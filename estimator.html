@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V15.5</title>
+<title>MHP Estimator V15.75</title>
 
 <style>
 body {
@@ -32,6 +32,12 @@ label { font-size:13px; font-weight:600; display:block; margin-bottom:6px; }
   transform:translate(-50%, -10px);
   transition:opacity .2s;
 }
+
+.label-with-tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
 .tooltip-text.show { visibility:visible; opacity:1; }
 
 input, select, button { width:100%; padding:8px 10px; font-size:14px; }
@@ -62,7 +68,7 @@ MHP-Estimator&#169;2025
     <label class="label-with-tooltip">
       Maximum Monthly Housing Payment
       <span class="tooltip-icon">ⓘ
-        <span class="tooltip-text show">
+        <span class="tooltip-text">
           Enter your target housing payment excluding HOA or condo fees.
         </span>
       </span>
@@ -74,7 +80,7 @@ MHP-Estimator&#169;2025
     <label class="label-with-tooltip">
       Maximum Funds Available to Use
       <span class="tooltip-icon">ⓘ
-        <span class="tooltip-text show">
+        <span class="tooltip-text">
           Assumes a minimum 5% down payment on a conventional loan.
         </span>
       </span>
@@ -237,4 +243,3 @@ loadCSV().then(runCalculator);
 </script>
 </body>
 </html>
-
