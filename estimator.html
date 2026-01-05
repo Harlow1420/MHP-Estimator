@@ -12,136 +12,41 @@ body {
   margin: 0;
   padding: 30px 0;
 }
-
-.container {
-  max-width: 1050px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-h1 { font-size: 26px; margin-bottom: 20px; }
-h2 {
-  font-size: 18px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 6px;
-}
-
+.container { max-width:1050px; margin:0 auto; padding:0 20px; }
+h1 { font-size:26px; margin-bottom:20px; }
+h2 { font-size:18px; border-bottom:1px solid #ddd; padding-bottom:6px; }
 .card {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 18px 20px;
-  margin-bottom: 20px;
+  background:#fff; border:1px solid #ddd; border-radius:6px;
+  padding:18px 20px; margin-bottom:20px;
 }
+.grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+label { font-size:13px; font-weight:600; display:block; margin-bottom:6px; }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-
-label {
-  font-size: 13px;
-  font-weight: 600;
-  display: block;
-  margin-bottom: 6px;
-}
-
-/* ===== Tooltip styles ===== */
-.label-with-tooltip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.tooltip-icon {
-  position: relative;
-  cursor: pointer;
-  font-size: 13px;
-  color: #555;
-  user-select: none;
-}
-
+.label-with-tooltip { display:inline-flex; align-items:center; gap:6px; }
+.tooltip-icon { cursor:pointer; color:#555; }
 .tooltip-text {
-  visibility: hidden;
-  opacity: 0;
-  width: 300px;
-  background-color: #222;
-  color: #fff;
-  text-align: left;
-  border-radius: 6px;
-  padding: 10px;
-  position: absolute;
-  z-index: 999;
-  bottom: 130%;
-  left: 50%;
-  transform: translateX(-50%);
-  transition: opacity 0.2s ease;
-  font-size: 12px;
-  line-height: 1.4;
+  visibility:hidden; opacity:0;
+  width:300px; background:#222; color:#fff;
+  padding:10px; border-radius:6px;
+  position:absolute; z-index:999;
+  transform:translate(-50%, -10px);
+  transition:opacity .2s;
 }
+.tooltip-text.show { visibility:visible; opacity:1; }
 
-.tooltip-text::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 6px;
-  border-style: solid;
-  border-color: #222 transparent transparent transparent;
-}
+input, select, button { width:100%; padding:8px 10px; font-size:14px; }
+button { background:#1f4fd8; color:#fff; border:none; border-radius:4px; cursor:pointer; }
+button:hover { background:#183fb0; }
 
-.tooltip-text.show {
-  visibility: visible;
-  opacity: 1;
-}
-/* ===== End tooltip styles ===== */
+.highlight { font-size:32px; font-weight:700; margin:10px 0; }
+table { width:100%; border-collapse:collapse; font-size:14px; }
+th, td { padding:8px 6px; border-bottom:1px solid #eee; }
+.right { text-align:right; }
+.mono { font-family:ui-monospace, Menlo, Consolas, monospace; }
+.pos { color:#1a7f37; font-weight:600; }
+.neg { color:#c92c2c; font-weight:600; }
 
-input, select, button {
-  width: 100%;
-  padding: 8px 10px;
-  font-size: 14px;
-}
-
-button {
-  background: #1f4fd8;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover { background: #183fb0; }
-
-.highlight {
-  font-size: 32px;
-  font-weight: 700;
-  margin: 10px 0;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-th, td {
-  padding: 8px 6px;
-  border-bottom: 1px solid #eee;
-}
-
-th { text-align: left; }
-.right { text-align: right; }
-.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-
-.disclaimer {
-  font-size: 12px;
-  color: #666;
-  text-align: center;
-  margin-top: 30px;
-}
+.disclaimer { font-size:12px; color:#666; text-align:center; margin-top:30px; }
 </style>
 </head>
 
@@ -152,15 +57,13 @@ th { text-align: left; }
 
 <div class="card">
 <h2>User Inputs</h2>
-
 <div class="grid">
   <div>
     <label class="label-with-tooltip">
       Maximum Monthly Housing Payment
       <span class="tooltip-icon">ⓘ
-        <span class="tooltip-text">
-          If considering properties with HOA or Condo fees, subtract those
-          from your desired housing payment before entering this amount.
+        <span class="tooltip-text show">
+          Enter your target housing payment excluding HOA or condo fees.
         </span>
       </span>
     </label>
@@ -171,9 +74,8 @@ th { text-align: left; }
     <label class="label-with-tooltip">
       Maximum Funds Available to Use
       <span class="tooltip-icon">ⓘ
-        <span class="tooltip-text">
-          This estimator assumes a minimum 5% down payment on a conventional loan.
-          Down payments below 5% are not supported.
+        <span class="tooltip-text show">
+          Assumes a minimum 5% down payment on a conventional loan.
         </span>
       </span>
     </label>
@@ -190,142 +92,78 @@ th { text-align: left; }
     <select id="county"></select>
   </div>
 </div>
-
 <br>
 <button onclick="runCalculator()">Run Estimation</button>
 </div>
 
 <div id="output"></div>
 
-<div class="disclaimer">
-*** For entertainment purposes only ***
-</div>
-
+<div class="disclaimer">*** For entertainment purposes only ***</div>
 </div>
 
 <script>
 "use strict";
 
-/* =====================
-INPUT COMMA FORMATTING
-===================== */
-function formatNumber(val){
-  if(!val) return "";
-  const n = val.toString().replace(/,/g,"");
-  if(isNaN(n)) return "";
-  return Number(n).toLocaleString("en-US");
-}
-
-function getNumericValue(id){
-  return Number(document.getElementById(id).value.replace(/,/g,"")) || 0;
-}
-
+/* ---------- Formatting ---------- */
+function fmt(x){return x.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
+function num(id){return Number(document.getElementById(id).value.replace(/,/g,""))||0;}
 ["maxPayment","maxCash"].forEach(id=>{
   const el=document.getElementById(id);
-  el.addEventListener("focus",()=>el.value=el.value.replace(/,/g,""));
-  el.addEventListener("blur",()=>el.value=formatNumber(el.value));
+  el.onfocus=()=>el.value=el.value.replace(/,/g,"");
+  el.onblur=()=>el.value=Number(el.value).toLocaleString();
 });
 
-/* =====================
-TOOLTIP HANDLING
-===================== */
-document.addEventListener("click",e=>{
-  document.querySelectorAll(".tooltip-icon").forEach(icon=>{
-    const tip=icon.querySelector(".tooltip-text");
-    icon.contains(e.target)
-      ? tip.classList.toggle("show")
-      : tip.classList.remove("show");
-  });
-});
+/* ---------- Constants ---------- */
+const BASE_RATE=0.0615, TERM=360, MIN_DP=0.05;
+const LBPMI=0.0034, HBPMI=0.0115;
+const RATE_STEP=0.00125;
 
-/* =====================
-ASSUMPTIONS
-===================== */
-const BASE_RATE = 0.0615;
-const TERM_MONTHS = 360;
-const MIN_DP_PCT = 0.05;
-
-const LBPMI = 0.0034;
-const HBPMI = 0.0115;
-
-/* =====================
-CSV DATA
-===================== */
-const CSV_URL =
-"https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/EPTRBC.csv";
-
-let COUNTY_DATA = {};
-let ACTIVE_FACTORS = null;
+/* ---------- CSV ---------- */
+const CSV_URL="https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/EPTRBC.csv";
+let COUNTY_DATA={}, ACTIVE_FACTORS=null;
 
 async function loadCSV(){
-  const res = await fetch(CSV_URL);
-  const text = await res.text();
-  const rows = text.trim().split("\n").slice(1);
-
-  rows.forEach(r=>{
-    const [state, county, tax, cc, cov, hoi] = r.split(",");
-    if(!COUNTY_DATA[state]) COUNTY_DATA[state]={};
-    COUNTY_DATA[state][county]={
-      tax:+tax,
-      cc:+cc,
-      hoiBaseCoverage:+cov,
-      hoiBaseAnnual:+hoi
-    };
+  const t=await (await fetch(CSV_URL)).text();
+  t.trim().split("\n").slice(1).forEach(r=>{
+    const [s,c,tax,cc,cov,hoi]=r.split(",");
+    COUNTY_DATA[s]??={};
+    COUNTY_DATA[s][c]={tax:+tax,cc:+cc,hoiBaseCoverage:+cov,hoiBaseAnnual:+hoi};
   });
   populateStates();
 }
 
-/* =====================
-DROPDOWNS
-===================== */
+/* ---------- Dropdowns ---------- */
 function populateStates(){
   const s=document.getElementById("state");
   s.innerHTML="";
-  Object.keys(COUNTY_DATA).sort().forEach(st=>{
-    s.add(new Option(st,st));
-  });
+  Object.keys(COUNTY_DATA).sort().forEach(x=>s.add(new Option(x,x)));
   if(COUNTY_DATA["Michigan"]) s.value="Michigan";
   populateCounties();
 }
-
 function populateCounties(){
-  const state=document.getElementById("state").value;
-  const c=document.getElementById("county");
+  const st=state.value, c=county;
   c.innerHTML="";
-  Object.keys(COUNTY_DATA[state]).sort().forEach(cty=>{
-    c.add(new Option(cty,cty));
-  });
-  if(COUNTY_DATA[state]["Oakland County"]) c.value="Oakland County";
-  ACTIVE_FACTORS = COUNTY_DATA[state][c.value];
+  Object.keys(COUNTY_DATA[st]).sort().forEach(x=>c.add(new Option(x,x)));
+  if(COUNTY_DATA[st]["Oakland County"]) c.value="Oakland County";
+  ACTIVE_FACTORS=COUNTY_DATA[st][c.value];
 }
+state.onchange=populateCounties;
+county.onchange=()=>ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
 
-document.getElementById("state").addEventListener("change",populateCounties);
-document.getElementById("county").addEventListener("change",()=>{
-  ACTIVE_FACTORS = COUNTY_DATA[
-    document.getElementById("state").value
-  ][document.getElementById("county").value];
-});
-
-/* =====================
-ENGINE
-===================== */
-function calculate(rate,maxPmt,maxCash){
+/* ---------- Engine ---------- */
+function calc(rate,maxPmt,maxCash){
   const r=rate/12;
-  const PIF=(r*Math.pow(1+r,TERM_MONTHS))/(Math.pow(1+r,TERM_MONTHS)-1);
-
+  const PIF=(r*Math.pow(1+r,TERM))/(Math.pow(1+r,TERM)-1);
   let hp=50000,last=null;
 
   while(true){
     const cc=hp*ACTIVE_FACTORS.cc;
     const dp=maxCash-cc;
-    if(dp<hp*MIN_DP_PCT) break;
+    if(dp<hp*MIN_DP) break;
 
-    const la=hp-dp;
-    const ltv=la/hp;
-
+    const la=hp-dp, ltv=la/hp;
     const pi=la*PIF;
     const tax=(hp*ACTIVE_FACTORS.tax)/12;
-
     const cov=Math.max(la,0.8*hp);
     const hoi=(ACTIVE_FACTORS.hoiBaseAnnual*(cov/ACTIVE_FACTORS.hoiBaseCoverage))/12;
 
@@ -337,32 +175,61 @@ function calculate(rate,maxPmt,maxCash){
 
     const pmt=pi+tax+hoi+pmi;
     if(pmt<=maxPmt && dp+cc<=maxCash){
-      last={hp,la,dp,cc,ltv,pi,tax,hoi,pmi,pmt};
+      last={hp,la,dp,cc,ltv,pi,tax,hoi,pmi,pmt,pmiF};
       hp+=1000;
     } else break;
   }
   return last;
 }
 
-/* =====================
-RUN
-===================== */
+/* ---------- Run ---------- */
 function runCalculator(){
-  if(!ACTIVE_FACTORS) return;
-
-  const base=calculate(
-    BASE_RATE,
-    getNumericValue("maxPayment"),
-    getNumericValue("maxCash")
-  );
+  const base=calc(BASE_RATE,num("maxPayment"),num("maxCash"));
   if(!base) return;
 
-  document.getElementById("output").innerHTML=`
-    <div class="card">
-      <div class="highlight">$${base.hp.toLocaleString()}</div>
-      <div>Loan Amount: <b>$${base.la.toLocaleString()}</b></div>
-    </div>
-  `;
+  let sens="";
+  for(let r=BASE_RATE-0.005;r<=BASE_RATE+0.005;r+=RATE_STEP){
+    const v=calc(r,num("maxPayment"),num("maxCash"));
+    if(!v) continue;
+    const d=v.hp-base.hp;
+    sens+=`<tr><td>${(r*100).toFixed(3)}%</td>
+      <td class="right">$${v.hp.toLocaleString()}</td>
+      <td class="right ${d>=0?"pos":"neg"}">${d>=0?"+":"−"}$${Math.abs(d).toLocaleString()}</td></tr>`;
+  }
+
+  output.innerHTML=`
+  <div class="card">
+    <div class="highlight">$${base.hp.toLocaleString()}</div>
+    <div>Loan Amount: <b>$${base.la.toLocaleString()}</b></div>
+  </div>
+
+  <div class="card">
+    <h2>Payment Breakdown</h2>
+    <table class="mono">
+      <tr><td>P&amp;I</td><td class="right">$${fmt(base.pi)}</td></tr>
+      <tr><td>Property Tax</td><td class="right">$${fmt(base.tax)}</td></tr>
+      <tr><td>Homeowners Insurance</td><td class="right">$${fmt(base.hoi)}</td></tr>
+      <tr><td>PMI</td><td class="right">$${fmt(base.pmi)}</td></tr>
+      <tr><th>Total</th><th class="right">$${fmt(base.pmt)}</th></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Transaction Details</h2>
+    <table class="mono">
+      <tr><td>Down Payment</td><td class="right">$${base.dp.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td></tr>
+      <tr><td>Closing Costs</td><td class="right">$${base.cc.toLocaleString()} (${(base.cc/base.hp*100).toFixed(2)}%)</td></tr>
+      <tr><td>LTV</td><td class="right">${(base.ltv*100).toFixed(2)}%</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Interest Rate Sensitivity</h2>
+    <table class="mono">
+      <tr><th>Rate</th><th class="right">MHP</th><th class="right">Δ</th></tr>
+      ${sens}
+    </table>
+  </div>`;
 }
 
 loadCSV().then(runCalculator);
