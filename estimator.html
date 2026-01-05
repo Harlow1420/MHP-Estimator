@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V15.75</title>
+<title>MHP Estimator V15.77</title>
 
 <style>
 body {
@@ -22,38 +22,38 @@ h2 { font-size:18px; border-bottom:1px solid #ddd; padding-bottom:6px; }
 .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
 label { font-size:13px; font-weight:600; display:block; margin-bottom:6px; }
 
+/* ---------- TOOLTIP CLICK-TOGGLE ---------- */
 .label-with-tooltip {
- display: inline-flex;
- align-items: center;
- gap: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
-
 .tooltip-icon {
- position: relative;
- cursor: pointer;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
 }
-
 .tooltip-text {
- visibility: hidden;
- opacity: 0;
- width: 300px;
- background: #222;
- color: #fff;
- padding: 10px;
- border-radius: 6px;
- position: absolute;
- z-index: 999;
- left: 50%;
- top: 100%;
- transform: translate(-50%, 6px);
- transition: opacity 0.2s ease;
+  visibility: hidden;
+  opacity: 0;
+  width: 300px;
+  background: #222;
+  color: #fff;
+  padding: 10px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 999;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, 6px);
+  transition: opacity 0.2s ease;
+}
+.tooltip-text.show {
+  visibility: visible;
+  opacity: 1;
 }
 
-.tooltip-icon:hover .tooltip-text {
- visibility: visible;
- opacity: 1;
-}
-
+/* ---------- FORM ELEMENTS ---------- */
 input, select, button { width:100%; padding:8px 10px; font-size:14px; }
 button { background:#1f4fd8; color:#fff; border:none; border-radius:4px; cursor:pointer; }
 button:hover { background:#183fb0; }
@@ -123,6 +123,14 @@ MHP-Estimator&#169;2025
 
 <script>
 "use strict";
+
+/* ---------- Tooltip Click Logic ---------- */
+document.querySelectorAll('.tooltip-icon').forEach(icon=>{
+  icon.addEventListener('click', ()=>{
+    const tooltip = icon.querySelector('.tooltip-text');
+    tooltip.classList.toggle('show');
+  });
+});
 
 /* ---------- Formatting ---------- */
 function fmt(x){return x.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
