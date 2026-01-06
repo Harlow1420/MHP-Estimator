@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V16</title>
+<title>MHP Estimator V16.25</title>
 
 <style>
 body {
@@ -66,6 +66,21 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 .neg { color:#c92c2c; font-weight:600; }
 
 .disclaimer { font-size:12px; color:#666; text-align:center; margin-top:30px; }
+
+/* ---------- STATE / COUNTY ROW ---------- */
+.subgrid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ---------- MOBILE BEHAVIOR ---------- */
+@media (max-width:600px){
+  .subgrid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 </head>
 
@@ -74,8 +89,10 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 
 <h1>Maximum Home Price Estimator</h1>
 MHP-Estimator&#169;2025
+
 <div class="card">
 <h2>User Inputs</h2>
+
 <div class="grid">
   <div>
     <label class="label-with-tooltip">
@@ -101,16 +118,20 @@ MHP-Estimator&#169;2025
     <input id="maxCash" value="200,000">
   </div>
 
-  <div>
-    <label>State</label>
-    <select id="state"></select>
-  </div>
+  <!-- State + County row -->
+  <div class="subgrid">
+    <div>
+      <label>State</label>
+      <select id="state"></select>
+    </div>
 
-  <div>
-    <label>County</label>
-    <select id="county"></select>
+    <div>
+      <label>County</label>
+      <select id="county" disabled></select>
+    </div>
   </div>
 </div>
+
 <br>
 <button onclick="runCalculator()">Run Estimation</button>
 </div>
@@ -159,13 +180,19 @@ function populateStates(){
   if(COUNTY_DATA["Michigan"]) s.value="Michigan";
   populateCounties();
 }
+
 function populateCounties(){
-  const st=state.value, c=county;
+  const st=state.value;
+  const c=county;
   c.innerHTML="";
+  c.disabled = !st;
+  if(!st) return;
+
   Object.keys(COUNTY_DATA[st]).sort().forEach(x=>c.add(new Option(x,x)));
   if(COUNTY_DATA[st]["Oakland County"]) c.value="Oakland County";
   ACTIVE_FACTORS=COUNTY_DATA[st][c.value];
 }
+
 state.onchange=populateCounties;
 county.onchange=()=>ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
 
