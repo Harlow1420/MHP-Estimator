@@ -226,10 +226,10 @@ function runCalculator(){
     <table class="mono">
       <tr><th></th><th class="right">/ Month</th><th class="right">Factor*</th></tr>
       <tr><td>P&amp;I</td><td class="right">$${fmt(base.pi)}</td><td class="right">($${fmt((piFactor*1000),4)} / $1,000)</td></tr>
-      <tr><td>Property Tax</td><td class="right">+ ${fmt(base.tax)}</td><td class="right">(${fmt((ACTIVE_FACTORS.tax*100),2)}% of MHP)/td></tr>
+      <tr><td>Property Tax</td><td class="right">+ ${fmt(base.tax)}</td><td class="right">(${fmt((ACTIVE_FACTORS.tax*100),2)}% of MHP)</td></tr>
       <tr><td>Homeowners Insurance</td><td class="right">+ ${fmt(base.hoi)}</td><td class="right">${fmt(hoiFactor,4)}</td></tr>
-      <tr><td>PMI</td><td class="right">+ ${fmt(base.pmi)}</td><td class="right">${fmt(base.pmiF,4)}</td></tr>
-      <tr><th>Total</th><th class="right">= ${fmt(base.pmt)}</th><th class="right">—</th></tr>
+      <tr><td>PMI</td><td class="right">+ ${fmt(base.pmi)}</td><td class="right">(${fmt((base.pmiF*100),4)}%)</td></tr>
+      <tr><th>Total</th><th class="right">= ${fmt(base.pmt)}</th><th class="right"></th></tr>
     </table>
   </div>
 
