@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V16.5</title>
+<title>MHP Estimator V16</title>
 
 <style>
 body {
@@ -117,7 +117,7 @@ MHP-Estimator&#169;2025
 
 <div id="output"></div>
 
-<div class="disclaimer">For entertainment purposes only</div>
+<div class="disclaimer">*** For entertainment purposes only ***</div>
 </div>
 
 <script>
@@ -220,32 +220,28 @@ function runCalculator(){
   <div class="card">
   <div>Using your inputs and an "example" interest rate of <b>${(BASE_RATE * 100).toFixed(3)}%</b>, the</div>
     <div class="highlight">Maximum Home Price (MHP) = $${base.hp.toLocaleString()}</div>
-    <div>with a Loan Amountof <b>$${base.la.toLocaleString()}</b>.</div>
+    <div>with a Loan Amountof <b>$${base.la.toLocaleString()}</b></div>
   </div>
 
-<div class="card">
-   <h2>Payment Breakdown</h2>
-   <table class="mono">
-     <tr><th>Payment</th><th class="right">/ Month</th><th class="right">Factor*</th></tr>
-     <tr><td>Pricipal &amp; Interest (P&amp;I)</td><td class="right">$${money(base.pi)}</td><td></td></tr>
-     <tr><td>Property Tax</td><td class="right">+ ${money(base.tax)}</td><td class="right">${(STATE_DATA[state].tax * 100).toFixed(3)}%</td></tr>
-     <tr><td>Homeowners Insurance</td><td class="right">+ ${money(base.hoi)}</td><td class="right">$${STATE_DATA[state].hoiBaseAnnual.toLocaleString()} / $${STATE_DATA[state].hoiBaseCoverage.toLocaleString()}</td></tr>
-     <tr><td>PMI</td><td class="right">+ ${money(base.pmi)}</td><td class="right">${(base.pmiFactor * 100).toFixed(2)}%</td></tr>
-     <tr><th>Total</th><th class="right">= $${money(base.pmt)}</th><th></th></tr>
-   </table>
- </div>
- 
- <div class="card">
-   <h2>Transaction Details</h2>
-   <table class="mono">
-     <tr><th>Amount</th><th class="right">Value</th><th class="right">Factor*</th></tr>
-     <tr><td>Maximum Home Price (MHP)</td><td class="right">$${base.hp.toLocaleString()}</td></td></tr>
-     <tr><td>Loan Amount</td><td class="right">- ${base.la.toLocaleString()}</td><td class="right">LTV = ${(base.ltv * 100).toFixed(2)}%</td></tr>
-     <tr><td>Down Payment</td><td class="right">= $${base.dp.toLocaleString()}</td><td class="right">${(base.dp / base.hp * 100).toFixed(2)}%</td></tr>
-     <tr><td>Closing Costs</td><td class="right">+ $${base.cc.toLocaleString()}</td><td class="right">(${(base.cc / base.hp * 100).toFixed(2)}% of MHP)<td></tr>
-     <tr><th>Total Cash to Close</th><th class="right">= $${base.ctc.toLocaleString()}</th><th></th></tr>
-   </table>
- </div>
+  <div class="card">
+    <h2>Payment Breakdown</h2>
+    <table class="mono">
+      <tr><td>P&amp;I</td><td class="right">$${fmt(base.pi)}</td></tr>
+      <tr><td>Property Tax</td><td class="right">$${fmt(base.tax)}</td></tr>
+      <tr><td>Homeowners Insurance</td><td class="right">$${fmt(base.hoi)}</td></tr>
+      <tr><td>PMI</td><td class="right">$${fmt(base.pmi)}</td></tr>
+      <tr><th>Total</th><th class="right">$${fmt(base.pmt)}</th></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Transaction Details</h2>
+    <table class="mono">
+      <tr><td>Down Payment</td><td class="right">$${base.dp.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td></tr>
+      <tr><td>Closing Costs</td><td class="right">$${base.cc.toLocaleString()} (${(base.cc/base.hp*100).toFixed(2)}%)</td></tr>
+      <tr><td>LTV</td><td class="right">${(base.ltv*100).toFixed(2)}%</td></tr>
+    </table>
+  </div>
 
   <div class="card">
     <h2>Interest Rate Sensitivity</h2>
