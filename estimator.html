@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V16.8</title>
+<title>MHP Estimator V16.89</title>
 
 <style>
 body {
@@ -255,7 +255,7 @@ function runCalculator(){
         <td class="right">+ ${base.cc.toLocaleString()} (${(base.cc/base.hp*100).toFixed(2)}%)</td>
         <td class="right">${fmt(base.cc/base.hp,4)}</td>
       </tr>
-      <tr><th>Cash to Close</th><th class="right">= $${base.ctc.toLocaleString()}</th><th class="right">—</th></tr>
+      <tr><th>Cash to Close</th><th class="right">= $${base.dp+base.cc.toLocaleString()}</th><th class="right">—</th></tr>
     </table>
   </div>
 
