@@ -229,7 +229,7 @@ function runCalculator(){
       <tr><td>Property Tax</td><td class="right">+ ${fmt(base.tax)}</td><td class="right">(${fmt((ACTIVE_FACTORS.tax*100),2)}% of MHP)</td></tr>
       <tr><td>Homeowners Insurance</td><td class="right">+ ${fmt(base.hoi)}</td><td class="right">${fmt(hoiFactor,4)}</td></tr>
       <tr><td>PMI</td><td class="right">+ ${fmt(base.pmi)}</td><td class="right">(${fmt((base.pmiF*100),4)}%)</td></tr>
-      <tr><th>Total</th><th class="right">= ${fmt(base.pmt)}</th><th class="right"></th></tr>
+      <tr><th>Total</th><th class="right">= $${fmt(base.pmt)}</th><th class="right"></th></tr>
     </table>
   </div>
 
@@ -240,15 +240,15 @@ function runCalculator(){
       <tr>
         <td>Maximum Home Price (MHP)</td>
         <td class="right">$${base.hp.toLocaleString()}</td>
-        <td class="right">${fmt(base.dp/base.hp,4)}</td><tr>
-        <td>Loan Amount</td>
+        <td class="right"></td><tr>
+        <td>Loan Amount (${fmt((base.la/base.hp*100),2)}%)</td>
         <td class="right">- ${base.la.toLocaleString()}</td>
-        <td class="right">${fmt(base.dp/base.hp,4)}</td>
+        <td class="right"></td>
       </tr>
       <tr>
-<td>Down Payment</td>
+<td>Down Payment (${fmt((base.dp/base.hp*100),2)}%)</td>
         <td class="right">= ${base.dp.toLocaleString()} (${fmt((base.dp/base.hp*100),2)}%)</td>
-        <td class="right">(${fmt((base.dp/base.hp*100),2)}%)</td>
+        <td class="right"></td>
       </tr>
       <tr>
         <td>Closing Costs</td>
