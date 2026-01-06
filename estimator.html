@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V15.77</title>
+<title>MHP Estimator V16</title>
 
 <style>
 body {
@@ -12,17 +12,48 @@ body {
   margin: 0;
   padding: 30px 0;
 }
+
 .container { max-width:1050px; margin:0 auto; padding:0 20px; }
-h1 { font-size:26px; margin-bottom:20px; }
-h2 { font-size:18px; border-bottom:1px solid #ddd; padding-bottom:6px; }
-.card {
-  background:#fff; border:1px solid #ddd; border-radius:6px;
-  padding:18px 20px; margin-bottom:20px;
+
+/* ---------- HEADER ---------- */
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: baseline;
+  margin-bottom: 20px;
 }
+.header h1 {
+  font-size: 26px;
+  margin: 0;
+  text-align: left;
+}
+.header .tagline {
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+  white-space: nowrap;
+}
+.header .version {
+  font-size: 13px;
+  color: #666;
+  text-align: right;
+  white-space: nowrap;
+}
+
+h2 { font-size:18px; border-bottom:1px solid #ddd; padding-bottom:6px; }
+
+.card {
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:6px;
+  padding:18px 20px;
+  margin-bottom:20px;
+}
+
 .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
 label { font-size:13px; font-weight:600; display:block; margin-bottom:6px; }
 
-/* ---------- TOOLTIP CLICK-TOGGLE ---------- */
+/* ---------- TOOLTIP ---------- */
 .label-with-tooltip {
   display: inline-flex;
   align-items: center;
@@ -31,7 +62,6 @@ label { font-size:13px; font-weight:600; display:block; margin-bottom:6px; }
 .tooltip-icon {
   position: relative;
   cursor: pointer;
-  user-select: none;
 }
 .tooltip-text {
   visibility: hidden;
@@ -48,7 +78,7 @@ label { font-size:13px; font-weight:600; display:block; margin-bottom:6px; }
   transform: translate(-50%, 6px);
   transition: opacity 0.2s ease;
 }
-.tooltip-text.show {
+.tooltip-icon:hover .tooltip-text {
   visibility: visible;
   opacity: 1;
 }
@@ -73,64 +103,61 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 <body>
 <div class="container">
 
-<h1>Maximum Home Price Estimator</h1>
-MHP-Estimator&#169;2025
-<div class="card">
-<h2>User Inputs</h2>
-<div class="grid">
-  <div>
-    <label class="label-with-tooltip">
-      Maximum Monthly Housing Payment
-      <span class="tooltip-icon">ⓘ
-        <span class="tooltip-text">
-          Enter your target housing payment excluding HOA or condo fees.
-        </span>
-      </span>
-    </label>
-    <input id="maxPayment" value="4,000">
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Maximum Home Price Estimator</h1>
+    <div class="tagline">A tool for thought …</div>
+    <div class="version">MHP-Estimator&#169;2025</div>
   </div>
 
-  <div>
-    <label class="label-with-tooltip">
-      Maximum Funds Available to Use
-      <span class="tooltip-icon">ⓘ
-        <span class="tooltip-text">
-          Assumes a minimum 5% down payment on a conventional loan.
-        </span>
-      </span>
-    </label>
-    <input id="maxCash" value="200,000">
+  <div class="card">
+    <h2>User Inputs</h2>
+    <div class="grid">
+      <div>
+        <label class="label-with-tooltip">
+          Maximum Monthly Housing Payment
+          <span class="tooltip-icon">ⓘ
+            <span class="tooltip-text">
+              Enter your target housing payment excluding HOA or condo fees.
+            </span>
+          </span>
+        </label>
+        <input id="maxPayment" value="4,000">
+      </div>
+
+      <div>
+        <label class="label-with-tooltip">
+          Maximum Funds Available to Use
+          <span class="tooltip-icon">ⓘ
+            <span class="tooltip-text">
+              Assumes a minimum 5% down payment on a conventional loan.
+            </span>
+          </span>
+        </label>
+        <input id="maxCash" value="200,000">
+      </div>
+
+      <div>
+        <label>State</label>
+        <select id="state"></select>
+      </div>
+
+      <div>
+        <label>County</label>
+        <select id="county"></select>
+      </div>
+    </div>
+    <br>
+    <button onclick="runCalculator()">Run Estimation</button>
   </div>
 
-  <div>
-    <label>State</label>
-    <select id="state"></select>
-  </div>
+  <div id="output"></div>
 
-  <div>
-    <label>County</label>
-    <select id="county"></select>
-  </div>
-</div>
-<br>
-<button onclick="runCalculator()">Run Estimation</button>
-</div>
-
-<div id="output"></div>
-
-<div class="disclaimer">*** For entertainment purposes only ***</div>
+  <div class="disclaimer">*** For entertainment purposes only ***</div>
 </div>
 
 <script>
 "use strict";
-
-/* ---------- Tooltip Click Logic ---------- */
-document.querySelectorAll('.tooltip-icon').forEach(icon=>{
-  icon.addEventListener('click', ()=>{
-    const tooltip = icon.querySelector('.tooltip-text');
-    tooltip.classList.toggle('show');
-  });
-});
 
 /* ---------- Formatting ---------- */
 function fmt(x){return x.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
@@ -227,9 +254,9 @@ function runCalculator(){
 
   output.innerHTML=`
   <div class="card">
-  <div>Using your inputs and an "example" interest rate of <b>${(BASE_RATE * 100).toFixed(3)}%</b>, the</div>
+    <div>Using your inputs and an "example" interest rate of <b>${(BASE_RATE * 100).toFixed(3)}%</b>, the</div>
     <div class="highlight">Maximum Home Price (MHP) = $${base.hp.toLocaleString()}</div>
-    <div>with a Loan Amountof <b>$${base.la.toLocaleString()}</b></div>
+    <div>with a Loan Amount of <b>$${base.la.toLocaleString()}</b></div>
   </div>
 
   <div class="card">
