@@ -22,64 +22,44 @@ h2 { font-size:18px; border-bottom:1px solid #ddd; padding-bottom:6px; }
 .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
 label { font-size:13px; font-weight:600; display:block; margin-bottom:6px; }
 
-/* ---------- TOOLTIP CSS FIXED ---------- */
-.label-with-tooltip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.tooltip-icon {
-  position: relative;
-  cursor: pointer;
-}
+/* ---------- TOOLTIP ---------- */
+.label-with-tooltip { display:inline-flex; align-items:center; gap:6px; }
+.tooltip-icon { position:relative; cursor:pointer; }
 .tooltip-text {
-  visibility: hidden;
-  opacity: 0;
-  width: 300px;
-  background: #222;
-  color: #fff;
-  padding: 10px;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 999;
-  left: 50%;
-  top: 100%;
-  transform: translate(-50%, 6px);
-  transition: opacity 0.2s ease;
+  visibility:hidden; opacity:0; width:300px;
+  background:#222; color:#fff; padding:10px;
+  border-radius:6px; position:absolute; z-index:999;
+  left:50%; top:100%; transform:translate(-50%,6px);
+  transition:opacity .2s ease;
 }
-.tooltip-icon:hover .tooltip-text {
-  visibility: visible;
-  opacity: 1;
-}
+.tooltip-icon:hover .tooltip-text { visibility:visible; opacity:1; }
 
-/* ---------- FORM ELEMENTS ---------- */
+/* ---------- FORM ---------- */
 input, select, button { width:100%; padding:8px 10px; font-size:14px; }
 button { background:#1f4fd8; color:#fff; border:none; border-radius:4px; cursor:pointer; }
 button:hover { background:#183fb0; }
 
-.highlight { font-size:32px; font-weight:700; margin:10px 0; }
-table { width:100%; border-collapse:collapse; font-size:14px; }
+/* ---------- TABLE ---------- */
+table { width:100%; border-collapse:collapse; font-size:14px; table-layout:fixed; }
 th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 .right { text-align:right; }
 .mono { font-family:ui-monospace, Menlo, Consolas, monospace; }
+
+.highlight { font-size:32px; font-weight:700; margin:10px 0; }
 .pos { color:#1a7f37; font-weight:600; }
 .neg { color:#c92c2c; font-weight:600; }
 
 .disclaimer { font-size:12px; color:#666; text-align:center; margin-top:30px; }
 
-/* ---------- STATE / COUNTY ROW ---------- */
+/* ---------- STATE / COUNTY ---------- */
 .subgrid {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
 }
-
-/* ---------- MOBILE BEHAVIOR ---------- */
 @media (max-width:600px){
-  .subgrid {
-    grid-template-columns: 1fr;
-  }
+  .subgrid { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -98,9 +78,7 @@ MHP-Estimator&#169;2025
     <label class="label-with-tooltip">
       Maximum Monthly Housing Payment
       <span class="tooltip-icon">ⓘ
-        <span class="tooltip-text">
-          Enter your target housing payment excluding HOA or condo fees.
-        </span>
+        <span class="tooltip-text">Enter your target housing payment excluding HOA or condo fees.</span>
       </span>
     </label>
     <input id="maxPayment" value="4,000">
@@ -110,21 +88,17 @@ MHP-Estimator&#169;2025
     <label class="label-with-tooltip">
       Maximum Funds Available to Use
       <span class="tooltip-icon">ⓘ
-        <span class="tooltip-text">
-          Assumes a minimum 5% down payment on a conventional loan.
-        </span>
+        <span class="tooltip-text">Assumes a minimum 5% down payment on a conventional loan.</span>
       </span>
     </label>
     <input id="maxCash" value="200,000">
   </div>
 
-  <!-- State + County row -->
   <div class="subgrid">
     <div>
       <label>State</label>
       <select id="state"></select>
     </div>
-
     <div>
       <label>County</label>
       <select id="county" disabled></select>
@@ -137,15 +111,15 @@ MHP-Estimator&#169;2025
 </div>
 
 <div id="output"></div>
-
 <div class="disclaimer">*** For entertainment purposes only ***</div>
+
 </div>
 
 <script>
 "use strict";
 
 /* ---------- Formatting ---------- */
-function fmt(x){return x.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmt(x,d=2){return x.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});}
 function num(id){return Number(document.getElementById(id).value.replace(/,/g,""))||0;}
 ["maxPayment","maxCash"].forEach(id=>{
   const el=document.getElementById(id);
@@ -174,25 +148,19 @@ async function loadCSV(){
 
 /* ---------- Dropdowns ---------- */
 function populateStates(){
-  const s=document.getElementById("state");
-  s.innerHTML="";
-  Object.keys(COUNTY_DATA).sort().forEach(x=>s.add(new Option(x,x)));
-  if(COUNTY_DATA["Michigan"]) s.value="Michigan";
+  state.innerHTML="";
+  Object.keys(COUNTY_DATA).sort().forEach(x=>state.add(new Option(x,x)));
+  if(COUNTY_DATA["Michigan"]) state.value="Michigan";
   populateCounties();
 }
-
 function populateCounties(){
-  const st=state.value;
-  const c=county;
-  c.innerHTML="";
-  c.disabled = !st;
-  if(!st) return;
-
-  Object.keys(COUNTY_DATA[st]).sort().forEach(x=>c.add(new Option(x,x)));
-  if(COUNTY_DATA[st]["Oakland County"]) c.value="Oakland County";
-  ACTIVE_FACTORS=COUNTY_DATA[st][c.value];
+  county.innerHTML="";
+  county.disabled=!state.value;
+  if(!state.value) return;
+  Object.keys(COUNTY_DATA[state.value]).sort().forEach(x=>county.add(new Option(x,x)));
+  if(COUNTY_DATA[state.value]["Oakland County"]) county.value="Oakland County";
+  ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
 }
-
 state.onchange=populateCounties;
 county.onchange=()=>ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
 
@@ -221,7 +189,7 @@ function calc(rate,maxPmt,maxCash){
 
     const pmt=pi+tax+hoi+pmi;
     if(pmt<=maxPmt && dp+cc<=maxCash){
-      last={hp,la,dp,cc,ltv,pi,tax,hoi,pmi,pmt,pmiF};
+      last={hp,la,dp,cc,ltv,pi,tax,hoi,pmi,pmt,pmiF,cov};
       hp+=1000;
     } else break;
   }
@@ -232,6 +200,9 @@ function calc(rate,maxPmt,maxCash){
 function runCalculator(){
   const base=calc(BASE_RATE,num("maxPayment"),num("maxCash"));
   if(!base) return;
+
+  const piFactor = base.pi / base.la;
+  const hoiFactor = (base.hoi * 12) / base.cov;
 
   let sens="";
   for(let r=BASE_RATE-0.005;r<=BASE_RATE+0.005;r+=RATE_STEP){
@@ -245,19 +216,44 @@ function runCalculator(){
 
   output.innerHTML=`
   <div class="card">
-  <div>Using your inputs and an "example" interest rate of <b>${(BASE_RATE * 100).toFixed(3)}%</b>, the</div>
+    <div>Using an example interest rate of <b>${(BASE_RATE*100).toFixed(3)}%</b>, the</div>
     <div class="highlight">Maximum Home Price (MHP) = $${base.hp.toLocaleString()}</div>
-    <div>with a Loan Amountof <b>$${base.la.toLocaleString()}</b></div>
+    <div>with a Loan Amount of <b>$${base.la.toLocaleString()}</b></div>
   </div>
 
   <div class="card">
     <h2>Payment Breakdown</h2>
     <table class="mono">
-      <tr><td>P&amp;I</td><td class="right">$${fmt(base.pi)}</td></tr>
-      <tr><td>Property Tax</td><td class="right">$${fmt(base.tax)}</td></tr>
-      <tr><td>Homeowners Insurance</td><td class="right">$${fmt(base.hoi)}</td></tr>
-      <tr><td>PMI</td><td class="right">$${fmt(base.pmi)}</td></tr>
-      <tr><th>Total</th><th class="right">$${fmt(base.pmt)}</th></tr>
+      <tr>
+        <th>Amount</th>
+        <th class="right">Monthly</th>
+        <th class="right">Factor</th>
+      </tr>
+      <tr>
+        <td>P&amp;I</td>
+        <td class="right">$${fmt(base.pi)}</td>
+        <td class="right">${fmt(piFactor,6)}</td>
+      </tr>
+      <tr>
+        <td>Property Tax</td>
+        <td class="right">$${fmt(base.tax)}</td>
+        <td class="right">${fmt(ACTIVE_FACTORS.tax,4)}</td>
+      </tr>
+      <tr>
+        <td>Homeowners Insurance</td>
+        <td class="right">$${fmt(base.hoi)}</td>
+        <td class="right">${fmt(hoiFactor,4)}</td>
+      </tr>
+      <tr>
+        <td>PMI</td>
+        <td class="right">$${fmt(base.pmi)}</td>
+        <td class="right">${fmt(base.pmiF,4)}</td>
+      </tr>
+      <tr>
+        <th>Total</th>
+        <th class="right">$${fmt(base.pmt)}</th>
+        <th class="right">—</th>
+      </tr>
     </table>
   </div>
 
