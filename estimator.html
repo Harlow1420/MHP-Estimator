@@ -239,7 +239,7 @@ function runCalculator(){
       <tr><th></th><th class="right">Amount</th><th class="right">Factor*</th></tr>
       <tr>
         <td>Maximum Home Price (MHP)</td>
-        <td class="right">$${base.hp.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td>
+        <td class="right">$${base.hp.toLocaleString()}</td>
         <td class="right">${fmt(base.dp/base.hp,4)}</td><tr>
         <td>Loan Amount</td>
         <td class="right">- ${base.la.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td>
@@ -252,7 +252,7 @@ function runCalculator(){
       </tr>
       <tr>
         <td>Closing Costs</td>
-        <td class="right">+ ${base.cc.toLocaleString()} (${(base.cc/base.hp*100).toFixed(2)}%)</td>
+        <td class="right">+ ${base.cc.toLocaleString()}</td>
         <td class="right">(${(base.cc/base.hp*100).toFixed(2)}% of MHP)</td>
       </tr>
       <tr><th>Cash to Close</th><th class="right">= $${(base.dp+base.cc).toLocaleString()}</th><th class="right"></th></tr>
