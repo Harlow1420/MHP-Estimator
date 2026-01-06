@@ -253,9 +253,9 @@ function runCalculator(){
       <tr>
         <td>Closing Costs</td>
         <td class="right">+ ${base.cc.toLocaleString()} (${(base.cc/base.hp*100).toFixed(2)}%)</td>
-        <td class="right">${fmt(base.cc/base.hp,4)}</td>
+        <td class="right">(${(base.cc/base.hp*100).toFixed(2)}% of MHP)</td>
       </tr>
-      <tr><th>Cash to Close</th><th class="right">= $${(base.dp+base.cc).toLocaleString()}</th><th class="right">—</th></tr>
+      <tr><th>Cash to Close</th><th class="right">= $${(base.dp+base.cc).toLocaleString()}</th><th class="right"></th></tr>
     </table>
   </div>
 
