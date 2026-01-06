@@ -226,10 +226,10 @@ function runCalculator(){
     <table class="mono">
       <tr><th>Amount</th><th class="right">Monthly</th><th class="right">Factor</th></tr>
       <tr><td>P&amp;I</td><td class="right">$${fmt(base.pi)}</td><td class="right">${fmt(piFactor,6)}</td></tr>
-      <tr><td>Property Tax</td><td class="right">$${fmt(base.tax)}</td><td class="right">${fmt(ACTIVE_FACTORS.tax,4)}</td></tr>
-      <tr><td>Homeowners Insurance</td><td class="right">$${fmt(base.hoi)}</td><td class="right">${fmt(hoiFactor,4)}</td></tr>
-      <tr><td>PMI</td><td class="right">$${fmt(base.pmi)}</td><td class="right">${fmt(base.pmiF,4)}</td></tr>
-      <tr><th>Total</th><th class="right">$${fmt(base.pmt)}</th><th class="right">—</th></tr>
+      <tr><td>Property Tax</td><td class="right">+ ${fmt(base.tax)}</td><td class="right">${fmt(ACTIVE_FACTORS.tax,4)}</td></tr>
+      <tr><td>Homeowners Insurance</td><td class="right">+ ${fmt(base.hoi)}</td><td class="right">${fmt(hoiFactor,4)}</td></tr>
+      <tr><td>PMI</td><td class="right">+ ${fmt(base.pmi)}</td><td class="right">${fmt(base.pmiF,4)}</td></tr>
+      <tr><th>Total</th><th class="right">= ${fmt(base.pmt)}</th><th class="right">—</th></tr>
     </table>
   </div>
 
@@ -242,24 +242,20 @@ function runCalculator(){
         <td class="right">$${base.hp.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td>
         <td class="right">${fmt(base.dp/base.hp,4)}</td><tr>
         <td>Loan Amount</td>
-        <td class="right">$${base.la.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td>
+        <td class="right">- ${base.la.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td>
         <td class="right">${fmt(base.dp/base.hp,4)}</td>
       </tr>
       <tr>
 <td>Down Payment</td>
-        <td class="right">$${base.dp.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td>
+        <td class="right">= ${base.dp.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td>
         <td class="right">${fmt(base.dp/base.hp,4)}</td>
       </tr>
       <tr>
         <td>Closing Costs</td>
-        <td class="right">$${base.cc.toLocaleString()} (${(base.cc/base.hp*100).toFixed(2)}%)</td>
+        <td class="right">+ ${base.cc.toLocaleString()} (${(base.cc/base.hp*100).toFixed(2)}%)</td>
         <td class="right">${fmt(base.cc/base.hp,4)}</td>
       </tr>
-      <tr>
-        <td>Cash to Close</td>
-        <td class="right">${(base.ltv*100).toFixed(2)}%</td>
-        <td class="right">${fmt(base.ltv,4)}</td>
-      </tr>
+      <tr><th>Cash to Close</th><th class="right">= ${fmt(base.pmt)}</th><th class="right">—</th></tr>
     </table>
   </div>
 
