@@ -238,11 +238,11 @@ function runCalculator(){
     <table class="mono">
       <tr><th>Amount</th><th class="right">Value</th><th class="right">Factor</th></tr>
       <tr>
-        <td>Down Payment</td>
-        <td class="right">$${base.dp.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td>
+        <td>Maximum Home Price (MHP)</td>
+        <td class="right">$${base.hp.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td>
         <td class="right">${fmt(base.dp/base.hp,4)}</td><tr>
-        <td>Down Payment</td>
-        <td class="right">$${base.dp.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td>
+        <td>Loan Amount</td>
+        <td class="right">$${base.la.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td>
         <td class="right">${fmt(base.dp/base.hp,4)}</td>
       </tr>
       <tr>
@@ -256,7 +256,7 @@ function runCalculator(){
         <td class="right">${fmt(base.cc/base.hp,4)}</td>
       </tr>
       <tr>
-        <td>LTV</td>
+        <td>Cash to Close</td>
         <td class="right">${(base.ltv*100).toFixed(2)}%</td>
         <td class="right">${fmt(base.ltv,4)}</td>
       </tr>
