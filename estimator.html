@@ -224,7 +224,7 @@ function runCalculator(){
   <div class="card">
     <h2>Payment Breakdown</h2>
     <table class="mono">
-      <tr><th></th><th class="right">/ Month</th><th class="right">Factor*</th></tr>
+      <tr><th>Amount</th><th class="right">Monthly</th><th class="right">Factor</th></tr>
       <tr><td>P&amp;I</td><td class="right">$${fmt(base.pi)}</td><td class="right">${fmt(piFactor,6)}</td></tr>
       <tr><td>Property Tax</td><td class="right">+ ${fmt(base.tax)}</td><td class="right">${fmt(ACTIVE_FACTORS.tax,4)}</td></tr>
       <tr><td>Homeowners Insurance</td><td class="right">+ ${fmt(base.hoi)}</td><td class="right">${fmt(hoiFactor,4)}</td></tr>
@@ -236,7 +236,7 @@ function runCalculator(){
   <div class="card">
     <h2>Transaction Details</h2>
     <table class="mono">
-      <tr><th></th><th class="right">Amount</th><th class="right">Factor*</th></tr>
+      <tr><th>Amount</th><th class="right">Value</th><th class="right">Factor</th></tr>
       <tr>
         <td>Maximum Home Price (MHP)</td>
         <td class="right">$${base.hp.toLocaleString()} (${(base.dp/base.hp*100).toFixed(2)}%)</td>
@@ -252,10 +252,10 @@ function runCalculator(){
       </tr>
       <tr>
         <td>Closing Costs</td>
-        <td class="right">+ $${base.hp.toLocaleString()} </td>
+        <td class="right">+ ${base.cc.toLocaleString()} (${(base.cc/base.hp*100).toFixed(2)}%)</td>
         <td class="right">${fmt(base.cc/base.hp,4)}</td>
       </tr>
-      <tr><th>Cash to Close</th><th class="right">= $${base.ctc.toLocaleString()}</th><th class="right"></th></tr>
+      <tr><th>Cash to Close</th><th class="right">= $${base.hp.toLocaleString()}</th><th class="right">—</th></tr>
     </table>
   </div>
 
