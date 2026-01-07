@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V17.5</title>
+<title>MHP Estimator V17.8</title>
 
 <style>
 body {
@@ -23,7 +23,7 @@ h2 { font-size:18px; border-bottom:1px solid #ddd; padding-bottom:6px; }
   margin-bottom:20px;
 }
 
-/* ✅ INPUT CARD ONLY */
+/*  INPUT CARD ONLY */
 .card.inputs {
   background:#ADD8E6;
 }
@@ -70,6 +70,14 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 @media (max-width:600px){
   .subgrid { grid-template-columns:1fr; }
 }
+
+/* ---------- RATE SENSITIVITY TABLE ---------- */
+.rate-table th,
+.rate-table td {
+  width: 33.333%;
+  text-align: center;
+}
+
 </style>
 </head>
 
@@ -79,7 +87,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 <h1>Maximum Home Price Estimator</h1>
 MHP-Estimator&#169;2025
 
-<!-- ✅ INPUT CONTAINER -->
+<!--  INPUT CONTAINER -->
 <div class="card inputs">
 <h2>User Inputs</h2>
 
@@ -265,7 +273,7 @@ function runCalculator(){
   <div class="card">
     <h2>Interest Rate Changes</h2>
     <div>How much would the Maximum Home Price change if the rate increased or decreased from the “example” rate of ${(BASE_RATE*100).toFixed(3)}%.</div>
-    <table class="mono">
+    <table class="mono rate-table">
       <tr><th class="right">Interest Rate</th><th class="right">Change</th><th class="right">Maximum Home Price</th></tr>
       ${sens}
     </table>
