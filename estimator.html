@@ -162,7 +162,9 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 </div>
 
 <script>
-"use strict";
+"use strict"; const state = document.getElementById("state");
+const county = document.getElementById("county");
+const output = document.getElementById("output");
 
 function fmt(x,d=2){return x.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});}
 function num(id){return Number(document.getElementById(id).value.replace(/,/g,""))||0;}
