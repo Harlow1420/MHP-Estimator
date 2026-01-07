@@ -236,7 +236,7 @@ for (let r = ROUNDED_BASE_RATE - 0.005; r <= ROUNDED_BASE_RATE + 0.005; r += RAT
       <tr><th></th><th class="right">/ Month</th><th class="right">Factor</th></tr>
       <tr><td>Principal P&amp;I Interest (P&amp;I)</td><td class="right">$${fmt(base.pi)}</td><td class="right">($${fmt((piFactor*1000),4)} / $1,000)</td></tr>
       <tr><td>Property Tax</td><td class="right">+ ${fmt(base.tax)}</td><td class="right">(${fmt((ACTIVE_FACTORS.tax*100),2)}% of MHP)</td></tr>
-      <tr><td>Homeowners Insurance</td><td class="right">+ ${fmt(base.hoi)}</td><td class="right">(${fmt((ACTIVE_FACTORS.hoiBaseAnnual),0)} / ${fmt((ACTIVE_FACTORS.hoiBaseCoverage),0)})</td></tr>
+      <tr><td>Homeowners Insurance</td><td class="right">+ ${fmt(base.hoi)}</td><td class="right">($${fmt((ACTIVE_FACTORS.hoiBaseAnnual),0)} / $${fmt((ACTIVE_FACTORS.hoiBaseCoverage),0)})</td></tr>
       <tr><td>PMI</td><td class="right">+ ${fmt(base.pmi)}</td><td class="right">(${fmt((base.pmiF*100),2)}%)</td></tr>
       <tr><th>Total</th><th class="right">= $${fmt(base.pmt)}</th><th class="right"></th></tr>
     </table>
@@ -272,7 +272,7 @@ for (let r = ROUNDED_BASE_RATE - 0.005; r <= ROUNDED_BASE_RATE + 0.005; r += RAT
     <h2>Interest Rate Changes</h2>
 <div class="mono">How much would the Maximum Home Price change if rates increased or decreased from “example” rate of ${(BASE_RATE * 100).toFixed(3)}% used in the estimate.</div>
     <table class="mono">
-      <tr><th clasee="right">Interest Rate</th><th class="right">Change</th><th class="right">Maximum Home Price</th></tr>
+      <tr><th class="right">Interest Rate</th><th class="right">Change</th><th class="right">Maximum Home Price</th></tr>
       ${sens}
     </table>
   </div>`;
