@@ -215,7 +215,7 @@ for (let r = ROUNDED_BASE_RATE - 0.005; r <= ROUNDED_BASE_RATE + 0.005; r += RAT
 
   const d = v.hp - base.hp;
   sens += `<tr>
-    <td>${(r * 100).toFixed(3)}%</td>
+    <td class="right">${(r * 100).toFixed(3)}%</td>
     <td class="right ${d >= 0 ? "pos" : "neg"}">
       ${d >= 0 ? "+" : "−"}$${Math.abs(d).toLocaleString()}
     </td>
