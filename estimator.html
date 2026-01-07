@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V16.89</title>
+<title>MHP Estimator V17</title>
 
 <style>
 body {
@@ -204,15 +204,24 @@ function runCalculator(){
   const piFactor = base.pi / base.la;
   const hoiFactor = (base.hoi * 12) / base.cov;
 
-  let sens="";
-  for(let r=BASE_RATE-0.005;r<=BASE_RATE+0.005;r+=RATE_STEP){
-    const v=calc(r,num("maxPayment"),num("maxCash"));
-    if(!v) continue;
-    const d=v.hp-base.hp;
-    sens+=`<tr><td>${(r*100).toFixed(3)}%</td>
-      <td class="right">$${v.hp.toLocaleString()}</td>
-      <td class="right ${d>=0?"pos":"neg"}">${d>=0?"+":"−"}$${Math.abs(d).toLocaleString()}</td></tr>`;
-  }
+  // Floor Base Rate to nearest 0.00125 (0.125%)
+const RATE_INCREMENT = 0.00125;
+const ROUNDED_BASE_RATE = Math.floor(BASE_RATE / RATE_INCREMENT) * RATE_INCREMENT;
+
+let sens = "";
+for (let r = ROUNDED_BASE_RATE - 0.005; r <= ROUNDED_BASE_RATE + 0.005; r += RATE_STEP) {
+  const v = calc(r, num("maxPayment"), num("maxCash"));
+  if (!v) continue;
+
+  const d = v.hp - base.hp;
+  sens += `<tr>
+    <td>${(r * 100).toFixed(3)}%</td>
+    <td class="right">$${v.hp.toLocaleString()}</td>
+    <td class="right ${d >= 0 ? "pos" : "neg"}">
+      ${d >= 0 ? "+" : "−"}$${Math.abs(d).toLocaleString()}
+    </td>
+  </tr>`;
+}
 
   output.innerHTML=`
   <div class="card">
