@@ -109,7 +109,7 @@ MHP-Estimator&#169;2025
         <span class="tooltip-text">Assumes a minimum 5% down payment on a conventional loan.</span>
       </span>
     </label>
-    <input id="maxCash" value="175,000">
+    <input id="maxCash" value="200,000">
   </div>
 
   <div class="subgrid">
@@ -157,9 +157,15 @@ let COUNTY_DATA={}, ACTIVE_FACTORS=null;
 async function loadCSV(){
   const t=await (await fetch(CSV_URL)).text();
   t.trim().split("\n").slice(1).forEach(r=>{
-    const [s,c,tax,cc,cov,hoi]=r.split(",");
+    const [s,c,tax,cc,cov,hoi,oull]=r.split(",");
     COUNTY_DATA[s]??={};
-    COUNTY_DATA[s][c]={tax:+tax,cc:+cc,hoiBaseCoverage:+cov,hoiBaseAnnual:+hoi};
+    COUNTY_DATA[s][c] = {
+  tax: +tax,
+  cc: +cc,
+  hoiBaseCoverage: +cov,
+  hoiBaseAnnual: +hoi,
+  oull: oull !== undefined ? +oull : null
+};
   });
   populateStates();
 }
@@ -178,6 +184,8 @@ function populateCounties(){
   Object.keys(COUNTY_DATA[state.value]).sort().forEach(x=>county.add(new Option(x,x)));
   if(COUNTY_DATA[state.value]["Oakland County"]) county.value="Oakland County";
   ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
+
+console.log("Loaded oull:", ACTIVE_FACTORS.oull);
 }
 state.onchange=populateCounties;
 county.onchange=()=>ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
