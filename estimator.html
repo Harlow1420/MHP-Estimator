@@ -99,7 +99,7 @@ MHP-Estimator&#169;2025
         <span class="tooltip-text">Enter your target housing payment excluding HOA or condo fees.</span>
       </span>
     </label>
-    <input id="maxPayment" value="3,500">
+    <input id="maxPayment" value="3,800">
   </div>
 
   <div>
@@ -109,7 +109,7 @@ MHP-Estimator&#169;2025
         <span class="tooltip-text">Assumes a minimum 5% down payment on a conventional loan.</span>
       </span>
     </label>
-    <input id="maxCash" value="180,000">
+    <input id="maxCash" value="185,000">
   </div>
 
   <div class="subgrid">
@@ -158,8 +158,7 @@ async function loadCSV(){
   const t=await (await fetch(CSV_URL)).text();
   t.trim().split("\n").slice(1).forEach(r=>{
     const [s,c,tax,cc,cov,hoi,oull]=r.split(",");
-    COUNTY_DATA[s]??={};
-    COUNTY_DATA[s][c] = {
+    COUNTY_DATA[s]??={}; COUNTY_DATA[s][c] = {
   tax: +tax,
   cc: +cc,
   hoiBaseCoverage: +cov,
@@ -184,11 +183,14 @@ function populateCounties(){
   Object.keys(COUNTY_DATA[state.value]).sort().forEach(x=>county.add(new Option(x,x)));
   if(COUNTY_DATA[state.value]["Oakland County"]) county.value="Oakland County";
   ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
+}
 
 /* ---------- V18.2 TEST FACTORS (Console Only) ---------- */
 
-state.onchange=populateCounties;
-county.onchange=()=>ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
+state.onchange = populateCounties;
+county.onchange = () => {
+  ACTIVE_FACTORS = COUNTY_DATA[state.value][county.value];
+};
 
 /* ---------- Engine ---------- */
 function calc(rate,maxPmt,maxCash){
