@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V18</title>
+<title>MHP Estimator V18.2</title>
 
 <style>
 body {
@@ -146,7 +146,7 @@ function num(id){return Number(document.getElementById(id).value.replace(/,/g,""
 });
 
 /* ---------- Constants ---------- */
-const BASE_RATE=0.0615, TERM=360, MIN_DP=0.05;
+const BASE_RATE=0.0616, TERM=360, MIN_DP=0.05;
 const LBPMI=0.0034, HBPMI=0.0115;
 const RATE_STEP=0.00125;
 
@@ -185,8 +185,20 @@ function populateCounties(){
   if(COUNTY_DATA[state.value]["Oakland County"]) county.value="Oakland County";
   ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
 
+/* ---------- V18.2 TEST FACTORS (Console Only) ---------- */
+const dpLIMIT = ((base.pmt / (base.hp / 1000) * 2) + base.pmt - num("maxPayment")) * -1;
+
+const fpPRINC = base.pmt - (base.la * BASE_RATE / 12);
+
+const lbFive = base.pi * (
+  (1 - Math.pow(1 + (BASE_RATE / 12), -300)) / (BASE_RATE / 12)
+);
+
 console.log("Loaded oull:", ACTIVE_FACTORS.oull);
-}
+console.log("V18.2 dpLIMIT:", dpLIMIT.toFixed(2));
+console.log("V18.2 fpPRINC:", fpPRINC.toFixed(2));
+console.log("V18.2 lbFive:", lbFive.toFixed(2));
+
 state.onchange=populateCounties;
 county.onchange=()=>ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
 
