@@ -232,7 +232,7 @@ function runCalculator(){
 /* ---------- V18.2 TEST FACTORS (Console Only) ---------- */
 const dpLIMIT = ((base.pi / (base.hp / 1000) * 2) + base.pmt - num("maxPayment")) * -1;
 
-const fpPRINC = base.pmt - (base.la * BASE_RATE / 12);
+const fpPRINC = base.pi - (base.la * BASE_RATE / 12);
 
 const lbFive = base.pi * (
   (1 - Math.pow(1 + (BASE_RATE / 12), -300)) / (BASE_RATE / 12)
