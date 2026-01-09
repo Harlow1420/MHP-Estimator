@@ -194,11 +194,14 @@ const lbFive = base.pi * (
   (1 - Math.pow(1 + (BASE_RATE / 12), -300)) / (BASE_RATE / 12)
 );
 
-console.log("Loaded oull:", ACTIVE_FACTORS.oull);
+/* SAFE logging — do not break load */
+if (ACTIVE_FACTORS && ACTIVE_FACTORS.oull !== undefined) {
+  console.log("Loaded oull:", ACTIVE_FACTORS.oull);
+}
+
 console.log("V18.2 dpLIMIT:", dpLIMIT.toFixed(2));
 console.log("V18.2 fpPRINC:", fpPRINC.toFixed(2));
 console.log("V18.2 lbFive:", lbFive.toFixed(2));
-
 state.onchange=populateCounties;
 county.onchange=()=>ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
 
