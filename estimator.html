@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V18.25</title>
+<title>MHP Estimator V18.35</title>
 
 <style>
 body {
@@ -282,7 +282,7 @@ console.log("V18.2 lbFive:", lbFive.toFixed(2));
       <tr><td>Property Tax</td><td class="right">+ ${fmt(base.tax)}</td><td class="right">(${fmt((ACTIVE_FACTORS.tax*100),2)}% of MHP)</td></tr>
       <tr><td>Homeowners Insurance</td><td class="right">+ ${fmt(base.hoi)}</td><td class="right">($${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)} / $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)})</td></tr>
       <tr><td>PMI</td><td class="right">+ ${fmt(base.pmi)}</td><td class="right">(${fmt((base.pmiF*100),2)}%)</td></tr>
-      <tr><th>Total</th><th class="right">= $${fmt(base.pmt)}</th><th></th></tr>
+      <tr><th>Total</th><th class="right">&#8776;  $${fmt(base.pmt)}</th><th></th></tr>
     </table>
   </div>
 
@@ -294,13 +294,13 @@ console.log("V18.2 lbFive:", lbFive.toFixed(2));
       <tr><td>Loan Amount (${fmt((base.la/base.hp*100),2)}% LTV)</td><td class="right">- ${base.la.toLocaleString()}</td><td></td></tr>
       <tr><td>Down Payment (${fmt((base.dp/base.hp*100),2)}%)</td><td class="right">= ${base.dp.toLocaleString()}</td><td></td></tr>
       <tr><td>Closing Costs</td><td class="right">+ ${base.cc.toLocaleString()}</td><td class="right">(${(base.cc/base.hp*100).toFixed(2)}% of MHP)</td></tr>
-      <tr><th>Funds needed to Close</th><th class="right">= $${(base.dp+base.cc).toLocaleString()}</th><th></th></tr>
+      <tr><th>Funds needed to Close</th><th class="right">&#8776;  $${(base.dp+base.cc).toLocaleString()}</th><th></th></tr>
     </table>
   </div>
 
   <div class="card">
     <h2>Interest Rate Changes</h2>
-    <div>How much would the Maximum Home Price change if the rate was lower or higher then the “example” rate of ${(BASE_RATE*100).toFixed(3)}%.</div>
+    <div>How much would the Maximum Home Price (MHP) change if the rate was lower or higher then the “example” rate of ${(BASE_RATE*100).toFixed(3)}%.</div>
     <table class="mono rate-table">
       <tr><th class="right">Interest Rate</th><th class="right">Change</th><th class="right">Maximum Home Price</th></tr>
       ${sens}
