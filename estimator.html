@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V18.35</title>
+<title>MHP Estimator V18.36</title>
 
 <style>
 body {
@@ -99,7 +99,7 @@ MHP-Estimator&#169;2025
         <span class="tooltip-text">Enter your target housing payment excluding HOA or condo fees.</span>
       </span>
     </label>
-    <input id="maxPayment" value="3,750">
+    <input id="maxPayment" value="3,950">
   </div>
 
   <div>
@@ -109,7 +109,7 @@ MHP-Estimator&#169;2025
         <span class="tooltip-text">Assumes a minimum 5% down payment on a conventional loan.</span>
       </span>
     </label>
-    <input id="maxCash" value="165,000">
+    <input id="maxCash" value="190,000">
   </div>
 
   <div class="subgrid">
@@ -235,8 +235,9 @@ const dpLIMIT = ((base.pi / (base.hp / 1000) * 2) + base.pmt - num("maxPayment")
 const fpPRINC = base.pi - (base.la * BASE_RATE / 12);
 
 const lbFive = base.pi * (
-  (1 - Math.pow(1 + (BASE_RATE / 12), -300)) / (BASE_RATE / 12)
-);
+  (1 - Math.pow(1 + (BASE_RATE / 12), -300)) / (BASE_RATE / 12)); 
+
+const miDrop = 360 - (Math.log(1-((base.hp * 0.8) * ((BASE_RATE / 12 ) / base.pi))) *-1) /(Math.log(1 + (BASE_RATE /12)));
 
 /* SAFE logging — do not break load */
 if (ACTIVE_FACTORS && ACTIVE_FACTORS.oull !== undefined) {
@@ -245,7 +246,8 @@ if (ACTIVE_FACTORS && ACTIVE_FACTORS.oull !== undefined) {
 
 console.log("V18.2 dpLIMIT:", dpLIMIT.toFixed(2));
 console.log("V18.2 fpPRINC:", fpPRINC.toFixed(2));
-console.log("V18.2 lbFive:", lbFive.toFixed(2));
+console.log("V18.2 lbFive:", lbFive.toFixed(2)); 
+console.log("V18.36 miDrop:", miDrop.toFixed(2));
 
   const piFactor = base.pi / base.la;
 
