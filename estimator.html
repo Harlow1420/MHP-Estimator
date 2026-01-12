@@ -128,7 +128,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           <span class="tooltip-text">Enter your target housing payment excluding HOA or condo fees.</span>
         </span>
       </label>
-      <input id="maxPayment" value="3,600">
+      <input id="maxPayment" value="2,900">
     </div>
 
     <div>
@@ -138,7 +138,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           <span class="tooltip-text">Assumes a minimum 5% down payment on a conventional loan.</span>
         </span>
       </label>
-      <input id="maxCash" value="150,000">
+      <input id="maxCash" value="100,000">
     </div>
 
     <div class="subgrid">
@@ -159,6 +159,8 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 
 <div id="output"></div>
 <div class="disclaimer">For entertainment purposes only</div>
+
+</div>
 
 <script>
 "use strict";
@@ -185,13 +187,13 @@ async function loadCSV(){
   const t=await (await fetch(CSV_URL)).text();
   t.trim().split("\n").slice(1).forEach(r=>{
     const [s,c,tax,cc,cov,hoi,oull]=r.split(",");
-    COUNTY_DATA[s]??={};
-    COUNTY_DATA[s][c]={
-      tax:+tax, cc:+cc,
-      hoiBaseCoverage:+cov,
-      hoiBaseAnnual:+hoi,
-      oull:oull?+oull:null
-    };
+    COUNTY_DATA[s]??={}; COUNTY_DATA[s][c] = {
+  tax: +tax,
+  cc: +cc,
+  hoiBaseCoverage: +cov,
+  hoiBaseAnnual: +hoi,
+  oull: oull !== undefined ? +oull : null
+};
   });
   populateStates();
 }
@@ -211,8 +213,13 @@ function populateCounties(){
   if(COUNTY_DATA[state.value]["Oakland County"]) county.value="Oakland County";
   ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
 }
-state.onchange=populateCounties;
-county.onchange=()=>ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
+
+/* ---------- V18.2 TEST FACTORS (Console Only) ---------- */
+
+state.onchange = populateCounties;
+county.onchange = () => {
+  ACTIVE_FACTORS = COUNTY_DATA[state.value][county.value];
+};
 
 /* ---------- Engine ---------- */
 function calc(rate,maxPmt,maxCash){
@@ -251,27 +258,79 @@ function runCalculator(){
   const base=calc(BASE_RATE,num("maxPayment"),num("maxCash"));
   if(!base) return;
 
-  let sens="";
-  for(let r=BASE_RATE-0.005;r<=BASE_RATE+0.005;r+=RATE_STEP){
-    const v=calc(r,num("maxPayment"),num("maxCash"));
-    if(!v) continue;
-    const d=v.hp-base.hp;
-    sens+=`<tr>
-      <td class="right">${(r*100).toFixed(3)}%</td>
-      <td class="right ${d>=0?"pos":"neg"}">${d>=0?"+":"−"}$${Math.abs(d).toLocaleString()}</td>
+const dpLIMIT=((base.pi/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
+
+  const miDrop=360-(Math.log(1-((base.hp*0.8)*((BASE_RATE/12)/base.pi)))*-1)/(Math.log(1+(BASE_RATE/12)));
+
+  /* ---------- NOTES ---------- */
+  const note1 = base.pmi > 0
+    ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately <b>${Math.round(miDrop)}</b> payments.`
+    : "";
+
+  const note2 = dpLIMIT > 0
+    ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum <b>5%</b> down payment.
+       The MHP could be higher with a program that allows for less than 5% down payment.`
+    : "";
+
+  const piFactor = base.pi / base.la;
+
+  const RATE_INCREMENT = 0.00125;
+  const ROUNDED_BASE_RATE = Math.floor(BASE_RATE / RATE_INCREMENT) * RATE_INCREMENT;
+
+  let sens = "";
+  for (let r = ROUNDED_BASE_RATE - 0.005; r <= ROUNDED_BASE_RATE + 0.005; r += RATE_STEP) {
+    const v = calc(r, num("maxPayment"), num("maxCash"));
+    if (!v) continue;
+
+    const d = v.hp - base.hp;
+    sens += `<tr>
+      <td class="right">${(r * 100).toFixed(3)}%</td>
+      <td class="right ${d >= 0 ? "pos" : "neg"}">
+        ${d >= 0 ? "+" : "−"}$${Math.abs(d).toLocaleString()}
+      </td>
       <td class="right">$${v.hp.toLocaleString()}</td>
     </tr>`;
   }
 
   output.innerHTML=`
   <div class="card">
-    <div class="highlight">Maximum Home Price ≈ $${base.hp.toLocaleString()}</div>
+    <div>Using an "example" rate of <b>${(BASE_RATE*100).toFixed(3)}%</b> on a 30YR Fixed and a few assumptions, the</div>
+    <div class="highlight">Maximum Home Price (MHP) &#8776; $${base.hp.toLocaleString()}</div>
+    <div>with a Loan Amount of <b>$${base.la.toLocaleString()}</b>.</div>${note2?`<div class="neg" style="margin-top:8px;">${note2}</div>`:""}
+  </div>
+  </div>
+
+  <div class="card">
+    <h2>Payment Breakdown</h2>
+    <table class="mono">
+      <tr><th></th><th class="right">/ Month</th><th class="right">Factor</th></tr>
+      <tr><td>Principal P&amp;I Interest (P&amp;I)</td><td class="right">$${fmt(base.pi)}</td><td class="right">($${fmt((piFactor*1000),4)} / $1,000)</td></tr>
+      <tr><td>Property Tax</td><td class="right">+ ${fmt(base.tax)}</td><td class="right">(${fmt((ACTIVE_FACTORS.tax*100),2)}% of MHP)</td></tr>
+      <tr><td>Homeowners Insurance</td><td class="right">+ ${fmt(base.hoi)}</td><td class="right">($${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)} / $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)})</td></tr>
+      <tr><td>PMI</td><td class="right">+ ${fmt(base.pmi)}</td><td class="right">(${fmt((base.pmiF*100),2)}%)</td></tr>
+      <tr><th>Total</th><th class="right">&#8776;  $${fmt(base.pmt)}</th><th></th></tr>
+    </table>
+${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}</div>
+
+  </div>
+
+  <div class="card">
+    <h2>Transaction Details</h2>
+    <table class="mono">
+      <tr><th></th><th class="right">Amount</th><th class="right">Factor</th></tr>
+      <tr><td>Maximum Home Price (MHP)</td><td class="right">$${base.hp.toLocaleString()}</td><td></td></tr>
+      <tr><td>Loan Amount (${fmt((base.la/base.hp*100),2)}% LTV)</td><td class="right">- ${base.la.toLocaleString()}</td><td></td></tr>
+      <tr><td>Down Payment (${fmt((base.dp/base.hp*100),2)}%)</td><td class="right">= ${base.dp.toLocaleString()}</td><td></td></tr>
+      <tr><td>Closing Costs</td><td class="right">+ ${base.cc.toLocaleString()}</td><td class="right">(${(base.cc/base.hp*100).toFixed(2)}% of MHP)</td></tr>
+      <tr><th>Funds needed to Close</th><th class="right">&#8776;  $${(base.dp+base.cc).toLocaleString()}</th><th></th></tr>
+    </table>
   </div>
 
   <div class="card">
     <h2>Interest Rate Changes</h2>
+    <div>How much would the Maximum Home Price (MHP) change if the rate was lower or higher then the “example” rate of ${(BASE_RATE*100).toFixed(3)}%.</div>
     <table class="mono rate-table">
-      <tr><th>Rate</th><th>Change</th><th>MHP</th></tr>
+      <tr><th class="right">Interest Rate</th><th class="right">Change</th><th class="right">Maximum Home Price</th></tr>
       ${sens}
     </table>
   </div>`;
