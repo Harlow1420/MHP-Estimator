@@ -128,7 +128,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           <span class="tooltip-text">Enter your target housing payment excluding HOA or condo fees.</span>
         </span>
       </label>
-      <input id="maxPayment" value="3,250">
+      <input id="maxPayment" value="3,150">
     </div>
 
     <div>
@@ -138,7 +138,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           <span class="tooltip-text">Assumes a minimum 5% down payment on a conventional loan.</span>
         </span>
       </label>
-      <input id="maxCash" value="125,000">
+      <input id="maxCash" value="135,000">
     </div>
 
     <div class="subgrid">
@@ -264,7 +264,7 @@ const dpLIMIT=((base.pi/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
 
   /* ---------- NOTES ---------- */
   const note1 = base.pmi > 0
-    ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately <b>${Math.round(miDrop)}</b> payments.`
+    ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately <b>${Math.round(miDrop)}</b> payments. `
     : "";
 
   const note2 = dpLIMIT > 0
@@ -274,7 +274,7 @@ const dpLIMIT=((base.pi/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
 
 const note3 =
   ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull
-    ? `The loan amount is greater than the conforming loan limit of <b>$${ACTIVE_FACTORS.oull.toLocaleString()}</b> for <b>${county.value}, ${state.value}</b>. <b>Jumbo Loans</b> are outside the scoop of this tool (other limitations may apply).`
+    ? `The loan amount is greater than the conforming loan limit of <b>$${ACTIVE_FACTORS.oull.toLocaleString()}</b> for <b>${county.value}, ${state.value}</b>. <b>Jumbo Loans</b> are outside the scoop of this tool (other requirements and/or restrictions may apply).`
     : "";
 
 
@@ -316,8 +316,7 @@ const note3 =
       <tr><td>PMI</td><td class="right">+ ${fmt(base.pmi)}</td><td class="right">(${fmt((base.pmiF*100),2)}%)</td></tr>
       <tr><th>Total</th><th class="right">&#8776;  $${fmt(base.pmt)}</th><th></th></tr>
     </table>
-${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}</div>
-${note3?`<div class="pos" style="margin-top:12px;">${note3}</div>`:""}
+${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}${note3?`<div class="pos" style="margin-top:12px;">${note3}</div>`:""}
 
   <div class="card">
     <h2>Transaction Details</h2>
