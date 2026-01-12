@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V18.54</title>
+<title>MHP Estimator V18.55</title>
 
 <style>
 body {
@@ -128,7 +128,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           <span class="tooltip-text">Enter your target housing payment excluding HOA or condo fees.</span>
         </span>
       </label>
-      <input id="maxPayment" value="2,900">
+      <input id="maxPayment" value="3,100">
     </div>
 
     <div>
@@ -272,6 +272,10 @@ const dpLIMIT=((base.pi/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
        The MHP could be higher with a program that allows for less than 5% down payment.`
     : "";
 
+ const note3 = base.la > oull;
+    ? `This is a jumbo, the PMI would be eligible to be cancelled after approximately <b>${Math.round(miDrop)}</b> payments.`
+    : "";
+
   const piFactor = base.pi / base.la;
 
   const RATE_INCREMENT = 0.00125;
@@ -311,6 +315,8 @@ const dpLIMIT=((base.pi/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
       <tr><th>Total</th><th class="right">&#8776;  $${fmt(base.pmt)}</th><th></th></tr>
     </table>
 ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}</div>
+${note3?`<div class="pos" style="margin-top:12px;">${note3}</div>`:""}</div>
+
 
   </div>
 
