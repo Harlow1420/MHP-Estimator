@@ -272,7 +272,7 @@ const dpLIMIT=((base.pi/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
        The MHP could be higher with a program that allows for less than 5% down payment.`
     : "";
 
- const note3 = base.la > oull;
+ const note3 = base.la > oull:
     ? `This is a jumbo, the PMI would be eligible to be cancelled after approximately <b>${Math.round(miDrop)}</b> payments.`
     : "";
 
