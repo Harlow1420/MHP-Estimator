@@ -116,7 +116,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
   <!-- 3-ROW HEADER -->
   <div class="header-container">
     <div class="header-left">Maximum Home Price Estimator</div>
-    <div class="header-center"><em><strong></strong>a tool for thought ...</strong></em></div>
+    <div class="header-center"><em><strong>a tool for thought ...</strong></em></div>
     <div class="header-right">MHP-Estimator ©2025</div>
   </div>
 
@@ -274,7 +274,7 @@ const dpLIMIT=((base.pi/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
 
 const note3 =
   ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull
-    ? `The loan amount is greater than the conforming loan limit of <b>$${ACTIVE_FACTORS.oull.toLocaleString()}</b> for <b>${county.value}, ${state.value}</b>. This is a <b>jumbo loan</b> and is outside the scoop of this tool.`
+    ? `The loan amount is greater than the conforming loan limit of <b>$${ACTIVE_FACTORS.oull.toLocaleString()}</b> for <b>${county.value}, ${state.value}</b>. <b>Jumbo Loans</b> are outside the scoop of this tool (other factors may apply).`
     : "";
 
 
