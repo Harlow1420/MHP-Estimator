@@ -274,7 +274,7 @@ const dpLIMIT=((base.pi/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
 
 const note3 =
   ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull
-    ? `The loan amount is greater than the conforming loan limit of <b>$${ACTIVE_FACTORS.oull.toLocaleString()}</b> for <b>${county.value}, ${state.value}</b>. <b>Jumbo Loans</b> are outside the scoop of this tool (other factors may apply).`
+    ? `The loan amount is greater than the conforming loan limit of <b>$${ACTIVE_FACTORS.oull.toLocaleString()}</b> for <b>${county.value}, ${state.value}</b>. <b>Jumbo Loans</b> are outside the scoop of this tool (other limitations may apply).`
     : "";
 
 
