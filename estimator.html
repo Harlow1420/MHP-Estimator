@@ -125,10 +125,10 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
       <label class="label-with-tooltip">
         Maximum Monthly Housing Payment
         <span class="tooltip-icon">ⓘ
-          <span class="tooltip-text">Enter your target housing payment excluding HOA or condo fees.</span>
+          <span class="tooltip-text">Some properties such as Condos, require Association Fees. If for example, you were interested in Condos and the aveage Association Fee is approx. $400 / mo. and your wanted a Maxium Housing Payment of $2,900, then you should enter $2,500 as your Maximum Housing Payment.</span>
         </span>
       </label>
-      <input id="maxPayment" value="3,150">
+      <input id="maxPayment" value="3,250">
     </div>
 
     <div>
@@ -310,7 +310,7 @@ const note3 =
     <h2>Payment Breakdown</h2>
     <table class="mono">
       <tr><th></th><th class="right">/ Month</th><th class="right">Factor</th></tr>
-      <tr><td>Principal P&amp;I Interest (P&amp;I)</td><td class="right">$${fmt(base.pi)}</td><td class="right">($${fmt((piFactor*1000),4)} / $1,000)</td></tr>
+      <tr><td>Principal &amp; Interest (P&amp;I)</td><td class="right">$${fmt(base.pi)}</td><td class="right">($${fmt((piFactor*1000),4)} / $1,000)</td></tr>
       <tr><td>Property Tax</td><td class="right">+ ${fmt(base.tax)}</td><td class="right">(${fmt((ACTIVE_FACTORS.tax*100),2)}% of MHP)</td></tr>
       <tr><td>Homeowners Insurance</td><td class="right">+ ${fmt(base.hoi)}</td><td class="right">($${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)} / $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)})</td></tr>
       <tr><td>PMI</td><td class="right">+ ${fmt(base.pmi)}</td><td class="right">(${fmt((base.pmiF*100),2)}%)</td></tr>
