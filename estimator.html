@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V19.2</title>
+<title>MHP Estimator V19.3</title>
 
 <style>
 body {
@@ -107,6 +107,12 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
   width: 33.333%;
   text-align: center;
 }
+
+/* ---------- OUTPUT CARD ALIGNMENT (OPTIONAL) ---------- */
+#output .card {
+  margin-left: auto;
+  margin-right: auto;
+}
 </style>
 </head>
 
@@ -128,7 +134,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           <span class="tooltip-text">Some properties such as Condos, require Association Fees. If for example, you were interested in Condos and the aveage Association Fee is approx. $400 / mo. and your wanted a Maxium Housing Payment of $2,900, then you should enter $2,500 as your Maximum Housing Payment.</span>
         </span>
       </label>
-      <input id="maxPayment" value="3,500">
+      <input id="maxPayment" value="4,000">
     </div>
 
     <div>
@@ -138,7 +144,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           <span class="tooltip-text">Although there are programs that offer less than 5% down payment options, they may have additional requirements, limitations or costs that are out of the scoop of this tool. This tool is defaulted to an assumption of 5% or more down payment.</span>
         </span>
       </label>
-      <input id="maxCash" value="135,000">
+      <input id="maxCash" value="200,000">
     </div>
 
     <div class="subgrid">
@@ -157,7 +163,12 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
   <button onclick="runCalculator()">Run Estimation</button>
 </div>
 
-<div id="output"></div>
+</div>
+
+<div class="container">
+  <div id="output"></div>
+</div>
+
 <div class="disclaimer">For entertainment purposes only</div>
 
 </div>
@@ -330,14 +341,21 @@ ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}${note3?`<
     </table>
   </div>
 
-  <div class="card">
+   <div class="card">
     <h2>Interest Rate Changes</h2>
     <div>How much would the Maximum Home Price (MHP) change if the rate was lower or higher then the “example” rate of ${(BASE_RATE*100).toFixed(3)}%.</div>
     <table class="mono rate-table">
       <tr><th class="right">Interest Rate</th><th class="right">Change</th><th class="right">Maximum Home Price</th></tr>
       ${sens}
     </table>
-  </div>`;
+  </div>
+
+  <div style="text-align:center; margin-top:16px;">
+    <a href="https://OwnerPal.com/disclaimer" target="_blank" rel="noopener noreferrer">
+      Disclaimer
+    </a>
+  </div>
+`;
 }
 
 loadCSV().then(runCalculator);
