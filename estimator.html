@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V19.4</title>
+<title>MHP Estimator V19.45</title>
 
 <style>
 body {
@@ -134,7 +134,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           <span class="tooltip-text">Some properties such as Condos, require Association Fees. If for example, you were interested in Condos and the average Association Fee is approx. $400 / mo. and your wanted a Maximum Housing Payment of $2,900, then you should enter $2,500 as your Maximum Housing Payment.</span>
         </span>
       </label>
-      <input id="maxPayment" value="2,500">
+      <input id="maxPayment" value="2,800">
     </div>
 
     <div>
@@ -144,7 +144,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           <span class="tooltip-text">Although there are programs that offer less than 5% down payment options, they may have additional eligibility requirements, limitations or costs that are out of the scoop of this tool. This tool is defaulted to an assumption of 5% or more down payment.</span>
         </span>
       </label>
-      <input id="maxCash" value="100,000">
+      <input id="maxCash" value="120,000">
     </div>
 
     <div class="subgrid">
@@ -277,6 +277,16 @@ const dpLIMIT=((base.pi/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
   const fpPRINC = base.pi - (base.la * BASE_RATE / 12);
 
   const lbFive = base.pi * ((1 - Math.pow(1 + (BASE_RATE / 12), -300)) / (BASE_RATE / 12));
+
+/* SAFE logging — do not break load */
+if (ACTIVE_FACTORS && ACTIVE_FACTORS.oull !== undefined) {
+  console.log("Loaded oull:", ACTIVE_FACTORS.oull);
+}
+
+console.log("V18.2 dpLIMIT:", dpLIMIT.toFixed(2));
+console.log("V18.2 fpPRINC:", fpPRINC.toFixed(2));
+console.log("V18.2 lbFive:", lbFive.toFixed(2));
+console.log("V18.36 miDrop:", miDrop.toFixed(2));
 
   /* ---------- NOTES ---------- */
   const note1 = base.pmi > 0
