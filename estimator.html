@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V20</title>
+<title>MHP Estimator V20.1</title>
 
 <style>
 body {
@@ -134,6 +134,16 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 .rate-table td {
   width: 33.333%;
   text-align: center;
+}
+
+/* ---------- EQUAL 3-COLUMN TABLES (33.333%) ---------- */
+.three-col-33 {
+  table-layout: fixed;
+}
+
+.three-col-33 th,
+.three-col-33 td {
+  width: 33.333%;
 }
 
 /* ---------- OUTPUT CARD ALIGNMENT (OPTIONAL) ---------- */
@@ -371,7 +381,7 @@ const note3 =
 
   <div class="card">
     <h2>Payment Breakdown</h2>
-    <table class="mono">
+    <table class="mono three-col-33">
       <tr><th></th><th class="right">/ Month</th><th class="right">Factor</th></tr>
       <tr><td>Principal &amp; Interest (P&amp;I)</td><td class="right">$${fmt(base.pi)}</td><td class="right">($${fmt((piFactor*1000),4)} / $1,000)</td></tr>
       <tr><td>Property Tax</td><td class="right">+ ${fmt(base.tax)}</td><td class="right">(${fmt((ACTIVE_FACTORS.tax*100),2)}% of MHP)</td></tr>
@@ -383,7 +393,7 @@ ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}
 
   <div class="card">
     <h2>Transaction Details</h2>
-    <table class="mono">
+    <table class="mono three-col-33">
       <tr><th></th><th class="right">Amount</th><th class="right">Factor</th></tr>
       <tr><td>Maximum Home Price (MHP)</td><td class="right">$${base.hp.toLocaleString()}</td><td></td></tr>
       <tr><td>Loan Amount (${fmt((base.la/base.hp*100),2)}% LTV)</td><td class="right">- ${base.la.toLocaleString()}</td><td></td></tr>
@@ -404,7 +414,7 @@ ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}
 
   <div style="text-align:center; margin-top:16px;">
     <a href="https://OwnerPal.com/disclaimer" target="_blank" rel="noopener noreferrer">
-      Disclaimer
+      Disclaimer / References / Use of Estimator
     </a>
   </div>
 `;
