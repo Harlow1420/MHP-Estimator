@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V19.54</title>
+<title>MHP Estimator V19.55</title>
 
 <style>
 body {
@@ -91,7 +91,15 @@ label { font-size:13px; font-weight:600; display:block; margin-bottom:6px; }
 
 /* ---------- FORM ---------- */
 input, select, button { width:100%; padding:8px 10px; font-size:14px; }
-button { background:#1f4fd8; color:#fff; border:none; border-radius:4px; cursor:pointer; }
+button {
+  background:#1f4fd8;
+  color:#fff;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
 button:hover { background:#183fb0; }
 
 /* ---------- TABLE ---------- */
@@ -157,7 +165,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           </span>
         </span>
       </label>
-      <input id="maxPayment" value="4,000">
+      <input id="maxPayment" value="3,900">
     </div>
 
     <div>
@@ -169,7 +177,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           </span>
         </span>
       </label>
-      <input id="maxCash" value="200,000">
+      <input id="maxCash" value="175,000">
     </div>
 
     <div class="subgrid">
@@ -184,7 +192,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
     </div>
 
   </div>
-</div>  <br>
+</div>
   <button onclick="runCalculator()">Run Estimation</button>
 </div>
 
