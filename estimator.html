@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V19.57</title>
+<title>MHP Estimator V19.58</title>
 
 <style>
 body {
@@ -169,7 +169,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           </span>
         </span>
       </label>
-      <input id="maxPayment" value="3,500">
+      <input id="maxPayment" value="3,800">
     </div>
 
     <div>
@@ -181,7 +181,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           </span>
         </span>
       </label>
-      <input id="maxCash" value="150,000">
+      <input id="maxCash" value="160,000">
     </div>
 
     <div class="subgrid">
@@ -306,7 +306,7 @@ function runCalculator(){
   const base=calc(BASE_RATE,num("maxPayment"),num("maxCash"));
   if(!base) return;
 
-const dpLIMIT=((base.pi/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
+const dpLIMIT=((base.pmt/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
 
   const miDrop=360-(Math.log(1-((base.hp*0.8)*((BASE_RATE/12)/base.pi)))*-1)/(Math.log(1+(BASE_RATE/12)));
 
@@ -327,17 +327,17 @@ console.log("V18.36 miDrop:", miDrop.toFixed(2));
 
   /* ---------- NOTES ---------- */
   const note1 = base.pmi > 0
-    ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately <b>${Math.round(miDrop)}</b> payments. `
+    ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately ${Math.round(miDrop)} payments. `
     : "";
 
   const note2 = dpLIMIT > 0
-    ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum <b>5%</b> down payment.
+    ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment.
        The MHP could be higher with a program that allows for less than 5% down payment.`
     : "";
 
 const note3 =
   ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull
-    ? `The loan amount is greater than the conforming loan limit of <b>$${ACTIVE_FACTORS.oull.toLocaleString()}</b> for <b>${county.value}, ${state.value}</b>. <b>Jumbo Loans</b> are outside the scoop of this tool (other requirements and/or restrictions may apply).`
+    ? `The loan amount is greater than the conforming loan limit of $${ACTIVE_FACTORS.oull.toLocaleString()} for ${county.value}, ${state.value}. <b>Jumbo Loans are outside the scoop of this tool (other requirements and/or restrictions may apply).`
     : "";
 
 
