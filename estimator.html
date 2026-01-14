@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V19.56</title>
+<title>MHP Estimator V19.57</title>
 
 <style>
 body {
@@ -169,7 +169,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           </span>
         </span>
       </label>
-      <input id="maxPayment" value="4,000">
+      <input id="maxPayment" value="3,500">
     </div>
 
     <div>
@@ -181,7 +181,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           </span>
         </span>
       </label>
-      <input id="maxCash" value="200,000">
+      <input id="maxCash" value="150,000">
     </div>
 
     <div class="subgrid">
@@ -379,7 +379,7 @@ const note3 =
       <tr><td>PMI</td><td class="right">+ ${fmt(base.pmi)}</td><td class="right">(${fmt((base.pmiF*100),2)}%)</td></tr>
       <tr><th>Total</th><th class="right">&#8776;  $${fmt(base.pmt)}</th><th></th></tr>
     </table>
-${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}${note3?`<div class="pos" style="margin-top:12px;">${note3}</div>`:""}
+${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}
 
   <div class="card">
     <h2>Transaction Details</h2>
@@ -390,7 +390,7 @@ ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}${note3?`<
       <tr><td>Down Payment (${fmt((base.dp/base.hp*100),2)}%)</td><td class="right">= ${base.dp.toLocaleString()}</td><td></td></tr>
       <tr><td>Closing Costs</td><td class="right">+ ${base.cc.toLocaleString()}</td><td class="right">(${(base.cc/base.hp*100).toFixed(2)}% of MHP)</td></tr>
       <tr><th>Funds needed to Close</th><th class="right">&#8776;  $${(base.dp+base.cc).toLocaleString()}</th><th></th></tr>
-    </table>
+    </table>${note3?`<div class="pos" style="margin-top:12px;">${note3}</div>`:""}
   </div>
 
    <div class="card">
