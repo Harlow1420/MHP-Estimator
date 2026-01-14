@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V19.58</title>
+<title>MHP Estimator V20</title>
 
 <style>
 body {
@@ -169,7 +169,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           </span>
         </span>
       </label>
-      <input id="maxPayment" value="3,800">
+      <input id="maxPayment" value="4,000">
     </div>
 
     <div>
@@ -181,7 +181,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           </span>
         </span>
       </label>
-      <input id="maxCash" value="160,000">
+      <input id="maxCash" value="200,000">
     </div>
 
     <div class="subgrid">
@@ -337,7 +337,7 @@ console.log("V18.36 miDrop:", miDrop.toFixed(2));
 
 const note3 =
   ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull
-    ? `The loan amount is greater than the conforming loan limit of $${ACTIVE_FACTORS.oull.toLocaleString()} for ${county.value}, ${state.value}. <b>Jumbo Loans are outside the scoop of this tool (other requirements and/or restrictions may apply).`
+    ? `The loan amount is greater than the conforming loan limit of $${ACTIVE_FACTORS.oull.toLocaleString()} for ${county.value}, ${state.value}. Jumbo Loans are outside the scoop of this tool (other requirements and/or restrictions may apply).`
     : "";
 
 
