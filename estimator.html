@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V20.1</title>
+<title>MHP Estimator V20.2</title>
 
 <style>
 body {
@@ -340,7 +340,8 @@ console.log("V18.36 miDrop:", miDrop.toFixed(2));
     ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately ${Math.round(miDrop)} payments. `
     : "";
 
-  const note2 = dpLIMIT > 0
+  const note2 =
+  dpLIMIT > 0 && (base.dp / base.hp) < 0.10
     ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment.
        The MHP could be higher with a program that allows for less than 5% down payment.`
     : "";
