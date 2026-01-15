@@ -2,10 +2,34 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V20.1</title>
+
+<!-- MOBILE / iFRAME VIEWPORT FIX -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MHP Estimator V20.2</title>
 
 <style>
+
+/* ===============================
+   GLOBAL SAFETY & iOS FIXES
+   =============================== */
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ===============================
+   BASE STYLES (V20.1 UNCHANGED)
+   =============================== */
+
 body {
+  min-width: 0; /* Critical iOS iframe fix */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: #f6f7f8;
   color: #222;
@@ -57,27 +81,17 @@ h2 { font-size:18px; border-bottom:1px solid #ddd; padding-bottom:6px; }
 }
 
 /* INPUT CARD ONLY */
-.card.inputs {
-  background:#ADD8E6;
-}
+.card.inputs { background:#ADD8E6; margin-bottom:0; }
 
-/* REMOVE bottom gap between inputs and button */
-.card.inputs {
-  margin-bottom: 0;
-}
-/* INPUTS SECTION TITLE */
 .inputs-title {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 12px;
   color: #222;
-}
-
-/* OPTIONAL — subtle divider */
-.inputs-title {
   border-bottom: 1px solid rgba(0,0,0,0.1);
   padding-bottom: 6px;
 }
+
 .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
 label { font-size:13px; font-weight:600; display:block; margin-bottom:6px; }
 
@@ -101,8 +115,8 @@ button {
   border:none;
   border-radius:4px;
   cursor:pointer;
-  margin-top: 0;
-  margin-bottom: 16px;
+  margin-top:0;
+  margin-bottom:16px;
 }
 button:hover { background:#183fb0; }
 
@@ -136,21 +150,50 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
   text-align: center;
 }
 
-/* ---------- EQUAL 3-COLUMN TABLES (33.333%) ---------- */
+/* ---------- EQUAL 3-COLUMN TABLES ---------- */
 .three-col-33 {
   table-layout: fixed;
 }
-
 .three-col-33 th,
 .three-col-33 td {
   width: 33.333%;
 }
 
-/* ---------- OUTPUT CARD ALIGNMENT (OPTIONAL) ---------- */
+/* ---------- OUTPUT CARD ALIGNMENT ---------- */
 #output .card {
   margin-left: auto;
   margin-right: auto;
 }
+
+/* ===============================
+   MOBILE-ONLY (PHONES)
+   =============================== */
+
+@media (max-width: 480px) {
+
+  body { padding: 12px 0; }
+
+  .container { padding: 0 12px; }
+
+  h1 { font-size: 1.4rem; line-height: 1.2; }
+  h2 { font-size: 1.05rem; }
+
+  table { font-size: 0.85rem; }
+  th, td {
+    padding: 6px;
+    white-space: normal;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  input, select, button {
+    min-height: 44px;
+    font-size: 16px; /* Prevents iOS zoom */
+  }
+}
+
 </style>
 </head>
 
@@ -179,7 +222,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           </span>
         </span>
       </label>
-      <input id="maxPayment" value="2,500">
+      <input id="maxPayment" value="2,800">
     </div>
 
     <div>
