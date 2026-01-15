@@ -141,9 +141,9 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
   table-layout: fixed;
 }
 
-.three-col-25 th,
-.three-col-25 td {
-  width: 50%;
+.three-col-33 th,
+.three-col-33 td {
+  width: 33.333%;
 }
 
 /* ---------- OUTPUT CARD ALIGNMENT (OPTIONAL) ---------- */
@@ -159,7 +159,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 
   <!-- 3-ROW HEADER -->
   <div class="header-container">
-    <div class="header-left">Maximum Home Price Estimator</div>
+    <div class="header-left">Maximum Home Price Estimator&copy;</div>
     <div class="header-center"><em><strong>a tool for thought ...</strong></em></div>
     <div class="header-right">MHP-Estimator ©2025</div>
   </div>
@@ -179,7 +179,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           </span>
         </span>
       </label>
-      <input id="maxPayment" value="3,500">
+      <input id="maxPayment" value="2,500">
     </div>
 
     <div>
@@ -191,7 +191,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           </span>
         </span>
       </label>
-      <input id="maxCash" value="200,000">
+      <input id="maxCash" value="100,000">
     </div>
 
     <div class="subgrid">
@@ -233,7 +233,7 @@ function num(id){return Number(document.getElementById(id).value.replace(/,/g,""
 });
 
 /* ---------- Constants ---------- */
-const BASE_RATE=0.0616, TERM=360, MIN_DP=0.05;
+const BASE_RATE=0.0606, TERM=360, MIN_DP=0.05;
 const LBPMI=0.0034, HBPMI=0.0115;
 const RATE_STEP=0.00125;
 
@@ -413,7 +413,7 @@ ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}
   </div>
 
   <div style="text-align:center; margin-top:16px;">
-    <a href="https://OwnerPal.com/disclaimer" target="_blank" rel="noopener noreferrer">
+    <a href="https://mhp-estimator.com/disclaimer" target="_blank" rel="noopener noreferrer">
       Disclaimer / References / Use of Estimator
     </a>
   </div>
