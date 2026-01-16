@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V21.1</title>
+<title>MHP Estimator V22.5</title>
 
 <style>
 body {
@@ -191,7 +191,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           </span>
         </span>
       </label>
-      <input id="maxCash" value="65,000">
+      <input id="maxCash" value="75,000">
     </div>
 
     <div class="subgrid">
@@ -393,7 +393,21 @@ const note3 =
     <h2>Payment Breakdown</h2>
     <table class="mono three-col-33">
       <tr><th></th><th class="right">/ Month</th><th class="right">Factor</th></tr>
-      <tr><td>Principal &amp; Interest (P&amp;I)</td><td class="right">$${fmt(base.pi)}</td><td class="right">($${fmt((piFactor*1000),4)} / $1,000)</td></tr>
+      <tr>
+  <td>
+    <span class="label-with-tooltip">
+      Principal &amp; Interest (P&amp;I)
+      <span class="tooltip-icon">ⓘ
+        <span class="tooltip-text">
+          With your 1st payment your loan balance will decrease by
+          <strong>$${fpPRINC.toFixed(2)}</strong>.
+        </span>
+      </span>
+    </span>
+  </td>
+  <td class="right">$${fmt(base.pi)}</td>
+  <td class="right">($${fmt((piFactor*1000),4)} / $1,000)</td>
+</tr>
       <tr><td>Property Tax</td><td class="right">+ ${fmt(base.tax)}</td><td class="right">(${fmt((ACTIVE_FACTORS.tax*100),2)}% of MHP)</td></tr>
       <tr><td>Homeowners Insurance</td><td class="right">+ ${fmt(base.hoi)}</td><td class="right">($${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)} / $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)})</td></tr>
       <tr><td>PMI</td><td class="right">+ ${fmt(base.pmi)}</td><td class="right">(${fmt((base.pmiF*100),2)}%)</td></tr>
