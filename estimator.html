@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V21.1</title>
+<title>MHP Estimator V21</title>
 
 <style>
 body {
@@ -296,13 +296,10 @@ function calc(rate,maxPmt,maxCash){
     const cov=Math.max(la,0.8*hp);
     const hoi=(ACTIVE_FACTORS.hoiBaseAnnual*(cov/ACTIVE_FACTORS.hoiBaseCoverage))/12;
 
-    let pmi = 0, pmiF = 0;
-pmiF = ltv > 0.8
-       ? (ltv >= 0.95
-           ? HBPMI
-           : LBPMI + (HBPMI - LBPMI) * (ltv - 0.8) / (0.95 - 0.8))
-       : 0;
-pmi = (la * pmiF) / 12;
+    let pmi=0,pmiF=0;
+    if(ltv>0.8){
+      pmiF=ltv>=0.95?HBPMI:LBPMI+(HBPMI-LBPMI)*(ltv-0.8001)/(0.95-0.8001);
+      pmi=(la*pmiF)/12;
     }
 
     const pmt=pi+tax+hoi+pmi;
