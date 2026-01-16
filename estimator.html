@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V20.3</title>
+<title>MHP Estimator V21.1</title>
 
 <style>
 body {
@@ -187,7 +187,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
         Maximum funds available to use
         <span class="tooltip-icon">ⓘ
           <span class="tooltip-text">
-            Although there are programs that offer less than 5% down payment options this tool assumes a minimum down payment of 5%.
+            Although there are programs that offer less than 5% down payment options, they may have additional eligibility requirements, limitations or costs that are out of the scoop of this tool. This tool is defaulted to an assumption of 5% or more down payment.
           </span>
         </span>
       </label>
@@ -296,10 +296,13 @@ function calc(rate,maxPmt,maxCash){
     const cov=Math.max(la,0.8*hp);
     const hoi=(ACTIVE_FACTORS.hoiBaseAnnual*(cov/ACTIVE_FACTORS.hoiBaseCoverage))/12;
 
-    let pmi=0,pmiF=0;
-    if(ltv>0.8){
-      pmiF=ltv>=0.95?HBPMI:LBPMI+(HBPMI-LBPMI)*(ltv-0.8001)/(0.95-0.8001);
-      pmi=(la*pmiF)/12;
+    let pmi = 0, pmiF = 0;
+pmiF = ltv > 0.8
+       ? (ltv >= 0.95
+           ? HBPMI
+           : LBPMI + (HBPMI - LBPMI) * (ltv - 0.8) / (0.95 - 0.8))
+       : 0;
+pmi = (la * pmiF) / 12;
     }
 
     const pmt=pi+tax+hoi+pmi;
