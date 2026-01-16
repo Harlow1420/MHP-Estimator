@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V23</title>
+<title>MHP Estimator V23.5</title>
 
 <style>
 body {
@@ -420,7 +420,18 @@ ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}
     <table class="mono three-col-33">
       <tr><th></th><th class="right">Amount</th><th class="right">Factor</th></tr>
       <tr><td>Maximum Home Price (MHP)</td><td class="right">$${base.hp.toLocaleString()}</td><td></td></tr>
-      <tr><td>Loan Amount (${fmt((base.la/base.hp*100),2)}% LTV)</td><td class="right">- ${base.la.toLocaleString()}</td><td></td></tr>
+      <tr><td>
+    <span class="label-with-tooltip">
+      Loan Amount (${fmt((base.la/base.hp*100),2)}% LTV)
+      <span class="tooltip-icon">ⓘ
+        <span class="tooltip-text">
+          In this example, after 5-years the loan balance would be
+          $${lbFive.toFixed(2)}. 
+        </span>
+      </span>
+    </span>
+  </td>
+<td></td></tr>
       <tr><td>Down Payment (${fmt((base.dp/base.hp*100),2)}%)</td><td class="right">= ${base.dp.toLocaleString()}</td><td></td></tr>
       <tr><td>Closing Costs</td><td class="right">+ ${base.cc.toLocaleString()}</td><td class="right">(${(base.cc/base.hp*100).toFixed(2)}% of MHP)</td></tr>
       <tr><th>Funds needed to Close</th><th class="right">&#8776;  $${(base.dp+base.cc).toLocaleString()}</th><th></th></tr>
