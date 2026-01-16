@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V23.7</title>
+<title>MHP Estimator V23.8</title>
 
 <style>
 body {
@@ -425,8 +425,8 @@ ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}
       Loan Amount (${fmt((base.la/base.hp*100),2)}% LTV)
       <span class="tooltip-icon">ⓘ
         <span class="tooltip-text">
-          In this example, after 5-years the loan balance would be
-          $${lbFive.toFixed(2)}. 
+          For reference, in this example, after 5-years the loan balance would be
+          $${lbFive.toLocaleString()}. 
         </span>
       </span>
     </span>
