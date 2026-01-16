@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V21</title>
+<title>MHP Estimator V21.1</title>
 
 <style>
 body {
@@ -191,7 +191,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           </span>
         </span>
       </label>
-      <input id="maxCash" value="100,000">
+      <input id="maxCash" value="65,000">
     </div>
 
     <div class="subgrid">
@@ -290,24 +290,33 @@ function calc(rate,maxPmt,maxCash){
     const dp=maxCash-cc;
     if(dp<hp*MIN_DP) break;
 
-    const la=hp-dp, ltv=la/hp;
+    const la=hp-dp;
+    const ltv=la/hp;
+
     const pi=la*PIF;
     const tax=(hp*ACTIVE_FACTORS.tax)/12;
     const cov=Math.max(la,0.8*hp);
     const hoi=(ACTIVE_FACTORS.hoiBaseAnnual*(cov/ACTIVE_FACTORS.hoiBaseCoverage))/12;
 
-    let pmi=0,pmiF=0;
-    if(ltv>0.8){
-      pmiF=ltv>=0.95?HBPMI:LBPMI+(HBPMI-LBPMI)*(ltv-0.8001)/(0.95-0.8001);
-      pmi=(la*pmiF)/12;
-    }
+    // -----------------------
+    // PMI (boundary-safe)
+    // -----------------------
+    let pmi = 0, pmiF = 0;
+    pmiF = ltv > 0.8
+           ? (ltv >= 0.95
+               ? HBPMI
+               : LBPMI + (HBPMI - LBPMI) * (ltv - 0.8) / (0.95 - 0.8))
+           : 0;
+    pmi = (la * pmiF) / 12;
 
-    const pmt=pi+tax+hoi+pmi;
+    const pmt = pi + tax + hoi + pmi;
+
     if(pmt<=maxPmt && dp+cc<=maxCash){
       last={hp,la,dp,cc,ltv,pi,tax,hoi,pmi,pmt,pmiF,cov};
       hp+=1000;
     } else break;
   }
+
   return last;
 }
 
