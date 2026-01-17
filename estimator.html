@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MHP Estimator V24.5</title>
+<title>MHP Estimator V24.6</title>
 
 <style>
 body {
@@ -278,6 +278,25 @@ state.onchange = populateCounties;
 county.onchange = () => {
   ACTIVE_FACTORS = COUNTY_DATA[state.value][county.value];
 };
+
+/* ---------- Tooltip Tap Support (V24.6) ---------- */
+document.addEventListener("click", function(e){
+  const icon = e.target.closest(".tooltip-icon");
+
+  document.querySelectorAll(".tooltip-text.show").forEach(t=>{
+    if(!icon || !t.parentElement.contains(icon)){
+      t.classList.remove("show");
+    }
+  });
+
+  if(icon){
+    const tip = icon.querySelector(".tooltip-text");
+    if(tip){
+      e.stopPropagation();
+      tip.classList.toggle("show");
+    }
+  }
+});
 
 /* ---------- Engine ---------- */
 function calc(rate,maxPmt,maxCash){
