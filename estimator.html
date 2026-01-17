@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MHP Estimator V23.8</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MHP Estimator V24.5</title>
 
 <style>
 body {
@@ -16,7 +17,7 @@ body {
 .container { max-width:1050px; margin:0 auto; padding:0 20px; }
 
 /* ---------- 3-ROW HEADER ---------- */
-header-container {
+.header-container {
   display: grid;
   grid-template-rows: auto auto auto;
   row-gap: 4px;
@@ -59,26 +60,21 @@ h2 { font-size:18px; border-bottom:1px solid #ddd; padding-bottom:6px; }
 /* INPUT CARD ONLY */
 .card.inputs {
   background:#ADD8E6;
-}
-
-/* REMOVE bottom gap between inputs and button */
-.card.inputs {
   margin-bottom: 0;
 }
+
 /* INPUTS SECTION TITLE */
 .inputs-title {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 12px;
   color: #222;
-}
-
-/* OPTIONAL — subtle divider */
-.inputs-title {
   border-bottom: 1px solid rgba(0,0,0,0.1);
   padding-bottom: 6px;
 }
+
 .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+
 label { font-size:13px; font-weight:600; display:block; margin-bottom:6px; }
 
 /* ---------- TOOLTIP ---------- */
@@ -101,7 +97,6 @@ button {
   border:none;
   border-radius:4px;
   cursor:pointer;
-  margin-top: 0;
   margin-bottom: 16px;
 }
 button:hover { background:#183fb0; }
@@ -129,27 +124,38 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
   .subgrid { grid-template-columns:1fr; }
 }
 
-/* ---------- RATE SENSITIVITY TABLE ---------- */
+/* ---------- RATE / 3-COLUMN TABLES ---------- */
 .rate-table th,
-.rate-table td {
-  width: 33.333%;
-  text-align: center;
-}
-
-/* ---------- EQUAL 3-COLUMN TABLES (33.333%) ---------- */
-.three-col-33 {
-  table-layout: fixed;
-}
-
+.rate-table td,
 .three-col-33 th,
 .three-col-33 td {
   width: 33.333%;
 }
 
-/* ---------- OUTPUT CARD ALIGNMENT (OPTIONAL) ---------- */
-#output .card {
-  margin-left: auto;
-  margin-right: auto;
+/* ---------- iPHONE OPTIMIZATION ---------- */
+@media (max-width: 480px) {
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-left {
+    font-size: 20px;
+  }
+
+  .highlight {
+    font-size: 26px;
+  }
+
+  input, select, button {
+    font-size: 16px; /* prevent iOS zoom */
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 }
 </style>
 </head>
@@ -157,7 +163,6 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 <body>
 <div class="container">
 
-  <!-- 3-ROW HEADER -->
   <div class="header-container">
     <div class="header-left">Maximum Home Price Estimator&copy;</div>
     <div class="header-center"><em><strong>a tool for thought ...</strong></em></div>
@@ -165,51 +170,48 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
   </div>
 
   <div class="card inputs">
+    <div class="inputs-title">Inputs</div>
+    <div class="grid">
 
-  <div class="inputs-title">Inputs</div>
-
-  <div class="grid">
-
-    <div>
-      <label class="label-with-tooltip">
-        Maximum Monthly Housing Payment
-        <span class="tooltip-icon">ⓘ
-          <span class="tooltip-text">
-            Some properties such as Condos, require Association Fees. If for example, you were interested in Condos and the aveage Association Fee is approx. $400 / mo. and your wanted a Maxium Housing Payment of $2,900, then you should enter $2,500 as your Maximum Housing Payment.
-          </span>
-        </span>
-      </label>
-      <input id="maxPayment" value="2,900">
-    </div>
-
-    <div>
-      <label class="label-with-tooltip">
-        Maximum funds available to use
-        <span class="tooltip-icon">ⓘ
-          <span class="tooltip-text">
-            Although there are programs that offer less than 5% down payment options, they may have additional eligibility requirements, limitations or costs that are out of the scoop of this tool. This tool is defaulted to an assumption of 5% or more down payment.
-          </span>
-        </span>
-      </label>
-      <input id="maxCash" value="75,000">
-    </div>
-
-    <div class="subgrid">
       <div>
-        <label>State</label>
-        <select id="state"></select>
+        <label class="label-with-tooltip">
+          Maximum Monthly Housing Payment
+          <span class="tooltip-icon">ⓘ
+            <span class="tooltip-text">
+              Some properties such as Condos require Association Fees.
+            </span>
+          </span>
+        </label>
+        <input id="maxPayment" value="2,900">
       </div>
-      <div>
-        <label>County</label>
-        <select id="county" disabled></select>
-      </div>
-    </div>
 
+      <div>
+        <label class="label-with-tooltip">
+          Maximum funds available to use
+          <span class="tooltip-icon">ⓘ
+            <span class="tooltip-text">
+              This tool assumes a minimum 5% down payment.
+            </span>
+          </span>
+        </label>
+        <input id="maxCash" value="75,000">
+      </div>
+
+      <div class="subgrid">
+        <div>
+          <label>State</label>
+          <select id="state"></select>
+        </div>
+        <div>
+          <label>County</label>
+          <select id="county" disabled></select>
+        </div>
+      </div>
+
+    </div>
   </div>
-</div>
-  <button onclick="runCalculator()">Run Estimation</button>
-</div>
 
+  <button onclick="runCalculator()">Run Estimation</button>
 </div>
 
 <div class="container">
@@ -217,8 +219,6 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 </div>
 
 <div class="disclaimer">For entertainment purposes only</div>
-
-</div>
 
 <script>
 "use strict";
