@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MHP Estimator V27.7</title>
+<title>MHP Estimator V28.5</title>
  
 <style>
 body {
@@ -357,11 +357,58 @@ function calc(rate,maxPmt,maxCash){
  
     const pmt = pi + tax + hoi + pmi;
  
-    if(pmt<=maxPmt && dp+cc<=maxCash){
-      last={hp,la,dp,cc,ltv,pi,tax,hoi,pmi,pmt,pmiF,cov};
-      hp+=1000;
-    } else break;
-  }
+    if (pmt <= maxPmt && dp + cc <= maxCash) {
+
+ last = { hp, la, dp, cc, ltv, pi, tax, hoi, pmi, pmt, pmiF, cov };
+ hp += 1000;
+
+} else {
+
+ /* ---------- MICRO REFINEMENT NEAR 80% LTV ---------- */
+ if (last && Math.abs(last.ltv - 0.80) < 0.02) {
+
+   let best = last;
+
+   for (let h = last.hp - 2000; h <= last.hp + 2000; h += 100) {
+
+     if (h <= 0) continue;
+
+     const cc2 = h * ACTIVE_FACTORS.cc;
+     const dp2 = maxCash - cc2;
+     if (dp2 < h * MIN_DP) continue;
+
+     const la2 = h - dp2;
+     const ltv2 = la2 / h;
+
+     const pi2 = la2 * PIF;
+     const tax2 = (h * ACTIVE_FACTORS.tax) / 12;
+     const cov2 = Math.max(la2, 0.8 * h);
+     const hoi2 = (ACTIVE_FACTORS.hoiBaseAnnual * (cov2 / ACTIVE_FACTORS.hoiBaseCoverage)) / 12;
+
+     let pmiF2 = 0;
+     if (ltv2 > 0.8) {
+       pmiF2 = ltv2 >= 0.95
+         ? HBPMI
+         : LBPMI + (HBPMI - LBPMI) * (ltv2 - 0.8) / (0.95 - 0.8);
+     }
+
+     const pmi2 = (la2 * pmiF2) / 12;
+     const pmt2 = pi2 + tax2 + hoi2 + pmi2;
+
+     if (pmt2 <= maxPmt && dp2 + cc2 <= maxCash) {
+       best = {
+         hp: h, la: la2, dp: dp2, cc: cc2, ltv: ltv2,
+         pi: pi2, tax: tax2, hoi: hoi2,
+         pmi: pmi2, pmt: pmt2, pmiF: pmiF2, cov: cov2
+       };
+     }
+   }
+
+   last = best;
+ }
+
+ break;
+}  }
  
   return last;
 }
