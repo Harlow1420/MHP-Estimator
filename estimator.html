@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MHP Estimator V28.5</title>
+<title>MHP Estimator V29.1</title>
  
 <style>
 body {
@@ -89,8 +89,8 @@ h2 { font-size:18px; border-bottom:1px solid #ddd; padding-bottom:6px; }
   font-weight: 600;
   margin-bottom: 12px;
   color: #222;
-  border-bottom: 1px solid rgba(0,0,0,0.1);
-  padding-bottom: 6px;
+  /*border-bottom: 1px solid rgba(0,0,0,0.1); */
+  padding-bottom: 0;
 }
  
 .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
@@ -217,7 +217,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           Maximum funds available to use
           <span class="tooltip-icon">ⓘ
             <span class="tooltip-text">
-              Although there are programs that offer less than 5% down payment options, they may have additional eligibility requirements, limitations or costs that are out of the scoop of this tool. This tool is defaulted to an assumption of 5% or more down payment.
+              Although there are programs that offer less than 5% down payment options, they may have additional eligibility requirements, limitations or costs that are out of the scoop of this tool. This tool is defaulted to an assumption of 5% or more down payment on a conventional conforming loan.
             </span>
           </span>
         </label>
@@ -450,7 +450,7 @@ console.log("V18.36 miDrop:", miDrop.toFixed(2));
  
 const note3 =
   ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull
-    ? `The loan amount is greater than the conforming loan limit of $${ACTIVE_FACTORS.oull.toLocaleString()} for ${county.value}, ${state.value}. Jumbo Loans are outside the scoop of this tool (other requirements and/or restrictions may apply).`
+    ? `The loan amount is greater than the conforming loan limit of $${ACTIVE_FACTORS.oull.toLocaleString()} for ${county.value}, ${state.value}. Jumbo Loans are outside the scoop of this tool (<b>other requirements and/or restrictions may apply</b>).`
     : "";
  
  
@@ -492,8 +492,8 @@ const note3 =
       Principal &amp; Interest (P&amp;I)
       <span class="tooltip-icon">ⓘ
         <span class="tooltip-text">
-          The 1st payment the loan balance would decrease by
-          $${fpPRINC.toFixed(2)} and every payment thereafter, the amount paid toward principal reduction increases slightly.
+          With the 1st payment the loan balance would decrease by
+          $${fpPRINC.toFixed(2)} and every payment thereafter, the amount paid toward reducing the loan balance increases slightly.
         </span>
       </span>
     </span>
