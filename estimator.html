@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MHP Estimator V30</title>
+<title>MHP Estimator V29.5</title>
  
 <style>
 body {
@@ -266,31 +266,11 @@ function num(id){return Number(document.getElementById(id).value.replace(/,/g,""
   el.onblur=()=>el.value=Number(el.value).toLocaleString();
 });
  
-/* ---------- DYNAMIC BASE RATE ---------- */
-let BASE_RATE = 0.0609; // fallback safety value
-
-async function loadBaseRate(){
-  try{
-    const res = await fetch(
-      "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/refs/heads/main/Rate",
-      { cache: "no-store" }
-    );
-    const txt = await res.text();
-    const r = parseFloat(txt.trim());
-    if(!isNaN(r) && r > 0 && r < 0.20){
-      BASE_RATE = r;
-      console.log("Loaded BASE_RATE:", BASE_RATE);
-    }
-  } catch(e){
-    console.warn("BASE_RATE fetch failed, using fallback");
-  }
-}
-
 /* ---------- Constants ---------- */
-const TERM=360, MIN_DP=0.05;
+const BASE_RATE=0.0609, TERM=360, MIN_DP=0.05;
 const LBPMI=0.0034, HBPMI=0.0115;
 const RATE_STEP=0.00125;
-
+ 
 /* ---------- CSV ---------- */
 const CSV_URL="https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/EPTRBC.csv";
 let COUNTY_DATA={}, ACTIVE_FACTORS=null;
