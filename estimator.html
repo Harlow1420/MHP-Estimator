@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MHP Estimator V30</title>
+<title>MHP Estimator V31.2</title>
  
 <style>
 body {
@@ -468,12 +468,12 @@ console.log("V18.36 miDrop:", miDrop.toFixed(2));
  
   /* ---------- NOTES ---------- */
   const note1 = base.pmi > 0
-    ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately ${Math.round(miDrop)} payments. `
+    ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately ${Math.round(miDrop)} payments `
     : "";
  
   const note2 =
   dpLIMIT > 0 && (base.dp / base.hp) < 0.10
-    ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment.
+    ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment
        The MHP could be higher with a program that allows for less than 5% down payment.`
     : "";
  
@@ -505,9 +505,9 @@ const note3 =
  
   output.innerHTML=`
   <div class="card">
-    <div>Using an "example" rate of <b>${(BASE_RATE*100).toFixed(3)}%</b> on a 30YR Fixed and a few assumptions, the</div>
+    <div>Using an "example" rate of <b>${(BASE_RATE*100).toFixed(2)}%</b> on a 30YR Fixed and a few assumptions, the</div>
     <div class="highlight">Maximum Home Price (MHP) &#8776; $${base.hp.toLocaleString()}</div>
-    <div> with a Loan Amount of <b>$${base.la.toLocaleString()}</b>.</div>${note2?`<div class="neg" style="margin-top:8px;">${note2}</div>`:""}
+    <div> with a Loan Amount of <b>$${base.la.toLocaleString()}</b></div>${note2?`<div class="neg" style="margin-top:8px;">${note2}</div>`:""}
   </div>
   </div>
  
@@ -562,7 +562,7 @@ ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}
  
    <div class="card">
     <h2>Interest Rate Changes</h2>
-    <div>How much would the Maximum Home Price (MHP) change if the rate was lower or higher then the “example” rate of ${(BASE_RATE*100).toFixed(3)}%.</div><br>
+    <div>How much would the Maximum Home Price (MHP) change if the rate was lower or higher than the “example” rate of ${(BASE_RATE*100).toFixed(2)}%.</div><br>
     <table class="mono rate-table">
       <tr><th class="right">Interest Rate</th><th class="right">Change</th><th class="right">Maximum Home Price</th></tr>
       ${sens}
