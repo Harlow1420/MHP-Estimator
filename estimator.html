@@ -228,7 +228,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
             </span>
           </span>
         </label>
-        <input id="maxCash" value="80,000">
+        <input id="maxCash" value="85,000">
       </div>
  
       <div class="subgrid">
@@ -562,7 +562,7 @@ ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}
  
    <div class="card">
     <h2>Interest Rate Changes</h2>
-    <div>How much would the Maximum Home Price (MHP) change if the rate was lower or higher then the “example” rate of ${(BASE_RATE*100).toFixed(3)}%.</div>
+    <div>How much would the Maximum Home Price (MHP) change if the rate was lower or higher then the “example” rate of ${(BASE_RATE*100).toFixed(3)}%.<br></div>
     <table class="mono rate-table">
       <tr><th class="right">Interest Rate</th><th class="right">Change</th><th class="right">Maximum Home Price</th></tr>
       ${sens}
@@ -577,6 +577,7 @@ ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}
 `;
 }
  
-Promise.all([loadCSV(), loadBaseRate()]).then(runCalculator);</script>
+Promise.all([loadCSV(), loadBaseRate()]).then(runCalculator);
+</script>
 </body>
 </html>
