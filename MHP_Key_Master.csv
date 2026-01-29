@@ -1,5 +1,5 @@
 key,status,access_type,start_date,end_date,partner_name,partner_contact,source,campaign_name,billing_plan,billing_status,external_ref,created_date,last_updated,notes,sales
-YYYD,active,monthly,2026-01-28,2026-01-29,Kurt Harlow,harlowkurt@gmail.com,website,,monthly_15,paid,,2026-02-01,2026-02-01,Sample starter key,
+YYYD,active,monthly,2026-01-28,2026-01-30,Kurt Harlow,harlowkurt@gmail.com,website,,monthly_15,paid,,2026-02-01,2026-02-01,Sample starter key,
 6KXT,,,,,,,,,,,,,,,
 RMGD,,,,,,,,,,,,,,,
 UMCM,,,,,,,,,,,,,,,
@@ -49,3 +49,4 @@ TJRF,,,,,,,,,,,,,,,
 GFRG,,,,,,,,,,,,,,,
 59RN,,,,,,,,,,,,,,,
 ZKG4,,,,,,,,,,,,,,,
+
