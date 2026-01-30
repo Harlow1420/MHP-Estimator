@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Price Estimator Gate</title>
+<style>
+body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      display:flex; justify-content:center; align-items:center; height:100vh; margin:0;
+      background:#f6f7f8; color:#222; text-align:center; padding:20px;}
+.message { max-width:500px; background:#fff; border:1px solid #ddd; border-radius:8px;
+          padding:24px; box-shadow:0 2px 6px rgba(0,0,0,0.1); font-size:18px;}
+.success { color:#1a7f37; }
+.error { color:#c92c2c; }
+</style>
+</head>
+<body>
+<div class="message" id="message">Validating access...</div>
+
+<script>
+"use strict";
+
+/* ---------- CSV URL with keys ---------- */
+const KEY_CSV_URL = "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/refs/heads/main/MHP_Key_Master.csv";
+
+/* ---------- Elements ---------- */
+const msgEl = document.getElementById("message");
+
+/* ---------- Get key from query string ---------- */
+const params = new URLSearchParams(window.location.search);
+const ACCESS_KEY = params.get("key");
+
+/* ---------- Redirect target ---------- */
+const LIVE_URL = "https://mhp-estimator.com/live/";
+
+async function validateKey() {
+   if (!ACCESS_KEY) {
+       msgEl.textContent = "No key provided.";
+       msgEl.classList.add("error");
+       return;
+   }
+
+   try {
+       const csvText = await (await fetch(KEY_CSV_URL, {cache:"no-store"})).text();
+       const today = new Date();
+       let valid = false;
+
+       for (const row of csvText.trim().split("\n").slice(1)) {
+           const [k,s,e] = row.split(",");
+           if (k.trim() === ACCESS_KEY) {
+               const start = new Date(s + "T00:00:00");
+               const end = new Date(e + "T23:59:59");
+               if (today >= start && today <= end) {
+                   valid = true;
+               }
+               break;
+           }
+       }
+
+       if (valid) {
+           msgEl.textContent = "Opening Estimator… this may take a moment.";
+           msgEl.classList.add("success");
+           setTimeout(() => { window.location.href = LIVE_URL; }, 1500);
+       } else {
+           msgEl.textContent = "The link is currently not available.";
+           msgEl.classList.add("error");
+       }
+
+   } catch (err) {
+       console.error(err);
+       msgEl.textContent = "Error validating key. Please try again later.";
+       msgEl.classList.add("error");
+   }
+}
+
+validateKey();
+</script>
+</body>
+</html>
