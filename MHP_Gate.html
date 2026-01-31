@@ -3,77 +3,126 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator Gate</title>
+<title>Opening Estimator…</title>
+
 <style>
-body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      display:flex; justify-content:center; align-items:center; height:100vh; margin:0;
-      background:#f6f7f8; color:#222; text-align:center; padding:20px;}
-.message { max-width:500px; background:#fff; border:1px solid #ddd; border-radius:8px;
-          padding:24px; box-shadow:0 2px 6px rgba(0,0,0,0.1); font-size:18px;}
-.success { color:#1a7f37; }
-.error { color:#c92c2c; }
+  body{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:#f6f7f8;
+    color:#222;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:100vh;
+    margin:0;
+  }
+  .card{
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:6px;
+    padding:24px 28px;
+    max-width:420px;
+    text-align:center;
+  }
+  .title{
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:12px;
+  }
+  .msg{
+    font-size:14px;
+    color:#555;
+  }
+  .error{
+    color:#c92c2c;
+    font-weight:600;
+  }
 </style>
 </head>
+
 <body>
-<div class="message" id="message">Validating access...</div>
+<div class="card">
+  <div class="title">Opening Estimator…</div>
+  <div id="msg" class="msg">Please wait, this will only take a moment.</div>
+</div>
 
 <script>
 "use strict";
 
-/* ---------- CSV URL with keys ---------- */
-const KEY_CSV_URL = "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/refs/heads/main/MHP_Key_Master.csv";
+/* ================= CONFIG ================= */
+const KEY_CSV_URL =
+  "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/refs/heads/main/MHP_Key_Master.csv";
 
-/* ---------- Elements ---------- */
-const msgEl = document.getElementById("message");
+const REDIRECT_URL = "https://mhp-estimator.com/live";
 
-/* ---------- Get key from query string ---------- */
-const params = new URLSearchParams(window.location.search);
-const ACCESS_KEY = params.get("key");
-
-/* ---------- Redirect target ---------- */
-const LIVE_URL = "https://mhp-estimator.com/live/";
-
-async function validateKey() {
-   if (!ACCESS_KEY) {
-       msgEl.textContent = "No key provided.";
-       msgEl.classList.add("error");
-       return;
-   }
-
-   try {
-       const csvText = await (await fetch(KEY_CSV_URL, {cache:"no-store"})).text();
-       const today = new Date();
-       let valid = false;
-
-       for (const row of csvText.trim().split("\n").slice(1)) {
-           const [k,s,e] = row.split(",");
-           if (k.trim() === ACCESS_KEY) {
-               const start = new Date(s + "T00:00:00");
-               const end = new Date(e + "T23:59:59");
-               if (today >= start && today <= end) {
-                   valid = true;
-               }
-               break;
-           }
-       }
-
-       if (valid) {
-           msgEl.textContent = "Opening Estimator… this may take a moment.";
-           msgEl.classList.add("success");
-           setTimeout(() => { window.location.href = LIVE_URL; }, 1500);
-       } else {
-           msgEl.textContent = "The link is currently not available.";
-           msgEl.classList.add("error");
-       }
-
-   } catch (err) {
-       console.error(err);
-       msgEl.textContent = "Error validating key. Please try again later.";
-       msgEl.classList.add("error");
-   }
+/* ================= HELPERS ================= */
+function qs(name){
+  return new URLSearchParams(window.location.search).get(name);
 }
 
-validateKey();
+function parseCSV(text){
+  const lines = text.trim().split(/\r?\n/);
+  const headers = lines[0].split(",").map(h => h.trim());
+
+  return lines.slice(1).map(line => {
+    const cols = line.split(",");
+    const row = {};
+    headers.forEach((h,i) => row[h] = (cols[i] || "").trim());
+    return row;
+  });
+}
+
+function showError(msg){
+  const el = document.getElementById("msg");
+  el.textContent = msg;
+  el.className = "msg error";
+}
+
+/* ================= MAIN ================= */
+(async function(){
+  const key = qs("key");
+
+  if(!key){
+    showError("This access link is missing or invalid.");
+    return;
+  }
+
+  try{
+    const res = await fetch(KEY_CSV_URL, { cache:"no-store" });
+    if(!res.ok) throw new Error("CSV fetch failed");
+
+    const csvText = await res.text();
+    const rows = parseCSV(csvText);
+
+    const row = rows.find(r => r.key === key);
+
+    if(!row){
+      showError("This access link is missing or invalid.");
+      return;
+    }
+
+    const today = new Date();
+    const start = new Date(row.start_date + "T00:00:00");
+    const end   = new Date(row.end_date   + "T23:59:59");
+
+    if(today < start || today > end){
+      showError("This access link is no longer available.");
+      return;
+    }
+
+    /* SUCCESS */
+    document.getElementById("msg").textContent =
+      "Access verified. Opening estimator…";
+
+    setTimeout(() => {
+      window.location.href = REDIRECT_URL;
+    }, 900);
+
+  }catch(err){
+    console.error(err);
+    showError("Unable to verify access at this time.");
+  }
+})();
 </script>
 </body>
 </html>
