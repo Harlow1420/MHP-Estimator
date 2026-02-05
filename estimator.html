@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V40</title>
- 
+<title>Home Price Estimator V40.1</title>
+
 <style>
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -13,42 +13,20 @@ body {
   margin: 0;
   padding: 30px 0;
 }
- 
 .container { max-width:1050px; margin:0 auto; padding:0 20px; }
- 
-/* ---------- 3-ROW HEADER ---------- */
+
 .header-container {
   display: grid;
   grid-template-rows: auto auto auto;
   row-gap: 4px;
-  margin-bottom: 0;
   background: #ADD8E6;
   padding: 14px 16px;
-  border-radius: 6px;
+  border-radius: 6px 6px 0 0;
 }
- 
-.header-left {
-  text-align: left;
-  font-size: 26px;
-  font-weight: 600;
-}
- 
-.header-center {
-  text-align: center;
-  font-style: italic;
-  color: #444;
-}
- 
-.header-right {
-  text-align: right;
-  font-size: 13px;
-  color: #666;
-}
-/* -------------------------------- */
- 
-h1 { font-size:26px; margin-bottom:20px; }
-h2 { font-size:18px; border-bottom:1px solid #ddd; padding-bottom:6px; }
- 
+.header-left { font-size:26px; font-weight:600; }
+.header-center { text-align:center; font-style:italic; }
+.header-right { text-align:right; font-size:13px; color:#666; }
+
 .card {
   background:#fff;
   border:1px solid #ddd;
@@ -56,190 +34,83 @@ h2 { font-size:18px; border-bottom:1px solid #ddd; padding-bottom:6px; }
   padding:18px 20px;
   margin-bottom:20px;
 }
- 
-/* INPUT CARD ONLY */
 .card.inputs {
   background:#ADD8E6;
-  margin-bottom: 0;
-  margin-top: 0;
-  border-top: 0;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+  border-top:0;
+  border-radius:0 0 6px 6px;
 }
 
-/* REMOVE SEAM BETWEEN HEADER & INPUT CARD */
-.header-container {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-/* REMOVE SEAM BETWEEN HEADER & INPUT CARD */
-.header-container {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
+.inputs-title { font-size:16px; font-weight:600; margin-bottom:12px; }
 
-.card.inputs {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
- 
-/* INPUTS SECTION TITLE */
-.inputs-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: #222;
-  /*border-bottom: 1px solid rgba(0,0,0,0.1); */
-  padding-bottom: 0;
-}
- 
 .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
- 
-label { font-size:13px; font-weight:600; display:block; margin-bottom:6px; }
- 
-/* ---------- TOOLTIP ---------- */
-.label-with-tooltip { display:inline-flex; align-items:center; gap:6px; }
-.tooltip-icon { position:relative; cursor:pointer; }
-.tooltip-text {
-  visibility:hidden; opacity:0; width:300px;
-  background:#222; color:#fff; padding:10px;
-  border-radius:6px; position:absolute; z-index:999;
-  left:50%; top:100%; transform:translate(-50%,6px);
-  transition:opacity .2s ease;
+.subgrid { grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+label { font-size:13px; font-weight:600; margin-bottom:6px; display:block; }
+
+input, select, button {
+  width:100%;
+  padding:8px 10px;
+  font-size:14px;
 }
-.tooltip-icon:hover .tooltip-text { visibility:visible; opacity:1; }
- 
-/* ---------- FORM ---------- */
-input, select, button { width:100%; padding:8px 10px; font-size:14px; }
+
 button {
   background:#2D92B3;
   color:#fff;
   border:none;
   border-radius:4px;
   cursor:pointer;
-  margin-bottom: 16px;
+  margin-bottom:16px;
 }
-button:hover { background:#183fb0; }
- 
-/* ---------- TABLE ---------- */
-table { width:100%; border-collapse:collapse; font-size:14px; table-layout:fixed; }
-th, td { padding:8px 6px; border-bottom:1px solid #eee; }
-.right { text-align:right; }
-.mono { font-family:ui-monospace, Menlo, Consolas, monospace; }
- 
+
 .highlight { font-size:32px; font-weight:700; margin:10px 0; }
-.pos { color:#1a7f37; font-weight:600; }
-.neg { color:#c92c2c; font-weight:600; }
-.neu { font-weight:600; } /* inherits default black */ 
-.disclaimer { font-size:12px; color:#666; text-align:center; margin-top:30px; }
- 
-/* ---------- STATE / COUNTY ---------- */
-.subgrid {
-  grid-column:1 / -1;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-@media (max-width:600px){
-  .subgrid { grid-template-columns:1fr; }
+.mono { font-family:ui-monospace, Menlo, Consolas, monospace; }
+.right { text-align:right; }
+
+.disclaimer {
+  font-size:12px;
+  color:#666;
+  text-align:center;
+  margin-top:30px;
 }
 
- /* ---------- RATE SENSITIVITY TABLE ---------- */
-.rate-table th,
-.rate-table td {
-  width: 33.333%;
-  text-align: center;
+@media (max-width:480px){
+  .grid { grid-template-columns:1fr; }
+  input, select, button { font-size:16px; }
 }
-
-/* ---------- RATE / 3-COLUMN TABLES ---------- */
-.rate-table th,
-.rate-table td,
-.three-col-33 th,
-.three-col-33 td {
-  width: 33.333%;
-}
- 
-/* ---------- iPHONE OPTIMIZATION ---------- */
-@media (max-width: 480px) {
- 
-  .grid {
-    grid-template-columns: 1fr;
-  }
- 
-  .header-left {
-    font-size: 20px;
-  }
- 
-  .highlight {
-    font-size: 26px;
-  }
- 
-  input, select, button {
-    font-size: 16px; /* prevent iOS zoom */
-  }
- 
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-}
-
-/* FORCE MATCHING LEFT/RIGHT PADDING FOR INPUTS */
-#maxPayment,
-#maxCash {
-  padding-right: 0;
-}
-
 </style>
 </head>
- 
+
 <body>
+
 <div class="container">
- 
   <div class="header-container">
     <div class="header-left">Home Price Range Estimator</div>
-    <div class="header-center"><h1><em>a tool for thought ...</em></h1></div>
+    <div class="header-center"><em>a tool for thought ...</em></div>
     <div class="header-right">HP-Estimator ©2025</div>
   </div>
- 
+
   <div class="card inputs">
     <div class="inputs-title">Inputs</div>
     <div class="grid">
- 
+
       <div>
-        <label class="label-with-tooltip">
-          Maximum Monthly Housing Payment
-          <span class="tooltip-icon">ⓘ
-            <span class="tooltip-text">
-              Some properties such as Condos, require Association Fees. If for example, you were interested in Condos and the average Association Fee is approx. $400 / mo. and you wanted a Maximum Housing Payment of $2,900, then you should enter $2,500 as your Maximum Housing Payment.
-            </span>
-          </span>
-        </label>
-        <input id="maxPayment" value="2,950">
-      </div>
- 
-      <div>
-        <label class="label-with-tooltip">
-          Maximum funds available to use
-          <span class="tooltip-icon">ⓘ
-            <span class="tooltip-text">
-              Although there are programs that offer less than 5% down payment options, they may have additional eligibility requirements, limitations or costs that are out of the scoop of this tool. This tool is defaulted to an assumption of 5% or more down payment on a conventional conforming loan.
-            </span>
-          </span>
-        </label>
-        <input id="maxCash" value="85,500">
+        <label>Maximum Monthly Housing Payment</label>
+        <input id="maxPayment" value="2950">
       </div>
 
-<!-- NEW TERM DROPDOWN -->
       <div>
-  <label>Loan Term</label>
-  <select id="term">
-    <option value="360" selected>30 Years</option>
-    <option value="180">15 Years</option>
-  </select>
-</div>
- 
+        <label>Maximum funds available to use</label>
+        <input id="maxCash" value="86000">
+      </div>
+
+      <div>
+        <label>Loan Term</label>
+        <select id="term">
+          <option value="360" selected>30 Years</option>
+          <option value="180">15 Years</option>
+        </select>
+      </div>
+
       <div class="subgrid">
         <div>
           <label>State</label>
@@ -250,27 +121,52 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
           <select id="county" disabled></select>
         </div>
       </div>
- 
+
     </div>
   </div>
- 
+
   <button onclick="runCalculator()">Run Estimation</button>
 </div>
- 
+
 <div class="container">
   <div id="output"></div>
 </div>
- 
-<div class="disclaimer">The Home Price Range is designed to provide guidance and context, not as a precise determination.</div>
- 
+
+<div class="disclaimer">
+  Entertainment purposes only. Estimates rely on assumptions and public data.
+</div>
+
 <script>
 "use strict";
 
-/* =========================================================
-   V40.1-A — V32 STABLE ENGINE + SAFE OUTPUT
-   ========================================================= */
+/* ---------- BASE RATES ---------- */
+let FR30 = 0.065;
+let FR15 = 0.058;
 
-/* ---------- FINANCIAL HELPERS ---------- */
+async function loadBaseRates(){
+  try{
+    const res = await fetch(
+      "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/BaseRateAll.csv",
+      { cache:"no-store" }
+    );
+    const rows = (await res.text()).trim().split("\n");
+    const cols = rows[1].split(",");
+    FR30 = parseFloat(cols[0]) || FR30;
+    FR15 = parseFloat(cols[1]) || FR15;
+  } catch(e){
+    console.warn("Rate fetch failed, using defaults");
+  }
+}
+
+/* ---------- ACTIVE FACTORS (SAFE DEFAULT) ---------- */
+let ACTIVE_FACTORS = {
+  tax: 0.0125,
+  cc: 0.03,
+  hoiBaseAnnual: 1200,
+  hoiBaseCoverage: 300000
+};
+
+/* ---------- HELPERS ---------- */
 function num(id){
   return Number(
     (document.getElementById(id)?.value || "0").replace(/,/g,"")
@@ -283,9 +179,7 @@ function fmt(n,d=0){
   });
 }
 
-/* ---------- CORE ENGINE (V32 LOGIC) ---------- */
-
-let ACTIVE_FACTORS = null;
+/* ---------- CORE ENGINE (V32) ---------- */
 function calcV32(rate, TERM, maxPmt, maxCash){
 
   const r = rate / 12;
@@ -302,7 +196,6 @@ function calcV32(rate, TERM, maxPmt, maxCash){
 
     const cc = hp * ACTIVE_FACTORS.cc;
     const dp = maxCash - cc;
-
     if(dp < hp * MIN_DP) break;
 
     const la = hp - dp;
@@ -327,87 +220,44 @@ function calcV32(rate, TERM, maxPmt, maxCash){
     const pmt = pi + tax + hoi + pmi;
 
     if(pmt <= maxPmt && (dp + cc) <= maxCash){
-      best = { hp, la, dp, cc, ltv, pi, tax, hoi, pmi, pmt };
+      best = { hp, la, dp, cc, pi, tax, hoi, pmi, pmt };
       hp += 1000;
-    } else {
-      break;
-    }
+    } else break;
   }
 
   return best;
 }
 
-/* ---------- MAIN RUN ---------- */
+/* ---------- RUN ---------- */
 function runCalculator(){
-
-  if(!ACTIVE_FACTORS){
-    alert("Please select State and County");
-    return;
-  }
 
   const TERM = document.getElementById("term").value === "180" ? 180 : 360;
   const RATE = TERM === 180 ? FR15 : FR30;
 
-  const maxPmt  = num("maxPayment");
-  const maxCash = num("maxCash");
+  const base = calcV32(
+    RATE,
+    TERM,
+    num("maxPayment"),
+    num("maxCash")
+  );
 
-  const base = calcV32(RATE, TERM, maxPmt, maxCash);
-  renderOutput(base, TERM, RATE);
-}
-
-/* ---------- OUTPUT ---------- */
-function renderOutput(base, TERM, RATE){
-
-  const output = document.getElementById("output");
-
+  const out = document.getElementById("output");
   if(!base){
-    output.innerHTML = `
-      <div class="card">
-        <h3>No Result</h3>
-        <p>Your inputs do not support a purchase under the current constraints.</p>
-      </div>
-    `;
+    out.innerHTML = "<div class='card'>No result</div>";
     return;
   }
 
-  output.innerHTML = `
+  out.innerHTML = `
     <div class="card">
-      <div class="highlight">
-        Home Price Range &#8776; $${fmt(base.hp)}
-      </div>
-      <div>
-        Loan Amount: <b>$${fmt(base.la)}</b><br>
-        Term: ${TERM/12} years @ ${(RATE*100).toFixed(3)}%
-      </div>
+      <div class="highlight">$${fmt(base.hp)}</div>
+      <div>${TERM/12} yrs @ ${(RATE*100).toFixed(3)}%</div>
     </div>
-
-    <div class="card">
-      <h2>Monthly Payment Breakdown</h2>
-      <table class="mono">
-        <tr><td>P&amp;I</td><td class="right">$${fmt(base.pi,2)}</td></tr>
-        <tr><td>Property Tax</td><td class="right">$${fmt(base.tax,2)}</td></tr>
-        <tr><td>Homeowners Insurance</td><td class="right">$${fmt(base.hoi,2)}</td></tr>
-        <tr><td>PMI</td><td class="right">$${fmt(base.pmi,2)}</td></tr>
-        <tr><th>Total</th><th class="right">$${fmt(base.pmt,2)}</th></tr>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>Funds to Close</h2>
-      <table class="mono">
-        <tr><td>Down Payment</td><td class="right">$${fmt(base.dp)}</td></tr>
-        <tr><td>Closing Costs</td><td class="right">$${fmt(base.cc)}</td></tr>
-        <tr><th>Total Cash Required</th>
-            <th class="right">$${fmt(base.dp + base.cc)}</th></tr>
-      </table>
-    </div>
-
-    <p class="disclaimer">
-      Entertainment purposes only. Estimates rely on assumptions and public data.
-    </p>
   `;
 }
 
-/* ---------- AUTO INIT ---------- */
+/* ---------- INIT ---------- */
 loadBaseRates();
 </script>
+
+</body>
+</html>
