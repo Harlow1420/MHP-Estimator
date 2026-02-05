@@ -228,17 +228,17 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
             </span>
           </span>
         </label>
-        <input id="maxCash" value="85,000">
+        <input id="maxCash" value="85,500">
       </div>
 
 <!-- NEW TERM DROPDOWN -->
       <div>
-        <label>Loan Term</label>
-        <select id="term">
-          <option value="360" selected>30 Years</option>
-          <option value="180">15 Years</option>
-        </select>
-      </div>
+  <label>Loan Term</label>
+  <select id="term">
+    <option value="360" selected>30 Years</option>
+    <option value="180">15 Years</option>
+  </select>
+</div>
  
       <div class="subgrid">
         <div>
@@ -284,6 +284,8 @@ function fmt(n,d=0){
 }
 
 /* ---------- CORE ENGINE (V32 LOGIC) ---------- */
+
+let ACTIVE_FACTORS = null;
 function calcV32(rate, TERM, maxPmt, maxCash){
 
   const r = rate / 12;
@@ -407,5 +409,5 @@ function renderOutput(base, TERM, RATE){
 }
 
 /* ---------- AUTO INIT ---------- */
-Promise.all([loadCSV(), loadBaseRates()]).then(()=>{});
+loadBaseRates();
 </script>
