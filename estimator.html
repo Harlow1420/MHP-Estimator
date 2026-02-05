@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V32.23</title>
+<title>Home Price Estimator V32.24</title>
  
 <style>
 body {
@@ -303,8 +303,8 @@ async function loadBaseRateAll() {
     // Skip header, parse each line
     lines.slice(1).forEach(line => {
       const [rawTerm, rawRate] = line.split(",");
-      const term = rawTerm.replace(/"/g, "").trim();  // remove quotes & whitespace
-      const rate = parseFloat(rawRate.trim());        // remove whitespace
+      const term = rawTerm.replace(/"/g, "").trim(); // remove quotes & whitespace
+      const rate = parseFloat(rawRate.trim());      // remove whitespace
       if (term === "FR30") BASE_RATE_30 = rate;
       if (term === "FR15") BASE_RATE_15 = rate;
     });
@@ -313,6 +313,7 @@ async function loadBaseRateAll() {
       "30YR Fixed": BASE_RATE_30,
       "15YR Fixed": BASE_RATE_15
     });
+
   } catch (e) {
     console.warn("Failed to load BaseRateAll.csv", e);
   }
