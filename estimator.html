@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V32</title>
+<title>Home Price Estimator V40</title>
  
 <style>
 body {
@@ -230,6 +230,15 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
         </label>
         <input id="maxCash" value="85,000">
       </div>
+
+<!-- NEW TERM DROPDOWN -->
+      <div>
+        <label>Loan Term</label>
+        <select id="term">
+          <option value="360" selected>30 Years</option>
+          <option value="180">15 Years</option>
+        </select>
+      </div>
  
       <div class="subgrid">
         <div>
@@ -257,77 +266,61 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
 <script>
 "use strict";
  
-/* ---------- Formatting ---------- */
-function fmt(x,d=2){return x.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});}
-function num(id){return Number(document.getElementById(id).value.replace(/,/g,""))||0;}
-["maxPayment","maxCash"].forEach(id=>{
-  const el=document.getElementById(id);
-  el.onfocus=()=>el.value=el.value.replace(/,/g,"");
-  el.onblur=()=>el.value=Number(el.value).toLocaleString();
-});
- 
-/* ---------- DYNAMIC BASE RATE ---------- */
-let BASE_RATE = 0.0609; // fallback safety value
+/* ---------- Helpers ---------- */
+function num(id){ return Number(document.getElementById(id).value.replace(/,/g,"")) || 0; }
+function fmt(x,d=2){ return x.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d}); }
 
-async function loadBaseRate() {
-  try {
+/* ---------- Rates ---------- */
+let FR30 = 0.0609;
+let FR15 = 0.0550;
+
+async function loadBaseRates(){
+  try{
     const res = await fetch(
-      "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/refs/heads/main/Rate",
-      { cache: "no-store" }
+      "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/refs/heads/main/BaseRateAll.csv",
+      { cache:"no-store" }
     );
-    const txt = await res.text();
-    const r = parseFloat(txt.trim());
-
-    if (!isNaN(r) && r > 0 && r < 0.20) {
-      BASE_RATE = r;
-      console.log("Loaded BASE_RATE:", BASE_RATE);
-    } else {
-      console.warn("Invalid rate file contents");
-    }
-  } catch (e) {
-    console.warn("BASE_RATE fetch failed", e);
+    const rows = (await res.text()).trim().split("\n");
+    const cols = rows[1].split(",");
+    FR30 = parseFloat(cols[0]);
+    FR15 = parseFloat(cols[1]);
+  } catch(e){
+    console.warn("Rate load failed", e);
   }
 }
+
 /* ---------- Constants ---------- */
-const TERM=360, MIN_DP=0.05;
+const MIN_DP=0.05;
 const LBPMI=0.0034, HBPMI=0.0115;
-const RATE_STEP=0.00125;
 
 /* ---------- CSV ---------- */
 const CSV_URL="https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/EPTRBC.csv";
 let COUNTY_DATA={}, ACTIVE_FACTORS=null;
- 
+
 async function loadCSV(){
   const t=await (await fetch(CSV_URL)).text();
   t.trim().split("\n").slice(1).forEach(r=>{
     const [s,c,tax,cc,cov,hoi,oull]=r.split(",");
-    COUNTY_DATA[s]??={}; COUNTY_DATA[s][c] = {
-  tax: +tax,
-  cc: +cc,
-  hoiBaseCoverage: +cov,
-  hoiBaseAnnual: +hoi,
-  oull: oull !== undefined ? +oull : null
-};
+    COUNTY_DATA[s]??={};
+    COUNTY_DATA[s][c]={ tax:+tax, cc:+cc, hoiBaseCoverage:+cov, hoiBaseAnnual:+hoi, oull:+oull };
   });
   populateStates();
 }
- 
-/* ---------- Dropdowns ---------- */
+
 function populateStates(){
   state.innerHTML="";
-  Object.keys(COUNTY_DATA).sort().forEach(x=>state.add(new Option(x,x)));
-  if(COUNTY_DATA["Michigan"]) state.value="Michigan";
+  Object.keys(COUNTY_DATA).forEach(x=>state.add(new Option(x,x)));
+  state.value="Michigan";
   populateCounties();
 }
 function populateCounties(){
   county.innerHTML="";
-  county.disabled=!state.value;
-  if(!state.value) return;
-  Object.keys(COUNTY_DATA[state.value]).sort().forEach(x=>county.add(new Option(x,x)));
-  if(COUNTY_DATA[state.value]["Oakland County"]) county.value="Oakland County";
+  Object.keys(COUNTY_DATA[state.value]).forEach(x=>county.add(new Option(x,x)));
+  county.value="Oakland County";
   ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
 }
- 
+state.onchange=populateCounties;
+county.onchange=()=>ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value]; 
 /* ---------- V18.2 TEST FACTORS (Console Only) ---------- */
  
 state.onchange = populateCounties;
@@ -355,102 +348,47 @@ document.addEventListener("click", function(e){
 });
  
 /* ---------- Engine ---------- */
-function calc(rate,maxPmt,maxCash){
+function calc(rate, TERM, maxPmt, maxCash){
   const r=rate/12;
   const PIF=(r*Math.pow(1+r,TERM))/(Math.pow(1+r,TERM)-1);
   let hp=50000,last=null;
- 
+
   while(true){
     const cc=hp*ACTIVE_FACTORS.cc;
     const dp=maxCash-cc;
     if(dp<hp*MIN_DP) break;
- 
+
     const la=hp-dp;
     const ltv=la/hp;
- 
     const pi=la*PIF;
     const tax=(hp*ACTIVE_FACTORS.tax)/12;
-    const cov=Math.max(la,0.8*hp);
-    const hoi=(ACTIVE_FACTORS.hoiBaseAnnual*(cov/ACTIVE_FACTORS.hoiBaseCoverage))/12;
- 
-    // -----------------------
-    // PMI (boundary-safe)
-    // -----------------------
-    let pmi = 0, pmiF = 0;
-    pmiF = ltv > 0.8
-           ? (ltv >= 0.95
-               ? HBPMI
-               : LBPMI + (HBPMI - LBPMI) * (ltv - 0.8) / (0.95 - 0.8))
-           : 0;
-    pmi = (la * pmiF) / 12;
- 
-    const pmt = pi + tax + hoi + pmi;
- 
-    if (pmt <= maxPmt && dp + cc <= maxCash) {
+    const hoi=(ACTIVE_FACTORS.hoiBaseAnnual*(Math.max(la,0.8*hp)/ACTIVE_FACTORS.hoiBaseCoverage))/12;
+    const pmiF=ltv>0.8?(ltv>=0.95?HBPMI:LBPMI+(HBPMI-LBPMI)*(ltv-0.8)/(0.15)):0;
+    const pmi=(la*pmiF)/12;
+    const pmt=pi+tax+hoi+pmi;
 
- last = { hp, la, dp, cc, ltv, pi, tax, hoi, pmi, pmt, pmiF, cov };
- hp += 1000;
-
-} else {
-
- /* ---------- MICRO REFINEMENT NEAR 80% LTV ---------- */
- if (last && Math.abs(last.ltv - 0.80) < 0.02) {
-
-   let best = last;
-
-   for (let h = last.hp - 2000; h <= last.hp + 2000; h += 100) {
-
-     if (h <= 0) continue;
-
-     const cc2 = h * ACTIVE_FACTORS.cc;
-     const dp2 = maxCash - cc2;
-     if (dp2 < h * MIN_DP) continue;
-
-     const la2 = h - dp2;
-     const ltv2 = la2 / h;
-
-     const pi2 = la2 * PIF;
-     const tax2 = (h * ACTIVE_FACTORS.tax) / 12;
-     const cov2 = Math.max(la2, 0.8 * h);
-     const hoi2 = (ACTIVE_FACTORS.hoiBaseAnnual * (cov2 / ACTIVE_FACTORS.hoiBaseCoverage)) / 12;
-
-     let pmiF2 = 0;
-     if (ltv2 > 0.8) {
-       pmiF2 = ltv2 >= 0.95
-         ? HBPMI
-         : LBPMI + (HBPMI - LBPMI) * (ltv2 - 0.8) / (0.95 - 0.8);
-     }
-
-     const pmi2 = (la2 * pmiF2) / 12;
-     const pmt2 = pi2 + tax2 + hoi2 + pmi2;
-
-     if (pmt2 <= maxPmt && dp2 + cc2 <= maxCash) {
-       best = {
-         hp: h, la: la2, dp: dp2, cc: cc2, ltv: ltv2,
-         pi: pi2, tax: tax2, hoi: hoi2,
-         pmi: pmi2, pmt: pmt2, pmiF: pmiF2, cov: cov2
-       };
-     }
-   }
-
-   last = best;
- }
-
- break;
-}  }
- 
+    if(pmt<=maxPmt && dp+cc<=maxCash){
+      last={hp,la,dp,cc,ltv,pi,tax,hoi,pmi,pmt};
+      hp+=1000;
+    } else break;
+  }
   return last;
-}
- 
+} 
 /* ---------- Run ---------- */
 function runCalculator(){
-  const base=calc(BASE_RATE,num("maxPayment"),num("maxCash"));
+  const TERM=Number(document.getElementById("term").value);
+  const RATE = TERM===180 ? FR15 : FR30;
+
+  const base=calc(RATE, TERM, num("maxPayment"), num("maxCash"));
   if(!base) return;
- 
-const dpLIMIT=((base.pmt/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
- 
-  const miDrop=360-(Math.log(1-((base.hp*0.8)*((BASE_RATE/12)/base.pi)))*-1)/(Math.log(1+(BASE_RATE/12)));
- 
+
+  output.innerHTML=`
+  <div class="card">
+    <div>Using an example rate of <b>${(RATE*100).toFixed(2)}%</b> on a ${TERM/12}-Year Fixed</div>
+    <div class="highlight">Home Price Range ≈ $${base.hp.toLocaleString()}</div>
+    <div>Loan Amount: $${base.la.toLocaleString()}</div>
+  </div>`;
+} 
  /* ---------- RESTORED FACTORS ---------- */
   const fpPRINC = base.pi - (base.la * BASE_RATE / 12);
  
@@ -577,8 +515,7 @@ ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}
 `;
 }
  
-Promise.all([loadCSV(), loadBaseRate()]).then(runCalculator);
+Promise.all([loadCSV(), loadBaseRates()]).then(runCalculator);
 </script>
 </body>
 </html>
-
