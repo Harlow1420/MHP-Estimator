@@ -374,21 +374,76 @@ function calc(rate, TERM, maxPmt, maxCash){
   }
   return last;
 } 
-/* ---------- Run ---------- */
+/* =========================================================
+   V40.1 SAFE OUTPUT + CALC REBUILD
+   ========================================================= */
+
 function runCalculator(){
-  const TERM=Number(document.getElementById("term").value);
-  const RATE = TERM===180 ? FR15 : FR30;
 
-  const base=calc(RATE, TERM, num("maxPayment"), num("maxCash"));
-  if(!base) return;
+  if(!ACTIVE_FACTORS){
+    alert("Please select State and County");
+    return;
+  }
 
-  output.innerHTML=`
-  <div class="card">
-    <div>Using an example rate of <b>${(RATE*100).toFixed(2)}%</b> on a ${TERM/12}-Year Fixed</div>
-    <div class="highlight">Home Price Range ≈ $${base.hp.toLocaleString()}</div>
-    <div>Loan Amount: $${base.la.toLocaleString()}</div>
-  </div>`;
-} 
+  const TERM = termSelect.value === "15" ? 180 : 360;
+  const RATE = termSelect.value === "15" ? FR15 : FR30;
+
+  const PMT_LIMIT = num("pmtLimit");
+  const CASH_LIMIT = num("cashLimit");
+  const DP_PCT = num("dpPct") / 100;
+
+  const TAX_RATE = ACTIVE_FACTORS.tax;
+  const INS_RATE = ACTIVE_FACTORS.ins;
+  const PMI_RATE = ACTIVE_FACTORS.pmi;
+
+  const STEP = 1000;
+
+  let best = null;
+
+  for(let price = 50000; price <= 3000000; price += STEP){
+
+    const dp = price * DP_PCT;
+    const loan = price - dp;
+
+    const pi = pmt(loan, RATE, TERM);
+
+    const tax = price * TAX_RATE / 12;
+    const ins = price * INS_RATE / 12;
+
+    let pmi = 0;
+    if(dp / price < 0.20){
+      pmi = loan * PMI_RATE / 12;
+    }
+
+    const totalPmt = pi + tax + ins + pmi;
+    const cashUsed = dp;
+
+    if(totalPmt <= PMT_LIMIT && cashUsed <= CASH_LIMIT){
+      best = {
+        price, dp, loan, pi, tax, ins, pmi, totalPmt
+      };
+    }
+  }
+
+  renderOutput(best, TERM, RATE);
+}
+
+/* =========================================================
+   OUTPUT RENDER
+   ========================================================= */
+
+function renderOutput(base, TERM, RATE){
+
+  const output = document.getElementById("output");
+
+  if(!base){
+    output.innerHTML = `
+      <h3>No Result</h3>
+      <p>Your inputs do not support a purchase under the current constraints.</p>
+    `;
+    return;
+  }
+
  /* ---------- RESTORED FACTORS ---------- */
   const fpPRINC = base.pi - (base.la * BASE_RATE / 12);
  
