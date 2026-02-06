@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V32.29</title>
+<title>Home Price Estimator V32.4</title>
 <style>
 body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f6f7f8; color: #222; margin:0; padding:30px 0;}
 .container { max-width:1050px; margin:0 auto; padding:0 20px; }
@@ -141,8 +141,11 @@ async function loadBaseRateAll() {
         const lines = (await res.text()).trim().split("\n");
         if(lines.length >= 2){
             const rateLine = lines[1].trim().split(",").map(x=>parseFloat(x));
-            FR30_DEBUG = rateLine[0]; // keep as decimal
-            FR15_DEBUG = rateLine[1]; // keep as decimal
+
+            // --- FIX: Keep CSV decimals as-is, do NOT divide by 100 ---
+            FR30_DEBUG = rateLine[0]; // 0.0611 for 6.11%
+            FR15_DEBUG = rateLine[1]; // 0.0549 for 5.49%
+
             console.log("BaseRateAll.csv fetched:", {FR30:FR30_DEBUG, FR15:FR15_DEBUG});
         } else {
             console.warn("BaseRateAll parse failed:", lines);
@@ -151,7 +154,6 @@ async function loadBaseRateAll() {
         console.warn("BaseRateAll fetch failed:", err);
     }
 }
-
 // County CSV
 const CSV_URL = "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/EPTRBC.csv";
 let COUNTY_DATA = {}, ACTIVE_FACTORS = null;
