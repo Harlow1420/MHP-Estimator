@@ -63,7 +63,7 @@ th,td{padding:8px 6px;border-bottom:1px solid #eee;}
            </span>
          </span>
        </label>
-       <input id="maxPayment" value="2,850">
+       <input id="maxPayment" value="2,900">
      </div>
 
      <div>
@@ -75,7 +75,7 @@ th,td{padding:8px 6px;border-bottom:1px solid #eee;}
            </span>
          </span>
        </label>
-       <input id="maxCash" value="80,000">
+       <input id="maxCash" value="85,000">
      </div>
 
      <div>
@@ -183,6 +183,13 @@ document.addEventListener("click",function(e){
  if(icon){ const tip = icon.querySelector(".tooltip-text"); if(tip){ e.stopPropagation(); tip.classList.toggle("show"); } }
 });
 
+async function init() {
+    await loadBaseRateAll(); // waits for FR15/FR30 to be fetched
+    await loadCSV();
+    runCalculator(); // now FR15/FR30 are guaranteed loaded
+}
+init();
+
 // Engine
 function calc(rate,maxPmt,maxCash,term){
  const r=rate/12;
@@ -216,6 +223,14 @@ function runCalculator(){
 
  const base=calc(rateUsed,num("maxPayment"),num("maxCash"),term);
  if(!base) return;
+
+// Initialize
+async function init() {
+    await loadBaseRateAll();
+    await loadCSV();
+    runCalculator(); // auto-run after data is loaded
+}
+init();
 
  const piFactor=base.pi/base.la;
  const fpPRINC=base.pi-(base.la*rateUsed/12);
