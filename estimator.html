@@ -216,7 +216,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
             </span>
           </span>
         </label>
-        <input id="maxPayment" value="2,950">
+        <input id="maxPayment" value="2,900">
       </div>
  
       <div>
@@ -270,55 +270,37 @@ function num(id){return Number(document.getElementById(id).value.replace(/,/g,""
 /* ---------- DYNAMIC BASE RATE ---------- */
 let BASE_RATE = 0.0609; // fallback safety value
 
-async function loadBaseRate() {
-  try {
-    const res = await fetch(
-      "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/refs/heads/main/Rate",
-      { cache: "no-store" }
-    );
-    const txt = await res.text();
-    const r = parseFloat(txt.trim());
-
-    if (!isNaN(r) && r > 0 && r < 0.20) {
-      BASE_RATE = r;
-      console.log("Loaded BASE_RATE:", BASE_RATE);
-    } else {
-      console.warn("Invalid rate file contents");
-    }
-  } catch (e) {
-    console.warn("BASE_RATE fetch failed", e);
-  }
-}
-
-/* ---------- LOAD 15YR & 30YR RATES ---------- */
-const BASE_RATE_CSV_URL = "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/BaseRateAll.csv";
-let BASE_RATE_30 = null, BASE_RATE_15 = null;
-
 async function loadBaseRateAll() {
+  const BASE_RATE_CSV_URL = "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/BaseRateAll.csv";
   try {
     const res = await fetch(BASE_RATE_CSV_URL, { cache: "no-store" });
     const txt = await res.text();
-    const lines = txt.trim().split("\n");
 
-    // Skip header, parse each line
-    lines.slice(1).forEach(line => {
-      const [rawTerm, rawRate] = line.split(",");
-      const term = rawTerm.replace(/"/g, "").trim(); // remove quotes & whitespace
-      const rate = parseFloat(rawRate.trim());      // remove whitespace
-      if (term === "FR30") BASE_RATE_30 = rate;
-      if (term === "FR15") BASE_RATE_15 = rate;
-    });
+    // Clean up whitespace
+    const line = txt.trim();
 
-    console.log("Loaded Base Rates from CSV:", {
-      "30YR Fixed": BASE_RATE_30,
-      "15YR Fixed": BASE_RATE_15
-    });
+    // Regex to extract FR30 and FR15 rates from the one-line format
+    // Matches pattern: FR30,FR15 <number>,<number>
+    const match = line.match(/FR30\s*,\s*FR15\s*([0-9.]+)\s*,\s*([0-9.]+)/i);
 
+    if (match) {
+      const fr30 = parseFloat(match[1]);
+      const fr15 = parseFloat(match[2]);
+
+      if (!isNaN(fr30)) BASE_RATE_30 = fr30;
+      if (!isNaN(fr15)) BASE_RATE_15 = fr15;
+
+      console.log("Loaded Base Rates from CSV (one-line parser):", {
+        "30YR Fixed": BASE_RATE_30,
+        "15YR Fixed": BASE_RATE_15
+      });
+    } else {
+      console.warn("Failed to parse BaseRateAll.csv line:", line);
+    }
   } catch (e) {
     console.warn("Failed to load BaseRateAll.csv", e);
   }
 }
-
 /* ---------- Constants ---------- */
 const TERM=360, MIN_DP=0.05;
 const LBPMI=0.0034, HBPMI=0.0115;
