@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V32.26</title>
+<title>Home Price Estimator V32.27</title>
  
 <style>
 body {
@@ -320,10 +320,11 @@ async function loadBaseRateAll() {
   }
 }
 
-/* ---------- Constants ---------- */
-const TERM=360, MIN_DP=0.05;
-const LBPMI=0.0034, HBPMI=0.0115;
-const RATE_STEP=0.00125;
+// const TERM = 360;   <-- remove or comment out
+const MIN_DP = 0.05;
+const LBPMI = 0.0034;
+const HBPMI = 0.0115;
+const RATE_STEP = 0.00125;
 
 /* ---------- CSV ---------- */
 const CSV_URL="https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/EPTRBC.csv";
@@ -512,64 +513,71 @@ function calc(rate,maxPmt,maxCash){
 }
  
 /* ---------- Run ---------- */
-function runCalculator(){
-  const base=calc(BASE_RATE,num("maxPayment"),num("maxCash"));
-  if(!base) return;
-console.log("Active BASE_RATE used for calculations:", BASE_RATE);
+function runCalculator() {
+  // ---------- Selected Term & Label ----------
+  const termEl = document.getElementById("term");
+  const term = termEl ? parseInt(termEl.value) : 360; // default fallback
+  const termLabel = `${term / 12}YR Fixed`;
 
-if (FR30_DEBUG !== null || FR15_DEBUG !== null) {
-  console.log("Debug rates available:", {
-    FR30_DEBUG,
-    FR15_DEBUG
-  });
-}
- 
-const dpLIMIT=((base.pmt/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
- 
-  const miDrop=360-(Math.log(1-((base.hp*0.8)*((BASE_RATE/12)/base.pi)))*-1)/(Math.log(1+(BASE_RATE/12)));
- 
- /* ---------- RESTORED FACTORS ---------- */
-  const fpPRINC = base.pi - (base.la * BASE_RATE / 12);
- 
-  const lbFive = base.pi * ((1 - Math.pow(1 + (BASE_RATE / 12), -300)) / (BASE_RATE / 12));
- 
-/* SAFE logging — do not break load */
-if (ACTIVE_FACTORS && ACTIVE_FACTORS.oull !== undefined) {
-  console.log("Loaded oull:", ACTIVE_FACTORS.oull);
-}
- 
-console.log("V18.2 dpLIMIT:", dpLIMIT.toFixed(2));
-console.log("V18.2 fpPRINC:", fpPRINC.toFixed(2));
-console.log("V18.2 lbFive:", lbFive.toFixed(2));
-console.log("V18.36 miDrop:", miDrop.toFixed(2));
- 
-  /* ---------- NOTES ---------- */
+  // ---------- Select Rate Based on Term ----------
+  let rateUsed = BASE_RATE; // fallback if debug rates not loaded
+  if (term === 360 && FR30_DEBUG !== null) rateUsed = FR30_DEBUG;
+  else if (term === 180 && FR15_DEBUG !== null) rateUsed = FR15_DEBUG;
+
+  console.log("Using rate for calculation:", rateUsed, "with term:", termLabel);
+
+  // ---------- Perform Calculation ----------
+  const base = calc(rateUsed, num("maxPayment"), num("maxCash"), term);
+  if (!base) return;
+
+  console.log("Active rate used for calculations:", rateUsed);
+  if (FR30_DEBUG !== null || FR15_DEBUG !== null) {
+    console.log("Debug rates available:", { FR30_DEBUG, FR15_DEBUG });
+  }
+
+  const dpLIMIT = ((base.pmt / (base.hp / 1000) * 2) + base.pmt - num("maxPayment")) * -1;
+  const miDrop = 360 - (Math.log(1 - ((base.hp * 0.8) * ((rateUsed / 12) / base.pi))) * -1) / (Math.log(1 + (rateUsed / 12)));
+
+  // ---------- RESTORED FACTORS ----------
+  const fpPRINC = base.pi - (base.la * rateUsed / 12);
+  const lbFive = base.pi * ((1 - Math.pow(1 + (rateUsed / 12), -300)) / (rateUsed / 12));
+
+  // Safe logging
+  if (ACTIVE_FACTORS && ACTIVE_FACTORS.oull !== undefined) {
+    console.log("Loaded oull:", ACTIVE_FACTORS.oull);
+  }
+
+  console.log("dpLIMIT:", dpLIMIT.toFixed(2));
+  console.log("fpPRINC:", fpPRINC.toFixed(2));
+  console.log("lbFive:", lbFive.toFixed(2));
+  console.log("miDrop:", miDrop.toFixed(2));
+
+  // ---------- Notes ----------
   const note1 = base.pmi > 0
     ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately ${Math.round(miDrop)} payments `
     : "";
- 
+
   const note2 =
-  dpLIMIT > 0 && (base.dp / base.hp) < 0.10
-    ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment
-       The MHP could be higher with a program that allows for less than 5% down payment.`
-    : "";
- 
-const note3 =
-  ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull
-    ? `The loan amount is greater than the conforming loan limit of $${ACTIVE_FACTORS.oull.toLocaleString()} for ${county.value}, ${state.value}. Jumbo Loans are outside the scoop of this tool (<b>other requirements and/or restrictions may apply</b>).`
-    : "";
- 
- 
+    dpLIMIT > 0 && (base.dp / base.hp) < 0.10
+      ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment
+         The MHP could be higher with a program that allows for less than 5% down payment.`
+      : "";
+
+  const note3 =
+    ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull
+      ? `The loan amount is greater than the conforming loan limit of $${ACTIVE_FACTORS.oull.toLocaleString()} for ${county.value}, ${state.value}. Jumbo Loans are outside the scoop of this tool (<b>other requirements and/or restrictions may apply</b>).`
+      : "";
+
   const piFactor = base.pi / base.la;
- 
+
   const RATE_INCREMENT = 0.00125;
-  const ROUNDED_BASE_RATE = Math.floor(BASE_RATE / RATE_INCREMENT) * RATE_INCREMENT;
- 
+  const ROUNDED_BASE_RATE = Math.floor(rateUsed / RATE_INCREMENT) * RATE_INCREMENT;
+
   let sens = "";
   for (let r = ROUNDED_BASE_RATE - 0.005; r <= ROUNDED_BASE_RATE + 0.005; r += RATE_STEP) {
-    const v = calc(r, num("maxPayment"), num("maxCash"));
+    const v = calc(r, num("maxPayment"), num("maxCash"), term);
     if (!v) continue;
- 
+
     const d = v.hp - base.hp;
     sens += `<tr>
       <td class="right">${(r * 100).toFixed(3)}%</td>
@@ -579,10 +587,11 @@ const note3 =
       <td class="right">$${v.hp.toLocaleString()}</td>
     </tr>`;
   }
- 
+
+  // ---------- Output ---------- 
   output.innerHTML=`
   <div class="card">
-    <div>Using an "example" rate of <b>${(BASE_RATE*100).toFixed(2)}%</b> on a 30YR Fixed and a few assumptions, the upper limit of the</div>
+    <div> Using an "example" rate of <b>${(rateUsed*100).toFixed(2)}%</b> on a ${termLabel} and a few assumptions, the upper limit of the </div>
     <div class="highlight">Home Price Range &#8776; $${base.hp.toLocaleString()}</div>
     <div> with a Loan Amount of <b>$${base.la.toLocaleString()}</b></div>${note2?`<div class="neg" style="margin-top:8px;">${note2}</div>`:""}
   </div>
