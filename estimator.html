@@ -3,610 +3,253 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V32.27</title>
- 
+<title>Home Price Estimator V32.28</title>
 <style>
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f6f7f8;
-  color: #222;
-  margin: 0;
-  padding: 30px 0;
-}
- 
+body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f6f7f8; color: #222; margin:0; padding:30px 0;}
 .container { max-width:1050px; margin:0 auto; padding:0 20px; }
- 
-/* ---------- 3-ROW HEADER ---------- */
-.header-container {
-  display: grid;
-  grid-template-rows: auto auto auto;
-  row-gap: 4px;
-  margin-bottom: 0;
-  background: #ADD8E6;
-  padding: 14px 16px;
-  border-radius: 6px;
-}
- 
-.header-left {
-  text-align: left;
-  font-size: 26px;
-  font-weight: 600;
-}
- 
-.header-center {
-  text-align: center;
-  font-style: italic;
-  color: #444;
-}
- 
-.header-right {
-  text-align: right;
-  font-size: 13px;
-  color: #666;
-}
-/* -------------------------------- */
- 
-h1 { font-size:26px; margin-bottom:20px; }
-h2 { font-size:18px; border-bottom:1px solid #ddd; padding-bottom:6px; }
- 
-.card {
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:6px;
-  padding:18px 20px;
-  margin-bottom:20px;
-}
- 
-/* INPUT CARD ONLY */
-.card.inputs {
-  background:#ADD8E6;
-  margin-bottom: 0;
-  margin-top: 0;
-  border-top: 0;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
-/* REMOVE SEAM BETWEEN HEADER & INPUT CARD */
-.header-container {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-/* REMOVE SEAM BETWEEN HEADER & INPUT CARD */
-.header-container {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.card.inputs {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
- 
-/* INPUTS SECTION TITLE */
-.inputs-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: #222;
-  /*border-bottom: 1px solid rgba(0,0,0,0.1); */
-  padding-bottom: 0;
-}
- 
-.grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
- 
-label { font-size:13px; font-weight:600; display:block; margin-bottom:6px; }
- 
-/* ---------- TOOLTIP ---------- */
-.label-with-tooltip { display:inline-flex; align-items:center; gap:6px; }
-.tooltip-icon { position:relative; cursor:pointer; }
-.tooltip-text {
-  visibility:hidden; opacity:0; width:300px;
-  background:#222; color:#fff; padding:10px;
-  border-radius:6px; position:absolute; z-index:999;
-  left:50%; top:100%; transform:translate(-50%,6px);
-  transition:opacity .2s ease;
-}
-.tooltip-icon:hover .tooltip-text { visibility:visible; opacity:1; }
- 
-/* ---------- FORM ---------- */
-input, select, button { width:100%; padding:8px 10px; font-size:14px; }
-button {
-  background:#2D92B3;
-  color:#fff;
-  border:none;
-  border-radius:4px;
-  cursor:pointer;
-  margin-bottom: 16px;
-}
-button:hover { background:#183fb0; }
- 
-/* ---------- TABLE ---------- */
-table { width:100%; border-collapse:collapse; font-size:14px; table-layout:fixed; }
-th, td { padding:8px 6px; border-bottom:1px solid #eee; }
-.right { text-align:right; }
-.mono { font-family:ui-monospace, Menlo, Consolas, monospace; }
- 
-.highlight { font-size:32px; font-weight:700; margin:10px 0; }
-.pos { color:#1a7f37; font-weight:600; }
-.neg { color:#c92c2c; font-weight:600; }
-.disclaimer { font-size:12px; color:#666; text-align:center; margin-top:30px; }
-
- 
-/* ---------- STATE / COUNTY ---------- */
-.subgrid {
-  grid-column:1 / -1;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-@media (max-width:600px){
-  .subgrid { grid-template-columns:1fr; }
-}
-
- /* ---------- RATE SENSITIVITY TABLE ---------- */
-.rate-table th,
-.rate-table td {
-  width: 33.333%;
-  text-align: center;
-}
-
-/* ---------- RATE / 3-COLUMN TABLES ---------- */
-.rate-table th,
-.rate-table td,
-.three-col-33 th,
-.three-col-33 td {
-  width: 33.333%;
-}
- 
-/* ---------- iPHONE OPTIMIZATION ---------- */
-@media (max-width: 480px) {
- 
-  .grid {
-    grid-template-columns: 1fr;
-  }
- 
-  .header-left {
-    font-size: 20px;
-  }
- 
-  .highlight {
-    font-size: 26px;
-  }
- 
-  input, select, button {
-    font-size: 16px; /* prevent iOS zoom */
-  }
- 
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-}
-
-/* FORCE MATCHING LEFT/RIGHT PADDING FOR INPUTS */
-#maxPayment,
-#maxCash {
-  padding-right: 0;
-}
-
+/* Header */
+.header-container { display:grid; grid-template-rows:auto auto auto; row-gap:4px; margin-bottom:0; background:#ADD8E6; padding:14px 16px; border-radius:6px;}
+.header-left { text-align:left; font-size:26px; font-weight:600;}
+.header-center { text-align:center; font-style:italic; color:#444;}
+.header-right { text-align:right; font-size:13px; color:#666;}
+h1{font-size:26px;margin-bottom:20px;} h2{font-size:18px;border-bottom:1px solid #ddd; padding-bottom:6px;}
+.card{background:#fff;border:1px solid #ddd;border-radius:6px;padding:18px 20px;margin-bottom:20px;}
+.card.inputs{background:#ADD8E6;margin-bottom:0;margin-top:0;border-top:0;border-top-left-radius:0;border-top-right-radius:0;}
+.inputs-title{font-size:16px;font-weight:600;margin-bottom:12px;color:#222;padding-bottom:0;}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+label{font-size:13px;font-weight:600;display:block;margin-bottom:6px;}
+.label-with-tooltip{display:inline-flex;align-items:center;gap:6px;}
+.tooltip-icon{position:relative;cursor:pointer;}
+.tooltip-text{visibility:hidden;opacity:0;width:300px;background:#222;color:#fff;padding:10px;border-radius:6px;position:absolute;z-index:999;left:50%;top:100%;transform:translate(-50%,6px);transition:opacity .2s ease;}
+.tooltip-icon:hover .tooltip-text{visibility:visible;opacity:1;}
+input, select, button{width:100%;padding:8px 10px;font-size:14px;}
+button{background:#2D92B3;color:#fff;border:none;border-radius:4px;cursor:pointer;margin-bottom:16px;}
+button:hover{background:#183fb0;}
+table{width:100%;border-collapse:collapse;font-size:14px;table-layout:fixed;}
+th,td{padding:8px 6px;border-bottom:1px solid #eee;}
+.right{text-align:right;}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;}
+.highlight{font-size:32px;font-weight:700;margin:10px 0;}
+.pos{color:#1a7f37;font-weight:600;}
+.neg{color:#c92c2c;font-weight:600;}
+.disclaimer{font-size:12px;color:#666;text-align:center;margin-top:30px;}
+.subgrid{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:600px){.subgrid{grid-template-columns:1fr;}}
+.rate-table th,.rate-table td{width:33.333%;text-align:center;}
+.three-col-33 th,.three-col-33 td{width:33.333%;}
+@media(max-width:480px){.grid{grid-template-columns:1fr;}.header-left{font-size:20px;}.highlight{font-size:26px;} input,select,button{font-size:16px;} table{display:block;overflow-x:auto;white-space:nowrap;}}
+#maxPayment,#maxCash{padding-right:0;}
 </style>
 </head>
- 
+
 <body>
 <div class="container">
- 
-  <div class="header-container">
-    <div class="header-left">Home Price Range Estimator</div>
-    <div class="header-center"><h1><em>a tool for thought ...</em></h1></div>
-    <div class="header-right">HP-Estimator ©2025</div>
-  </div>
- 
-  <div class="card inputs">
-    <div class="inputs-title">Inputs</div>
-    <div class="grid">
- 
-      <div>
-        <label class="label-with-tooltip">
-          Maximum Monthly Housing Payment
-          <span class="tooltip-icon">ⓘ
-            <span class="tooltip-text">
-              Some properties such as Condos, require Association Fees. If for example, you were interested in Condos and the average Association Fee is approx. $400 / mo. and you wanted a Maximum Housing Payment of $2,900, then you should enter $2,500 as your Maximum Housing Payment.
-            </span>
-          </span>
-        </label>
-        <input id="maxPayment" value="2,850">
-      </div>
- 
-      <div>
-        <label class="label-with-tooltip">
-          Maximum funds available to use
-          <span class="tooltip-icon">ⓘ
-            <span class="tooltip-text">
-              Although there are programs that offer less than 5% down payment options, they may have additional eligibility requirements, limitations or costs that are out of the scoop of this tool. This tool is defaulted to an assumption of 5% or more down payment on a conventional conforming loan.
-            </span>
-          </span>
-        </label>
-        <input id="maxCash" value="80,000">
-      </div>
+ <div class="header-container">
+   <div class="header-left">Home Price Range Estimator</div>
+   <div class="header-center"><h1><em>a tool for thought ...</em></h1></div>
+   <div class="header-right">HP-Estimator ©2025</div>
+ </div>
 
-<!-- NEW TERM DROPDOWN -->
+ <div class="card inputs">
+   <div class="inputs-title">Inputs</div>
+   <div class="grid">
+
+     <div>
+       <label class="label-with-tooltip">
+         Maximum Monthly Housing Payment
+         <span class="tooltip-icon">ⓘ
+           <span class="tooltip-text">
+             Some properties such as Condos, require Association Fees. Example: if your max housing payment is $2,900 and HOA is $400, enter $2,500.
+           </span>
+         </span>
+       </label>
+       <input id="maxPayment" value="2,850">
+     </div>
+
+     <div>
+       <label class="label-with-tooltip">
+         Maximum funds available to use
+         <span class="tooltip-icon">ⓘ
+           <span class="tooltip-text">
+             Assumes 5% or more down payment. Less than 5% options may have additional requirements or costs.
+           </span>
+         </span>
+       </label>
+       <input id="maxCash" value="80,000">
+     </div>
+
      <div>
        <label>Loan Term</label>
        <select id="term">
          <option value="360" selected>30 Years</option>
          <option value="180">15 Years</option>
        </select>
-     </div> 
+     </div>
 
-      <div class="subgrid">
-        <div>
-          <label>State</label>
-          <select id="state"></select>
-        </div>
-        <div>
-          <label>County</label>
-          <select id="county" disabled></select>
-        </div>
-      </div>
- 
-    </div>
-  </div>
- 
-  <button onclick="runCalculator()">Run Estimation</button>
+     <div class="subgrid">
+       <div>
+         <label>State</label>
+         <select id="state"></select>
+       </div>
+       <div>
+         <label>County</label>
+         <select id="county" disabled></select>
+       </div>
+     </div>
+
+   </div>
+ </div>
+
+ <button onclick="runCalculator()">Run Estimation</button>
 </div>
- 
+
 <div class="container">
-  <div id="output"></div>
+ <div id="output"></div>
 </div>
- 
-<div class="disclaimer">Not an offer to lend. The Home Price Range is an illustrative estimate provided for context only and not a precise determination.
-</div>
- 
+
+<div class="disclaimer">Not an offer to lend. The Home Price Range is an illustrative estimate provided for context only and not a precise determination.</div>
+
 <script>
 "use strict";
 
-// Authoritative calculation rate (still sourced from /Rate)
-let BASE_RATE = 0.0609;   // fallback safety value
+// Constants
+const MIN_DP=0.05;
+const LBPMI=0.0034;
+const HBPMI=0.0115;
+const RATE_STEP=0.00125;
 
-// Debug-only rates from BaseRateAll.csv (console verification only)
+// Fallback BASE_RATE
+let BASE_RATE = 0.0609;
 let FR30_DEBUG = null;
 let FR15_DEBUG = null;
- 
-/* ---------- Formatting ---------- */
+
+// Formatting
 function fmt(x,d=2){return x.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});}
 function num(id){return Number(document.getElementById(id).value.replace(/,/g,""))||0;}
 ["maxPayment","maxCash"].forEach(id=>{
-  const el=document.getElementById(id);
-  el.onfocus=()=>el.value=el.value.replace(/,/g,"");
-  el.onblur=()=>el.value=Number(el.value).toLocaleString();
+ const el=document.getElementById(id);
+ el.onfocus=()=>el.value=el.value.replace(/,/g,"");
+ el.onblur=()=>el.value=Number(el.value).toLocaleString();
 });
- 
 
-/* ---------- DEBUG: BASE RATE ALL (CONSOLE ONLY) ---------- */
+// Load BaseRateAll.csv (debug)
 async function loadBaseRateAll() {
-  const URL =
-    "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/BaseRateAll.csv";
-
-  try {
-    const res = await fetch(URL, { cache: "no-store" });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-
-    const txt = await res.text();
-    const line = txt.trim();
-
-    // Expected one-line format:
-    // FR30,FR15,6.875,6.125
-    const match = line.match(
-      /FR30\s*,\s*FR15\s*,\s*([0-9.]+)\s*,\s*([0-9.]+)/i
-    );
-
-    if (!match) {
-      console.warn("BaseRateAll.csv parse failed:", line);
-      return;
-    }
-
-    FR30_DEBUG = parseFloat(match[1]) / 100;
-    FR15_DEBUG = parseFloat(match[2]) / 100;
-
-    console.log("BaseRateAll.csv fetched (debug only):", {
-      FR30: FR30_DEBUG,
-      FR15: FR15_DEBUG
-    });
-
-  } catch (err) {
-    console.warn("BaseRateAll.csv fetch failed:", err);
-  }
+ const URL = "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/BaseRateAll.csv";
+ try {
+   const res = await fetch(URL,{cache:"no-store"});
+   if(!res.ok) throw new Error("HTTP "+res.status);
+   const txt = await res.text();
+   const line = txt.trim();
+   const match = line.match(/FR30\s*,\s*FR15\s*,\s*([0-9.]+)\s*,\s*([0-9.]+)/i);
+   if(!match){console.warn("BaseRateAll parse failed:",line);return;}
+   FR30_DEBUG = parseFloat(match[1])/100;
+   FR15_DEBUG = parseFloat(match[2])/100;
+   console.log("BaseRateAll.csv fetched:",{FR30:FR30_DEBUG,FR15:FR15_DEBUG});
+ } catch(err){console.warn("BaseRateAll fetch failed:",err);}
 }
 
-// const TERM = 360;   <-- remove or comment out
-const MIN_DP = 0.05;
-const LBPMI = 0.0034;
-const HBPMI = 0.0115;
-const RATE_STEP = 0.00125;
-
-/* ---------- CSV ---------- */
+// County CSV
 const CSV_URL="https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/EPTRBC.csv";
 let COUNTY_DATA={}, ACTIVE_FACTORS=null;
-/* ---------- AUTHORITATIVE BASE RATE (/Rate) ---------- */
-async function loadBaseRate() {
-  const RATE_URL =
-    "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/refs/heads/main/Rate";
-
-  try {
-    const res = await fetch(RATE_URL, { cache: "no-store" });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-
-    const txt = (await res.text()).trim();
-    const rate = parseFloat(txt);
-
-    if (!isNaN(rate)) {
-      BASE_RATE = rate;
-      console.log("Loaded BASE_RATE from /Rate:", BASE_RATE);
-    } else {
-      console.warn("Invalid rate value from /Rate:", txt);
-    }
-
-  } catch (err) {
-    console.warn("Failed to load /Rate, using fallback:", err);
-  }
-} 
 async function loadCSV(){
-  const t=await (await fetch(CSV_URL)).text();
-  t.trim().split("\n").slice(1).forEach(r=>{
-    const [s,c,tax,cc,cov,hoi,oull]=r.split(",");
-    COUNTY_DATA[s]??={}; COUNTY_DATA[s][c] = {
-  tax: +tax,
-  cc: +cc,
-  hoiBaseCoverage: +cov,
-  hoiBaseAnnual: +hoi,
-  oull: oull !== undefined ? +oull : null
-};
-  });
-  populateStates();
+ const t=await (await fetch(CSV_URL)).text();
+ t.trim().split("\n").slice(1).forEach(r=>{
+   const [s,c,tax,cc,cov,hoi,oull]=r.split(",");
+   COUNTY_DATA[s]??={}; COUNTY_DATA[s][c]={tax:+tax,cc:+cc,hoiBaseCoverage:+cov,hoiBaseAnnual:+hoi,oull:oull?+oull:null};
+ });
+ populateStates();
 }
- 
-/* ---------- Dropdowns ---------- */
 function populateStates(){
-  state.innerHTML="";
-  Object.keys(COUNTY_DATA).sort().forEach(x=>state.add(new Option(x,x)));
-  if(COUNTY_DATA["Michigan"]) state.value="Michigan";
-  populateCounties();
+ state.innerHTML=""; Object.keys(COUNTY_DATA).sort().forEach(x=>state.add(new Option(x,x)));
+ if(COUNTY_DATA["Michigan"]) state.value="Michigan";
+ populateCounties();
 }
 function populateCounties(){
-  county.innerHTML="";
-  county.disabled=!state.value;
-  if(!state.value) return;
-  Object.keys(COUNTY_DATA[state.value]).sort().forEach(x=>county.add(new Option(x,x)));
-  if(COUNTY_DATA[state.value]["Oakland County"]) county.value="Oakland County";
-  ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
+ county.innerHTML=""; county.disabled=!state.value;
+ if(!state.value) return;
+ Object.keys(COUNTY_DATA[state.value]).sort().forEach(x=>county.add(new Option(x,x)));
+ if(COUNTY_DATA[state.value]["Oakland County"]) county.value="Oakland County";
+ ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];
 }
- 
-/* ---------- V18.2 TEST FACTORS (Console Only) ---------- */
- 
-state.onchange = populateCounties;
-county.onchange = () => {
-  ACTIVE_FACTORS = COUNTY_DATA[state.value][county.value];
-};
+state.onchange=populateCounties;
+county.onchange=()=>{ACTIVE_FACTORS=COUNTY_DATA[state.value][county.value];};
 
-// --- DEBUG: Verify default term value on load ---
-const termDropdown = document.getElementById("term");
-if (termDropdown) {
-  console.log("Loan Term default value:", termDropdown.value);
-}
-
-// --- DEBUG: Track term dropdown changes ---
-termDropdown.addEventListener("change", function() {
-  console.log("Loan Term changed to:", this.value);
-}); 
-
-/* ---------- Tooltip Tap Support (V24.6) ---------- */
-document.addEventListener("click", function(e){
-  const icon = e.target.closest(".tooltip-icon");
- 
-  document.querySelectorAll(".tooltip-text.show").forEach(t=>{
-    if(!icon || !t.parentElement.contains(icon)){
-      t.classList.remove("show");
-    }
-  });
- 
-  if(icon){
-    const tip = icon.querySelector(".tooltip-text");
-    if(tip){
-      e.stopPropagation();
-      tip.classList.toggle("show");
-    }
-  }
+// Tooltip support
+document.addEventListener("click",function(e){
+ const icon = e.target.closest(".tooltip-icon");
+ document.querySelectorAll(".tooltip-text.show").forEach(t=>{
+   if(!icon || !t.parentElement.contains(icon)) t.classList.remove("show");
+ });
+ if(icon){ const tip = icon.querySelector(".tooltip-text"); if(tip){ e.stopPropagation(); tip.classList.toggle("show"); } }
 });
- 
-/* ---------- Engine ---------- */
-function calc(rate,maxPmt,maxCash){
-  // --- DEBUG: Verify loan term passed into calculateMHP ---
-  const termEl = document.getElementById("term");
-  const termValue = termEl ? termEl.value : "MISSING";
-  console.log("calculateMHP() received Loan Term:", termValue);
-  const r=rate/12;
-  const PIF=(r*Math.pow(1+r,TERM))/(Math.pow(1+r,TERM)-1);
-  let hp=50000,last=null;
- 
-  while(true){
-    const cc=hp*ACTIVE_FACTORS.cc;
-    const dp=maxCash-cc;
-    if(dp<hp*MIN_DP) break;
- 
-    const la=hp-dp;
-    const ltv=la/hp;
- 
-    const pi=la*PIF;
-    const tax=(hp*ACTIVE_FACTORS.tax)/12;
-    const cov=Math.max(la,0.8*hp);
-    const hoi=(ACTIVE_FACTORS.hoiBaseAnnual*(cov/ACTIVE_FACTORS.hoiBaseCoverage))/12;
- 
-    // -----------------------
-    // PMI (boundary-safe)
-    // -----------------------
-    let pmi = 0, pmiF = 0;
-    pmiF = ltv > 0.8
-           ? (ltv >= 0.95
-               ? HBPMI
-               : LBPMI + (HBPMI - LBPMI) * (ltv - 0.8) / (0.95 - 0.8))
-           : 0;
-    pmi = (la * pmiF) / 12;
- 
-    const pmt = pi + tax + hoi + pmi;
- 
-    if (pmt <= maxPmt && dp + cc <= maxCash) {
 
- last = { hp, la, dp, cc, ltv, pi, tax, hoi, pmi, pmt, pmiF, cov };
- hp += 1000;
+// Engine
+function calc(rate,maxPmt,maxCash,term){
+ const r=rate/12;
+ const PIF=(r*Math.pow(1+r,term))/(Math.pow(1+r,term)-1);
+ let hp=50000,last=null;
+ while(true){
+   const cc=hp*ACTIVE_FACTORS.cc;
+   const dp=maxCash-cc; if(dp<hp*MIN_DP) break;
+   const la=hp-dp; const ltv=la/hp;
+   const pi=la*PIF;
+   const tax=(hp*ACTIVE_FACTORS.tax)/12;
+   const cov=Math.max(la,0.8*hp);
+   const hoi=(ACTIVE_FACTORS.hoiBaseAnnual*(cov/ACTIVE_FACTORS.hoiBaseCoverage))/12;
+   let pmiF=ltv>0.8?(ltv>=0.95?HBPMI:LBPMI+(HBPMI-LBPMI)*(ltv-0.8)/(0.95-0.8)):0;
+   const pmi=(la*pmiF)/12;
+   const pmt=pi+tax+hoi+pmi;
+   if(pmt<=maxPmt && dp+cc<=maxCash){ last={hp,la,dp,cc,ltv,pi,tax,hoi,pmi,pmt,pmiF,cov}; hp+=1000; }
+   else { if(last && Math.abs(last.ltv-0.8)<0.02){ let best=last; for(let h=last.hp-2000; h<=last.hp+2000; h+=100){ if(h<=0) continue; const cc2=h*ACTIVE_FACTORS.cc; const dp2=maxCash-cc2; if(dp2<h*MIN_DP) continue; const la2=h-dp2; const ltv2=la2/h; const pi2=la2*PIF; const tax2=(h*ACTIVE_FACTORS.tax)/12; const cov2=Math.max(la2,0.8*h); const hoi2=(ACTIVE_FACTORS.hoiBaseAnnual*(cov2/ACTIVE_FACTORS.hoiBaseCoverage))/12; let pmiF2=ltv2>0.8?(ltv2>=0.95?HBPMI:LBPMI+(HBPMI-LBPMI)*(ltv2-0.8)/(0.95-0.8)):0; const pmi2=(la2*pmiF2)/12; const pmt2=pi2+tax2+hoi2+pmi2; if(pmt2<=maxPmt && dp2+cc2<=maxCash){ best={hp:h,la:la2,dp:dp2,cc:cc2,ltv:ltv2,pi:pi2,tax:tax2,hoi:hoi2,pmi:pmi2,pmt:pmt2,pmiF:pmiF2,cov:cov2}; } } last=best; } break; }
+ }
+ return last;
+}
 
-} else {
+// Run Calculator
+function runCalculator(){
+ const termEl=document.getElementById("term");
+ const term=termEl?parseInt(termEl.value):360;
+ const termLabel=`${term/12}YR Fixed`;
+ let rateUsed=BASE_RATE;
+ if(term===360 && FR30_DEBUG!==null) rateUsed=FR30_DEBUG;
+ else if(term===180 && FR15_DEBUG!==null) rateUsed=FR15_DEBUG;
 
- /* ---------- MICRO REFINEMENT NEAR 80% LTV ---------- */
- if (last && Math.abs(last.ltv - 0.80) < 0.02) {
+ const base=calc(rateUsed,num("maxPayment"),num("maxCash"),term);
+ if(!base) return;
 
-   let best = last;
+ const piFactor=base.pi/base.la;
+ const fpPRINC=base.pi-(base.la*rateUsed/12);
+ const lbFive=base.pi*((1-Math.pow(1+(rateUsed/12),-300))/(rateUsed/12));
 
-   for (let h = last.hp - 2000; h <= last.hp + 2000; h += 100) {
+ const dpLIMIT=((base.pmt/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
+ const miDrop=360-(Math.log(1-((base.hp*0.8)*((rateUsed/12)/base.pi)))*-1)/(Math.log(1+(rateUsed/12)));
 
-     if (h <= 0) continue;
+ const note1 = base.pmi>0?`Based on these numbers, the PMI would be eligible to be cancelled after approximately ${Math.round(miDrop)} payments `:"";
+ const note2 = dpLIMIT>0&&(base.dp/base.hp)<0.10?`The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment. The MHP could be higher with a program that allows for less than 5% down payment.`:"";
+ const note3 = ACTIVE_FACTORS.oull && base.la>ACTIVE_FACTORS.oull?`The loan amount is greater than the conforming loan limit of $${ACTIVE_FACTORS.oull.toLocaleString()} for ${county.value}, ${state.value}. Jumbo Loans are outside the scope of this tool (<b>other requirements and/or restrictions may apply</b>).`:"";
 
-     const cc2 = h * ACTIVE_FACTORS.cc;
-     const dp2 = maxCash - cc2;
-     if (dp2 < h * MIN_DP) continue;
-
-     const la2 = h - dp2;
-     const ltv2 = la2 / h;
-
-     const pi2 = la2 * PIF;
-     const tax2 = (h * ACTIVE_FACTORS.tax) / 12;
-     const cov2 = Math.max(la2, 0.8 * h);
-     const hoi2 = (ACTIVE_FACTORS.hoiBaseAnnual * (cov2 / ACTIVE_FACTORS.hoiBaseCoverage)) / 12;
-
-     let pmiF2 = 0;
-     if (ltv2 > 0.8) {
-       pmiF2 = ltv2 >= 0.95
-         ? HBPMI
-         : LBPMI + (HBPMI - LBPMI) * (ltv2 - 0.8) / (0.95 - 0.8);
-     }
-
-     const pmi2 = (la2 * pmiF2) / 12;
-     const pmt2 = pi2 + tax2 + hoi2 + pmi2;
-
-     if (pmt2 <= maxPmt && dp2 + cc2 <= maxCash) {
-       best = {
-         hp: h, la: la2, dp: dp2, cc: cc2, ltv: ltv2,
-         pi: pi2, tax: tax2, hoi: hoi2,
-         pmi: pmi2, pmt: pmt2, pmiF: pmiF2, cov: cov2
-       };
-     }
-   }
-
-   last = best;
+ const RATE_INCREMENT=0.00125;
+ const ROUNDED_BASE_RATE=Math.floor(rateUsed/RATE_INCREMENT)*RATE_INCREMENT;
+ let sens="";
+ for(let r=ROUNDED_BASE_RATE-0.005;r<=ROUNDED_BASE_RATE+0.005;r+=RATE_STEP){
+   const v=calc(r,num("maxPayment"),num("maxCash"),term);
+   if(!v) continue;
+   const d=v.hp-base.hp;
+   sens+=`<tr>
+     <td class="right">${(r*100).toFixed(3)}%</td>
+     <td class="right ${d>=0?"pos":"neg"}">${d>=0?"+":"−"}$${Math.abs(d).toLocaleString()}</td>
+     <td class="right">$${v.hp.toLocaleString()}</td>
+   </tr>`;
  }
 
- break;
-}  }
- 
-  return last;
-}
- 
-/* ---------- Run ---------- */
-function runCalculator() {
-  // ---------- Selected Term & Label ----------
-  const termEl = document.getElementById("term");
-  const term = termEl ? parseInt(termEl.value) : 360; // default fallback
-  const termLabel = `${term / 12}YR Fixed`;
+ output.innerHTML=`
+ <div class="card">
+   <div>Using an "example" rate of <b>${(rateUsed*100).toFixed(2)}%</b> on a ${termLabel} and a few assumptions, the upper limit of the</div>
+   <div class="highlight">Home Price Range &#8776; $${base.hp.toLocaleString()}</div>
+   <div>with a Loan Amount of <b>$${base.la.toLocaleString()}</b></div>${note2?`<div class="neg" style="margin-top:8px;">${note2}</div>`:""}
+ </div>
 
-  // ---------- Select Rate Based on Term ----------
-  let rateUsed = BASE_RATE; // fallback if debug rates not loaded
-  if (term === 360 && FR30_DEBUG !== null) rateUsed = FR30_DEBUG;
-  else if (term === 180 && FR15_DEBUG !== null) rateUsed = FR15_DEBUG;
-
-  console.log("Using rate for calculation:", rateUsed, "with term:", termLabel);
-
-  // ---------- Perform Calculation ----------
-  const base = calc(rateUsed, num("maxPayment"), num("maxCash"), term);
-  if (!base) return;
-
-  console.log("Active rate used for calculations:", rateUsed);
-  if (FR30_DEBUG !== null || FR15_DEBUG !== null) {
-    console.log("Debug rates available:", { FR30_DEBUG, FR15_DEBUG });
-  }
-
-  const dpLIMIT = ((base.pmt / (base.hp / 1000) * 2) + base.pmt - num("maxPayment")) * -1;
-  const miDrop = 360 - (Math.log(1 - ((base.hp * 0.8) * ((rateUsed / 12) / base.pi))) * -1) / (Math.log(1 + (rateUsed / 12)));
-
-  // ---------- RESTORED FACTORS ----------
-  const fpPRINC = base.pi - (base.la * rateUsed / 12);
-  const lbFive = base.pi * ((1 - Math.pow(1 + (rateUsed / 12), -300)) / (rateUsed / 12));
-
-  // Safe logging
-  if (ACTIVE_FACTORS && ACTIVE_FACTORS.oull !== undefined) {
-    console.log("Loaded oull:", ACTIVE_FACTORS.oull);
-  }
-
-  console.log("dpLIMIT:", dpLIMIT.toFixed(2));
-  console.log("fpPRINC:", fpPRINC.toFixed(2));
-  console.log("lbFive:", lbFive.toFixed(2));
-  console.log("miDrop:", miDrop.toFixed(2));
-
-  // ---------- Notes ----------
-  const note1 = base.pmi > 0
-    ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately ${Math.round(miDrop)} payments `
-    : "";
-
-  const note2 =
-    dpLIMIT > 0 && (base.dp / base.hp) < 0.10
-      ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment
-         The MHP could be higher with a program that allows for less than 5% down payment.`
-      : "";
-
-  const note3 =
-    ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull
-      ? `The loan amount is greater than the conforming loan limit of $${ACTIVE_FACTORS.oull.toLocaleString()} for ${county.value}, ${state.value}. Jumbo Loans are outside the scoop of this tool (<b>other requirements and/or restrictions may apply</b>).`
-      : "";
-
-  const piFactor = base.pi / base.la;
-
-  const RATE_INCREMENT = 0.00125;
-  const ROUNDED_BASE_RATE = Math.floor(rateUsed / RATE_INCREMENT) * RATE_INCREMENT;
-
-  let sens = "";
-  for (let r = ROUNDED_BASE_RATE - 0.005; r <= ROUNDED_BASE_RATE + 0.005; r += RATE_STEP) {
-    const v = calc(r, num("maxPayment"), num("maxCash"), term);
-    if (!v) continue;
-
-    const d = v.hp - base.hp;
-    sens += `<tr>
-      <td class="right">${(r * 100).toFixed(3)}%</td>
-      <td class="right ${d >= 0 ? "pos" : "neg"}">
-        ${d >= 0 ? "+" : "−"}$${Math.abs(d).toLocaleString()}
-      </td>
-      <td class="right">$${v.hp.toLocaleString()}</td>
-    </tr>`;
-  }
-
-  // ---------- Output ---------- 
-  output.innerHTML=`
-  <div class="card">
-    <div> Using an "example" rate of <b>${(rateUsed*100).toFixed(2)}%</b> on a ${termLabel} and a few assumptions, the upper limit of the </div>
-    <div class="highlight">Home Price Range &#8776; $${base.hp.toLocaleString()}</div>
-    <div> with a Loan Amount of <b>$${base.la.toLocaleString()}</b></div>${note2?`<div class="neg" style="margin-top:8px;">${note2}</div>`:""}
-  </div>
-  </div>
- 
-  <div class="card">
-    <h2>Payment Breakdown</h2>
-    <table class="mono three-col-33">
-      <tr><th></th><th class="right">/ Month</th><th class="right">Factor</th></tr>
-      <tr>
-  <td>
-    <span class="label-with-tooltip">
-      Principal &amp; Interest (P&amp;I)
-      <span class="tooltip-icon">ⓘ
-        <span class="tooltip-text">
+class="tooltip-text">
           With the 1st payment the loan balance would decrease by
           $${fpPRINC.toFixed(2)} and every payment thereafter, the amount paid toward reducing the loan balance increases slightly.
         </span>
@@ -662,12 +305,10 @@ ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}
   </div>
 `;
 }
- 
-Promise.all([
-  loadCSV(),        // county & tax data
-  loadBaseRate(),   // authoritative /Rate → BASE_RATE
-  loadBaseRateAll() // debug-only CSV → console
-]).then(runCalculator);
+
+// Initialize
+loadBaseRateAll();
+loadCSV();
 </script>
 </body>
 </html>
