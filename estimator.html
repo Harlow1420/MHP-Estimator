@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V32.28</title>
+<title>Home Price Estimator V32.29</title>
 <style>
 body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f6f7f8; color: #222; margin:0; padding:30px 0;}
 .container { max-width:1050px; margin:0 auto; padding:0 20px; }
@@ -138,14 +138,14 @@ async function loadBaseRateAll() {
     try {
         const res = await fetch(URL, {cache:"no-store"});
         if(!res.ok) throw new Error("HTTP "+res.status);
-        const txt = await res.text();
-        const parts = txt.trim().split(",");
-        if(parts.length >= 4){
-            FR30_DEBUG = parseFloat(parts[2])/100;
-            FR15_DEBUG = parseFloat(parts[3])/100;
+        const lines = (await res.text()).trim().split("\n");
+        if(lines.length >= 2){
+            const rateLine = lines[1].trim().split(",").map(x=>parseFloat(x));
+            FR30_DEBUG = rateLine[0]; // keep as decimal
+            FR15_DEBUG = rateLine[1]; // keep as decimal
             console.log("BaseRateAll.csv fetched:", {FR30:FR30_DEBUG, FR15:FR15_DEBUG});
         } else {
-            console.warn("BaseRateAll parse failed:", txt);
+            console.warn("BaseRateAll parse failed:", lines);
         }
     } catch(err){
         console.warn("BaseRateAll fetch failed:", err);
@@ -181,7 +181,6 @@ function populateCounties(){
     countyEl.disabled = !stateEl.value;
     if(!stateEl.value) return;
     Object.keys(COUNTY_DATA[stateEl.value]).sort().forEach(x => countyEl.add(new Option(x,x)));
-    // Only set default if not already selected
     if(!countyEl.value && COUNTY_DATA[stateEl.value]["Oakland County"]) countyEl.value = "Oakland County";
     ACTIVE_FACTORS = COUNTY_DATA[stateEl.value][countyEl.value];
 }
@@ -252,20 +251,17 @@ function calc(rate, maxPmt, maxCash, term){
 
 // Run Calculator
 function runCalculator(){
-    const termEl = document.getElementById("term");
-    const term = termEl ? parseInt(termEl.value) : 360;
+    const term = parseInt(document.getElementById("term").value);
     const termLabel = `${term/12}YR Fixed`;
     let rateUsed = BASE_RATE;
     if(term===360 && FR30_DEBUG!==null) rateUsed = FR30_DEBUG;
     else if(term===180 && FR15_DEBUG!==null) rateUsed = FR15_DEBUG;
+    console.log("Using rate:", rateUsed);
 
     const base = calc(rateUsed, num("maxPayment"), num("maxCash"), term);
     if(!base) return;
 
     const piFactor = base.pi/base.la;
-    const fpPRINC = base.pi - (base.la*rateUsed/12);
-    const lbFive = base.pi*((1-Math.pow(1+(rateUsed/12),-300))/(rateUsed/12));
-
     const note1 = base.pmi>0 ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately ${Math.round(360 - Math.log(1-((base.hp*0.8)*(rateUsed/12)/base.pi))/Math.log(1+(rateUsed/12)))} payments ` : "";
     const note2 = ((base.dp/base.hp)<0.10) ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment. The MHP could be higher with a program that allows for less than 5% down payment.` : "";
     const note3 = ACTIVE_FACTORS.oull && base.la>ACTIVE_FACTORS.oull ? `The loan amount is greater than the conforming loan limit of $${ACTIVE_FACTORS.oull.toLocaleString()} for ${document.getElementById("county").value}, ${document.getElementById("state").value}. Jumbo Loans are outside the scope of this tool (<b>other requirements and/or restrictions may apply</b>).` : "";
