@@ -257,6 +257,13 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
  
 <script>
 "use strict";
+
+// Authoritative calculation rate (still sourced from /Rate)
+let BASE_RATE = 0.0609;   // fallback safety value
+
+// Debug-only rates from BaseRateAll.csv (console verification only)
+let FR30_DEBUG = null;
+let FR15_DEBUG = null;
  
 /* ---------- Formatting ---------- */
 function fmt(x,d=2){return x.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});}
@@ -267,40 +274,43 @@ function num(id){return Number(document.getElementById(id).value.replace(/,/g,""
   el.onblur=()=>el.value=Number(el.value).toLocaleString();
 });
  
-/* ---------- DYNAMIC BASE RATE ---------- */
-let BASE_RATE = 0.0609; // fallback safety value
 
+/* ---------- DEBUG: BASE RATE ALL (CONSOLE ONLY) ---------- */
 async function loadBaseRateAll() {
-  const BASE_RATE_CSV_URL = "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/BaseRateAll.csv";
-  try {
-    const res = await fetch(BASE_RATE_CSV_URL, { cache: "no-store" });
-    const txt = await res.text();
+  const URL =
+    "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/BaseRateAll.csv";
 
-    // Clean up whitespace
+  try {
+    const res = await fetch(URL, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+
+    const txt = await res.text();
     const line = txt.trim();
 
-    // Regex to extract FR30 and FR15 rates from the one-line format
-    // Matches pattern: FR30,FR15 <number>,<number>
-    const match = line.match(/FR30\s*,\s*FR15\s*([0-9.]+)\s*,\s*([0-9.]+)/i);
+    // Expected one-line format:
+    // FR30,FR15,6.875,6.125
+    const match = line.match(
+      /FR30\s*,\s*FR15\s*,\s*([0-9.]+)\s*,\s*([0-9.]+)/i
+    );
 
-    if (match) {
-      const fr30 = parseFloat(match[1]);
-      const fr15 = parseFloat(match[2]);
-
-      if (!isNaN(fr30)) BASE_RATE_30 = fr30;
-      if (!isNaN(fr15)) BASE_RATE_15 = fr15;
-
-      console.log("Loaded Base Rates from CSV (one-line parser):", {
-        "30YR Fixed": BASE_RATE_30,
-        "15YR Fixed": BASE_RATE_15
-      });
-    } else {
-      console.warn("Failed to parse BaseRateAll.csv line:", line);
+    if (!match) {
+      console.warn("BaseRateAll.csv parse failed:", line);
+      return;
     }
-  } catch (e) {
-    console.warn("Failed to load BaseRateAll.csv", e);
+
+    FR30_DEBUG = parseFloat(match[1]) / 100;
+    FR15_DEBUG = parseFloat(match[2]) / 100;
+
+    console.log("BaseRateAll.csv fetched (debug only):", {
+      FR30: FR30_DEBUG,
+      FR15: FR15_DEBUG
+    });
+
+  } catch (err) {
+    console.warn("BaseRateAll.csv fetch failed:", err);
   }
 }
+
 /* ---------- Constants ---------- */
 const TERM=360, MIN_DP=0.05;
 const LBPMI=0.0034, HBPMI=0.0115;
@@ -309,7 +319,29 @@ const RATE_STEP=0.00125;
 /* ---------- CSV ---------- */
 const CSV_URL="https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/main/EPTRBC.csv";
 let COUNTY_DATA={}, ACTIVE_FACTORS=null;
- 
+/* ---------- AUTHORITATIVE BASE RATE (/Rate) ---------- */
+async function loadBaseRate() {
+  const RATE_URL =
+    "https://raw.githubusercontent.com/Harlow1420/MHP-Estimator/refs/heads/main/Rate";
+
+  try {
+    const res = await fetch(RATE_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+
+    const txt = (await res.text()).trim();
+    const rate = parseFloat(txt);
+
+    if (!isNaN(rate)) {
+      BASE_RATE = rate;
+      console.log("Loaded BASE_RATE from /Rate:", BASE_RATE);
+    } else {
+      console.warn("Invalid rate value from /Rate:", txt);
+    }
+
+  } catch (err) {
+    console.warn("Failed to load /Rate, using fallback:", err);
+  }
+} 
 async function loadCSV(){
   const t=await (await fetch(CSV_URL)).text();
   t.trim().split("\n").slice(1).forEach(r=>{
@@ -459,6 +491,14 @@ function calc(rate,maxPmt,maxCash){
 function runCalculator(){
   const base=calc(BASE_RATE,num("maxPayment"),num("maxCash"));
   if(!base) return;
+console.log("Active BASE_RATE used for calculations:", BASE_RATE);
+
+if (FR30_DEBUG !== null || FR15_DEBUG !== null) {
+  console.log("Debug rates available:", {
+    FR30_DEBUG,
+    FR15_DEBUG
+  });
+}
  
 const dpLIMIT=((base.pmt/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1;
  
@@ -590,7 +630,11 @@ ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}
 `;
 }
  
-Promise.all([loadCSV(), loadBaseRate(), loadBaseRateAll()]).then(runCalculator);
+Promise.all([
+  loadCSV(),        // county & tax data
+  loadBaseRate(),   // authoritative /Rate → BASE_RATE
+  loadBaseRateAll() // debug-only CSV → console
+]).then(runCalculator);
 </script>
 </body>
 </html>
