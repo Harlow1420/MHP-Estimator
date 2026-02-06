@@ -75,7 +75,7 @@ th,td{padding:8px 6px;border-bottom:1px solid #eee;}
            </span>
          </span>
        </label>
-       <input id="maxCash" value="90,000">
+       <input id="maxCash" value="95,000">
      </div>
 
      <div>
@@ -143,8 +143,8 @@ async function loadBaseRateAll() {
             const rateLine = lines[1].trim().split(",").map(x=>parseFloat(x));
 
             // --- FIX: Keep CSV decimals as-is, do NOT divide by 100 ---
-            FR30_DEBUG = rateLine[0]; // 0.0611 for 6.11%
-            FR15_DEBUG = rateLine[1]; // 0.0549 for 5.49%
+            FR30_DEBUG = rateLine[0] / 100; // 0.0611 for 6.11%
+            FR15_DEBUG = rateLine[1] / 100; // 0.0549 for 5.49%
 
             console.log("BaseRateAll.csv fetched:", {FR30:FR30_DEBUG, FR15:FR15_DEBUG});
         } else {
