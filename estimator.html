@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V32.24</title>
+<title>Home Price Estimator V32.26</title>
  
 <style>
 body {
@@ -216,7 +216,7 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
             </span>
           </span>
         </label>
-        <input id="maxPayment" value="2,800">
+        <input id="maxPayment" value="2,850">
       </div>
  
       <div>
@@ -230,7 +230,16 @@ th, td { padding:8px 6px; border-bottom:1px solid #eee; }
         </label>
         <input id="maxCash" value="80,000">
       </div>
- 
+
+<!-- NEW TERM DROPDOWN -->
+     <div>
+       <label>Loan Term</label>
+       <select id="term">
+         <option value="360" selected>30 Years</option>
+         <option value="180">15 Years</option>
+       </select>
+     </div> 
+
       <div class="subgrid">
         <div>
           <label>State</label>
@@ -379,7 +388,18 @@ state.onchange = populateCounties;
 county.onchange = () => {
   ACTIVE_FACTORS = COUNTY_DATA[state.value][county.value];
 };
- 
+
+// --- DEBUG: Verify default term value on load ---
+const termDropdown = document.getElementById("term");
+if (termDropdown) {
+  console.log("Loan Term default value:", termDropdown.value);
+}
+
+// --- DEBUG: Track term dropdown changes ---
+termDropdown.addEventListener("change", function() {
+  console.log("Loan Term changed to:", this.value);
+}); 
+
 /* ---------- Tooltip Tap Support (V24.6) ---------- */
 document.addEventListener("click", function(e){
   const icon = e.target.closest(".tooltip-icon");
@@ -401,6 +421,10 @@ document.addEventListener("click", function(e){
  
 /* ---------- Engine ---------- */
 function calc(rate,maxPmt,maxCash){
+  // --- DEBUG: Verify loan term passed into calculateMHP ---
+  const termEl = document.getElementById("term");
+  const termValue = termEl ? termEl.value : "MISSING";
+  console.log("calculateMHP() received Loan Term:", termValue);
   const r=rate/12;
   const PIF=(r*Math.pow(1+r,TERM))/(Math.pow(1+r,TERM)-1);
   let hp=50000,last=null;
