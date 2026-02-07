@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V35.5</title>
+<title>Home Price Estimator V35.6</title>
 <style>
 body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f6f7f8; color: #222; margin:0; padding:30px 0;}
 .container { max-width:1050px; margin:0 auto; padding:0 20px; }
@@ -63,7 +63,7 @@ th,td{padding:8px 6px;border-bottom:1px solid #eee;}
            </span>
          </span>
        </label>
-       <input id="maxPayment" value="2,850">
+       <input id="maxPayment" value="2,950">
      </div>
 
      <div>
@@ -183,7 +183,8 @@ function populateCounties(){
     countyEl.disabled = !stateEl.value;
     if(!stateEl.value) return;
     Object.keys(COUNTY_DATA[stateEl.value]).sort().forEach(x => countyEl.add(new Option(x,x)));
-    if(!countyEl.value && COUNTY_DATA[stateEl.value]["Oakland County"]) countyEl.value = "Oakland County";
+    if (stateEl.value === "Michigan" && COUNTY_DATA["Michigan"]["Oakland County"])
+    countyEl.value = "Oakland County";
     ACTIVE_FACTORS = COUNTY_DATA[stateEl.value][countyEl.value];
 }
 
