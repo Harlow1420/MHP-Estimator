@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V32.4</title>
+<title>Home Price Estimator V35.1</title>
 <style>
 body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f6f7f8; color: #222; margin:0; padding:30px 0;}
 .container { max-width:1050px; margin:0 auto; padding:0 20px; }
@@ -59,11 +59,11 @@ th,td{padding:8px 6px;border-bottom:1px solid #eee;}
          Maximum Monthly Housing Payment
          <span class="tooltip-icon">ⓘ
            <span class="tooltip-text">
-             Some properties such as Condos, require Association Fees. Example: if your max housing payment is $2,900 and HOA is $400, enter $2,500.
+             Some properties such as Condos, require Association Fees. If for example, you were interested in Condos and the average Association Fee is approx. $400 / mo. and you wanted a Maximum Housing Payment of $2,900, then you should enter $2,500 as your Maximum Housing Payment.
            </span>
          </span>
        </label>
-       <input id="maxPayment" value="2,850">
+       <input id="maxPayment" value="2,900">
      </div>
 
      <div>
@@ -71,11 +71,11 @@ th,td{padding:8px 6px;border-bottom:1px solid #eee;}
          Maximum funds available to use
          <span class="tooltip-icon">ⓘ
            <span class="tooltip-text">
-             Assumes 5% or more down payment. Less than 5% options may have additional requirements or costs.
+             Although there are programs that offer less than 5% down payment options, they may have additional eligibility requirements, limitations or costs that are out of the scoop of this tool. This tool is defaulted to an assumption of 5% or more down payment on a conventional conforming loan.
            </span>
          </span>
        </label>
-       <input id="maxCash" value="99,000">
+       <input id="maxCash" value="80,000">
      </div>
 
      <div>
@@ -316,7 +316,8 @@ function runCalculator(){
 </div>
 
 <div class="card">
-  <h2>Interest Rate Sensitivity</h2>
+  <h2> Interest Rate Changes </h2>
+<div>How much would the Home Price Range change if the rate was lower or higher than the “example” rate of >${(rateUsed*100).toFixed(2)}%</div><br>
   <table class="mono rate-table">
     <tr><th class="right">Interest Rate</th><th class="right">Change</th><th class="right">Upper Range Limit</th></tr>
     ${sens}
