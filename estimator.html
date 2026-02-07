@@ -264,8 +264,8 @@ function runCalculator(){
     if(!base) return;
 
     const piFactor = base.pi/base.la;
-    const note1 = base.pmi > 0 ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately ${Math.round(360-(Math.log(1-((base.hp*0.8)*((rateUsed/12)/base.pi)))*-1)/(Math.log(1+(rateUsed/12)))} payments ` : "";
-    const note2 = ((base.dp/base.hp)<0.10) ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment. The Home Price Range could be higher with a program that allows for less than 5% down payment.` : "";
+    const note1 = base.pmi>0 ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately ${Math.round(360 - Math.log(1-((base.hp*0.8)*(rateUsed/12)/base.pi))/Math.log(1+(rateUsed/12)))} payments ` : "";
+    const note2 = ((base.dp/base.hp)<0.10) ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment. The Maximum Home Price Range could be higher with a program that allows for less than 5% down payment.` : "";
     const note3 = ACTIVE_FACTORS.oull && base.la>ACTIVE_FACTORS.oull ? `The loan amount is greater than the conforming loan limit of $${ACTIVE_FACTORS.oull.toLocaleString()} for ${document.getElementById("county").value}, ${document.getElementById("state").value}. Jumbo Loans are outside the scope of this tool (other requirements and/or restrictions may apply).` : "";
 
     const RATE_INCREMENT = 0.00125;
