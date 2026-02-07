@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V35.4</title>
+<title>Home Price Estimator V35.3</title>
 <style>
 body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f6f7f8; color: #222; margin:0; padding:30px 0;}
 .container { max-width:1050px; margin:0 auto; padding:0 20px; }
@@ -63,7 +63,7 @@ th,td{padding:8px 6px;border-bottom:1px solid #eee;}
            </span>
          </span>
        </label>
-       <input id="maxPayment" value="2,900">
+       <input id="maxPayment" value="2,950">
      </div>
 
      <div>
@@ -264,9 +264,9 @@ function runCalculator(){
     if(!base) return;
 
     const piFactor = base.pi/base.la;
-    const note1 = base.pmi > 0 ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately ${Math.round(360-(Math.log(1-((base.hp*0.8)*((rateUsed/12)/base.pi)))*-1)/(Math.log(1+(rateUsed/12)))} payments ` : "";
-    const note2 = ((base.dp/base.hp)<0.10) ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment. The Home Price Range could be higher with a program that allows for less than 5% down payment.` : "";
-    const note3 = ACTIVE_FACTORS.oull && base.la>ACTIVE_FACTORS.oull ? `The loan amount is greater than the conforming loan limit of $${ACTIVE_FACTORS.oull.toLocaleString()} for ${document.getElementById("county").value}, ${document.getElementById("state").value}. Jumbo Loans are outside the scope of this tool (other requirements and/or restrictions may apply).` : "";
+    const note1 = base.pmi>0 ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately ${Math.round(360 - Math.log(1-((base.hp*0.8)*(rateUsed/12)/base.pi))/Math.log(1+(rateUsed/12)))} payments ` : "";
+    const note2 = ((base.dp/base.hp)<0.10) ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment. The MHP could be higher with a program that allows for less than 5% down payment.` : "";
+    const note3 = ACTIVE_FACTORS.oull && base.la>ACTIVE_FACTORS.oull ? `The loan amount is greater than the conforming loan limit of $${ACTIVE_FACTORS.oull.toLocaleString()} for ${document.getElementById("county").value}, ${document.getElementById("state").value}. Jumbo Loans are outside the scope of this tool (<b>other requirements and/or restrictions may apply</b>).` : "";
 
     const RATE_INCREMENT = 0.00125;
     const ROUNDED_BASE_RATE = Math.floor(rateUsed/RATE_INCREMENT)*RATE_INCREMENT;
