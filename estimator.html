@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V35.2</title>
+<title>Home Price Estimator V35.3</title>
 <style>
 body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f6f7f8; color: #222; margin:0; padding:30px 0;}
 .container { max-width:1050px; margin:0 auto; padding:0 20px; }
@@ -330,7 +330,7 @@ function runCalculator(){
 async function init() {
     await loadBaseRateAll();
     await loadCSV();
-    // Do NOT auto-run calculation
+    runCalculator(); // ← auto-run once defaults + data are ready
 }
 init();
 </script>
