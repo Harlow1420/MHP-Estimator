@@ -302,7 +302,7 @@ const note1 = base.pmi > 0
   <h2>Payment Breakdown</h2>
   <table class="mono three-col-33">
     <tr><th></th><th class="right">Monthly Amount</th><th class="right">Details / Factor</th></tr>
-    <tr><td>Principal & Interest</td><td class="right">$${fmt(base.pi)}</td><td class="right">($${fmt(piFactor*1000,2)}/$1,000 of Loan)</td></tr>
+    <tr><td>Principal & Interest</td><td class="right">$${fmt(base.pi)}</td><td class="right">($${fmt(piFactor*1000,2)}/$1,000)</td></tr>
     <tr><td>Property Tax</td><td class="right">$${fmt(base.tax)}</td><td class="right">(${fmt(ACTIVE_FACTORS.tax*100,2)}% of HP)</td></tr>
     <tr><td>Homeowners Insurance</td><td class="right">$${fmt(base.hoi)}</td><td class="right">($${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)}/$${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)})</td></tr>
     <tr><td>PMI</td><td class="right">$${fmt(base.pmi)}</td><td class="right">(${fmt(base.pmiF*100,2)}%)</td></tr>
