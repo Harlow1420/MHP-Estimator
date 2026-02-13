@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V36.2</title>
+<title>Home Price Estimator V37.5</title>
 <style>
 body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f6f7f8; color: #222; margin:0; padding:30px 0;}
 .container { max-width:1050px; margin:0 auto; padding:0 20px; }
@@ -290,7 +290,7 @@ const note1 = base.pmi > 0
 const dpConstraint = (((base.pmt/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1 > 0);
 
 const note2 = dpConstraint
-  ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment. The Maximum Home Price Range could be higher with a program that allows for less than 5% down.`
+  ? ` The Estimator was designed to maximize a potential home price for conventional conforming (non-jumbo) fixed rate loans with 5% or more down payment. Based on the inputs provided the maximum home price was limited by that down payment minimum. The maximum home price could be higher with a program that allows for less than 5% down payment (or more available funds to use and rerun estimation).`
   : "";
 
 const note3 = (ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull)
@@ -323,35 +323,43 @@ const note3 = (ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull)
 </div>${!(note2 || note3) ? `
 
 <div class="card">
-  <h2>Payment Breakdown</h2>
+  <h2>Estimated Monthly Payment</h2>
+  <div style="margin-bottom:10px;">
+    Here’s how your estimated monthly housing payment is made up.
+  </div>
   <table class="mono three-col-33">
-    <tr><th></th><th class="right">Monthly Amount</th><th class="right">Details / Factor</th></tr>
-    <tr><td>Principal & Interest</td><td class="right">$${fmt(base.pi)}</td><td class="right">($${fmt(piFactor*1000,2)}/$1,000)</td></tr>
-    <tr><td>Property Tax</td><td class="right">$${fmt(base.tax)}</td><td class="right">(${fmt(ACTIVE_FACTORS.tax*100,2)}% of HP)</td></tr>
-    <tr><td>Homeowners Insurance</td><td class="right">$${fmt(base.hoi)}</td><td class="right">($${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)}/$${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)})</td></tr>
-    <tr><td>PMI</td><td class="right">$${fmt(base.pmi)}</td><td class="right">(${fmt(base.pmiF*100,2)}%)</td></tr>
-    <tr><th>Total</th><th class="right">&#8776; $${fmt(base.pmt)}</th><th></th></tr>
+    <tr><th></th><th class="right">Monthly Estimate</th><th class="right">How It’s Calculated</th></tr>
+    <tr><td>Principal & Interest</td><td class="right">$${fmt(base.pi)}</td><td class="right">($${fmt(piFactor*1000,2)}/$1,000 borrowed)</td></tr>
+    <tr><td>Property Taxes</td><td class="right">$${fmt(base.tax)}</td><td class="right">(${fmt(ACTIVE_FACTORS.tax*100,2)}% of home price)</td></tr>
+    <tr><td>Home Insurance</td><td class="right">$${fmt(base.hoi)}</td><td class="right">Based on typical coverage levels</td></tr>
+    <tr><td>Mortgage Insurance (PMI)</td><td class="right">$${fmt(base.pmi)}</td><td class="right">${base.pmiF > 0 ? `(${fmt(base.pmiF*100,2)}%)` : "Not required at this level"}</td></tr>
+    <tr><th>Total Estimated Payment</th><th class="right">&#8776; $${fmt(base.pmt)}</th><th></th></tr>
   </table>
   ${note1?`<div class="pos" style="margin-top:12px;">${note1}</div>`:""}
 </div>
 
 <div class="card">
-  <h2>Transaction Details</h2>
+  <h2>Estimated Costs to Purchase</h2>
+  <div style="margin-bottom:10px;">
+    An estimate of what buying at this price could look like.
+  </div>
   <table class="mono three-col-33">
-    <tr><th></th><th class="right">Amount</th><th class="right">Factor</th></tr>
-    <tr><td>Home Price (HP)</td><td class="right">$${base.hp.toLocaleString()}</td><td></td></tr>
-    <tr><td>Loan Amount (${fmt((base.la/base.hp*100),2)}% LTV)</td><td class="right">- $${base.la.toLocaleString()}</td><td></td></tr>
-    <tr><td>Down Payment (${fmt((base.dp/base.hp*100),2)}%)</td><td class="right">= $${base.dp.toLocaleString()}</td><td></td></tr>
-    <tr><td>Closing Costs</td><td class="right">+ $${base.cc.toLocaleString()}</td><td class="right">(${(base.cc/base.hp*100).toFixed(2)}% of HP)</td></tr>
-    <tr><th>Funds needed to Close</th><th class="right">&#8776; $${(base.dp+base.cc).toLocaleString()}</th><th></th></tr>
+    <tr><th></th><th class="right">Estimated Amount</th><th class="right">Notes</th></tr>
+    <tr><td>Home Price</td><td class="right">$${base.hp.toLocaleString()}</td><td></td></tr>
+    <tr><td>Estimated Loan</td><td class="right">- $${base.la.toLocaleString()}</td><td>(${fmt((base.la/base.hp*100),2)}% of price)</td></tr>
+    <tr><td>Your Down Payment</td><td class="right">= $${base.dp.toLocaleString()}</td><td>(${fmt((base.dp/base.hp*100),2)}%)</td></tr>
+    <tr><td>Estimated Closing Costs</td><td class="right">+ $${base.cc.toLocaleString()}</td><td>(${(base.cc/base.hp*100).toFixed(2)}% of price)</td></tr>
+    <tr><th>Estimated Cash Needed</th><th class="right">&#8776; $${(base.dp+base.cc).toLocaleString()}</th><th></th></tr>
   </table>
 </div>
 
 <div class="card">
-  <h2> Interest Rate Changes </h2>
-  <div>How much would the Home Price Range change if the rate was lower or higher than the “example” rate of ${(rateUsed*100).toFixed(2)}%</div><br>
+  <h2>How Rates Could Affect Your Price Range</h2>
+  <div style="margin-bottom:10px;">
+    If interest rates were a little lower or higher than the example rate of ${(rateUsed*100).toFixed(2)}%, here’s how your estimated price range could shift.
+  </div>
   <table class="mono rate-table">
-    <tr><th class="right">Interest Rate</th><th class="right">Change</th><th class="right">Upper Range Limit</th></tr>
+    <tr><th class="right">Interest Rate</th><th class="right">Change in Price</th><th class="right">Estimated Upper Price</th></tr>
     ${sens}
   </table>
 </div>
