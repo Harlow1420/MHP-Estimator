@@ -63,7 +63,7 @@ th,td{padding:8px 6px;border-bottom:1px solid #eee;}
            </span>
          </span>
        </label>
-       <input id="maxPayment" value="2,900">
+       <input id="maxPayment" value="2,850">
      </div>
 
      <div>
@@ -287,7 +287,7 @@ const note1 = base.pmi > 0
   ? `Based on these numbers, the PMI would be eligible to be cancelled after approximately ${Math.round(miDrop)} payments `
   : "";
     // --- Constraint Flags ---
-const dpConstraint = (base.dp / base.hp) < MIN_DP;
+const dpConstraint = (((base.pmt/(base.hp/1000)*2)+base.pmt-num("maxPayment"))*-1 > 0);
 
 const note2 = dpConstraint
   ? `The Maximum Home Price shown here was limited by the Estimator’s assumed minimum 5% down payment. The Maximum Home Price Range could be higher with a program that allows for less than 5% down.`
@@ -376,4 +376,3 @@ init();
 </script>
 </body>
 </html>
-
