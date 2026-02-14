@@ -63,7 +63,7 @@ th,td{padding:8px 6px;border-bottom:1px solid #eee;}
            </span>
          </span>
        </label>
-       <input id="maxPayment" value="2,800">
+       <input id="maxPayment" value="2,900">
      </div>
 
      <div>
@@ -291,7 +291,7 @@ const dpConstraint =
 (
   (((base.pmt/(base.hp/1000)*2) + base.pmt - num("maxPayment")) * -1 > 0)
   &&
-  ((base.la / base.hp) < 0.10)
+  ((base.la / base.hp) < 0.055)
 );
 const note2 = dpConstraint
  ? `
