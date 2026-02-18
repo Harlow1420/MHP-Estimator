@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V38.5</title>
+<title>Home Price Estimator V38.6</title>
 <style>
 body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f6f7f8; color: #222; margin:0; padding:30px 0;}
 .container { max-width:1050px; margin:0 auto; padding:0 20px; }
@@ -303,9 +303,6 @@ const dpConstraint = paymentFailSafe && outsidePmiCusp;
 const note2 = dpConstraint
  ? `
    <p>
-     The Estimator was designed to maximize a potential home price for conventional conforming loans with a minimum down payment of 5%.
-   </p>
-   <p>
      Based on the inputs provided, the maximum home price was limited by that down payment minimum.
    </p>
    <p>
@@ -357,7 +354,7 @@ const note3 = (ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull)
 <div class="card">
   <h2>Estimated Monthly Payment</h2>
   <div style="margin-bottom:10px;">
-    Here’s how your estimated monthly housing payment is made up.
+    Here’s an example of how that estimated payment is made up.
   </div>
   <table class="mono three-col-33">
     <tr><th></th><th class="right">Monthly Estimate</th><th class="right">How It’s Calculated</th></tr>
