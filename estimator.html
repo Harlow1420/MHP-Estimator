@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Estimator V38.6</title>
+<title>Home Price Estimator V38.7</title>
 <style>
 body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f6f7f8; color: #222; margin:0; padding:30px 0;}
 .container { max-width:1050px; margin:0 auto; padding:0 20px; }
@@ -347,7 +347,10 @@ const note3 = (ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull)
   ` : `
       <div>Using an "example" rate of <b>${(rateUsed*100).toFixed(2)}%</b> on a ${termLabel} and a few assumptions, the upper limit of the</div>
       <div class="highlight">Home Price Range &#8776; $${base.hp.toLocaleString()}</div>
-      <div>with a Loan Amount of <b>$${base.la.toLocaleString()}</b></div>
+      <div>with a Loan Amount of <b>$${base.la.toLocaleString('en-US', {
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0
+})}</b></div>
   `}
 </div>${!(note2 || note3) ? `
 
