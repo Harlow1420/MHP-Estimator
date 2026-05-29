@@ -79,10 +79,38 @@ th,td{padding:8px 6px;border-bottom:1px solid #eee;}
 .neu { color:#6b7280; font-weight:400; }
 .disclaimer{font-size:12px;color:#666;text-align:center;margin-top:30px;}
 .subgrid{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-@media(max-width:600px){.subgrid{grid-template-columns:1fr;}}
-.rate-table th,.rate-table td{width:33.333%;text-align:center;}
-.three-col-33 th,.three-col-33 td{width:33.333%;}
-@media(max-width:480px){.grid{grid-template-columns:1fr;}.header-left{font-size:20px;}.highlight{font-size:26px;} input,select,button{font-size:16px;} table{display:block;overflow-x:auto;white-space:nowrap;}}
+
+@media(max-width:480px){
+
+ .grid{
+   grid-template-columns:1fr;
+ }
+
+ .header-left{
+   font-size:20px;
+ }
+
+ .highlight{
+   font-size:26px;
+ }
+
+ input,
+ select,
+ button{
+   font-size:16px;
+ }
+
+ /* ONLY MAIN TABLES */
+ .rate-table,
+ .three-col-33,
+ #paymentTable{
+   display:block;
+   overflow-x:auto;
+   white-space:nowrap;
+ }
+
+}
+
 #maxPayment,#maxCash{padding-right:0;}
 
 /* ----- SUBSECTION: SENSITIVITY MINI TABLE ----- */
@@ -103,6 +131,14 @@ th,td{padding:8px 6px;border-bottom:1px solid #eee;}
 
 .sens-mini tr:last-child td{
  border-bottom:none;
+}
+
+.sens-mini{
+ table-layout:auto;
+}
+
+.sens-mini td{
+ white-space:normal;
 }
 
 /* ----- SUBSECTION: LOADING OVERLAY ----- */
