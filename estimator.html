@@ -84,6 +84,30 @@ th,td{padding:8px 6px;border-bottom:1px solid #eee;}
 .three-col-33 th,.three-col-33 td{width:33.333%;}
 @media(max-width:480px){.grid{grid-template-columns:1fr;}.header-left{font-size:20px;}.highlight{font-size:26px;} input,select,button{font-size:16px;} table{display:block;overflow-x:auto;white-space:nowrap;}}
 #maxPayment,#maxCash{padding-right:0;}
+
+/* ----- SUBSECTION: SENSITIVITY MINI TABLE ----- */
+.sens-mini{
+ width:100%;
+ border-collapse:collapse;
+ font-size:12px;
+ background:#f8fafc;
+ border:1px solid #e5e7eb;
+ border-radius:6px;
+ overflow:hidden;
+}
+
+.sens-mini td{
+ padding:4px 6px;
+ border-bottom:1px solid #edf1f5;
+}
+
+.sens-mini tr:last-child td{
+ border-bottom:none;
+}
+
+/* ----- SUBSECTION: LOADING OVERLAY ----- */
+#loadingOverlay {
+
 /* ----- SUBSECTION: LOADING OVERLAY ----- */
 #loadingOverlay {
   position: fixed;
@@ -422,7 +446,7 @@ document.addEventListener("click", function(e){
 async function getCountyFromCity(city, state) {
     const apiKey = "8adbac99bb8c428fbc8b2621fccf00f5";
  
-    const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(city + ", " + state)}&key=${apiKey}`;
+    const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(city + ", " + state)}&key=${apiKey}`;
  
     try {
         const res = await fetch(url);
@@ -497,7 +521,7 @@ function calc(rate, maxPmt, maxCash, term){
     let hp = 50000, last = null;
  
     while(true){
-        const cc = hp * ACTIVE_FACTORS.cc;
+        const cc = hp * ACTIVE_FACTORS.cc;
         const dp = maxCash - cc;
         if(dp < hp*MIN_DP) break;
  
@@ -533,7 +557,7 @@ function calc(rate, maxPmt, maxCash, term){
                 let best = last;
                 for(let h = last.hp-2000; h <= last.hp+2000; h += 100){
                     if(h <= 0) continue;
-                    const cc2 = h * ACTIVE_FACTORS.cc;
+                    const cc2 = h * ACTIVE_FACTORS.cc;
                     const dp2 = maxCash - cc2;
                     if(dp2 < h*MIN_DP) continue;
                     const la2 = h - dp2;
@@ -557,7 +581,7 @@ function calc(rate, maxPmt, maxCash, term){
  
     return last;
 }
- //  ENVIRONMENT SCALER (rate + tax + insurance) function simulateEnv({ rateShift = 0, taxScale = 1, hoiScale = 1 }, rateUsed, term) {    const original = { ...ACTIVE_FACTORS };    ACTIVE_FACTORS.tax *= taxScale;   ACTIVE_FACTORS.hoiBaseAnnual *= hoiScale;    const result = calc(     rateUsed + rateShift,     num("maxPayment"),     num("maxCash"),     term   );    ACTIVE_FACTORS = original;    return result; } 
+ //  ENVIRONMENT SCALER (rate + tax + insurance) function simulateEnv({ rateShift = 0, taxScale = 1, hoiScale = 1 }, rateUsed, term) {    const original = { ...ACTIVE_FACTORS };    ACTIVE_FACTORS.tax *= taxScale;   ACTIVE_FACTORS.hoiBaseAnnual *= hoiScale;    const result = calc(     rateUsed + rateShift,     num("maxPayment"),     num("maxCash"),     term   );    ACTIVE_FACTORS = original;    return result; }
 </script>
 <script>
  
@@ -573,7 +597,7 @@ function runCalculator(){
     const base = calc(rateUsed, num("maxPayment"), num("maxCash"), term);
     if(!base) return;
  
-    const piFactor = base.pi / base.la;
+    const piFactor = base.pi / base.la;
  
     const miDrop =
   term -
@@ -587,7 +611,7 @@ const note1 = base.pmi > 0
     // Stability Buffer Around 80% LTV
     const PMI_BUFFER_LOW  = 0.7925;
     const PMI_BUFFER_HIGH = 0.8075;
-    const ltv = base.la / base.hp;
+    const ltv = base.la / base.hp;
  
     const paymentFailSafe = (((base.pmt / (base.hp / 1000) * 2) + base.pmt - num("maxPayment")) * -1 > 0) && (ltv > 0.9);
     const outsidePmiCusp = (ltv < PMI_BUFFER_LOW || ltv > PMI_BUFFER_HIGH);
@@ -597,36 +621,59 @@ const note1 = base.pmi > 0
         ? `<p> Based on the inputs provided, the maximum home price would likely be a with less than 5% down payment.</p><p>This tool cannot calculate examples for less than 5% down payment, like FHA, VA, USDA Rural and First-Time Buyer Programs, because they have additional requirements and/or restrictions making them outside the scoop of this tool.</p><p>Program options with less than 5% down payment should be discussed with a lender.</p>`
         : "";
  
-    const note3 = (ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull)
+    const note3 = (ACTIVE_FACTORS.oull && base.la > ACTIVE_FACTORS.oull)
         ? `<p>Based on the inputs provided, the projected loan amount is greater than the conforming loan limit of $${ACTIVE_FACTORS.oull.toLocaleString()} for ${document.getElementById("county").value}, ${ACTIVE_FACTORS.sti}.</p>
            <p>Jumbo Loans may have other requirements and/or restrictions and are out of scope of this tool.</p><p>Jumbo program options should be discussed with a lender.</p>`
         : "";
  
-const note4 = (base.la === 0)
+const note4 = (base.la === 0)
   ? `Note: Based on your inputs, you have the cash available to pay for a higher priced home, but the equivalent of the effective monthly taxes and homeowner’s insurance on a higher priced home could exceed the monthly housing expense you inputted for your comfort level. `
   : "";
  
 // ====================================== // SECTION: SENSITIVITY / RATE TABLE // ======================================
- let sens = "";  const RATE_INCREMENT = 0.0025; const ROUNDED_BASE_RATE = Math.floor(rateUsed / RATE_INCREMENT) * RATE_INCREMENT;  for(let r = ROUNDED_BASE_RATE - 0.005; r <= ROUNDED_BASE_RATE + 0.005; r += RATE_INCREMENT){    const v = calc(r, num("maxPayment"), num("maxCash"), term);   if(!v) continue;    const d = v.hp - base.hp;    sens += `<tr>       <td class="right">If the Interest Rate was ${(r * 100).toFixed(3)}% vs. ${(rateUsed*100).toFixed(3)}%</td>       <td class="right ${d>=0?"pos":"neg"}">         ${d>=0?"+":"−"}$${Math.abs(d).toLocaleString()}       </td>       <td class="right">$${v.hp.toLocaleString()} home price with a $${Math.round(v.la).toLocaleString()} loan amount</td>   </tr>
-<table>
-  <tr>
-    <td>Principal & Interest</td>
-    <td>$${fmt(v.pi)}</td>
-  </tr>
-  <tr>
-    <td>Property Taxes</td>
-    <td>$${(v.tax)}</td>
-  <tr>
-    <td>Homeowners Ins.</td>
-    <td>$${fmt(v.hoi)}</td>
-  <tr>
-    <td>PMI</td>
-    <td>$${fmt(v.pmi)}</td>
-  <tr>
-    <td>Total Payment</td>
-    <td>$${fmt(v.pmt)} </td>
-  </tr>
-</table> `; }  // Optional divider row (clean UX) sens += `<tr><td colspan="3" style="border-top:2px solid #ccc;"></td></tr>`;  const envScenarios = [   { label: `If the Property Tax Rate was 30% lower (${fmt(ACTIVE_FACTORS.tax*70,2)}% vs. ${fmt(ACTIVE_FACTORS.tax*100,2)}%)`, taxScale: 0.70 },   { label: `If the Property Tax Rate was 15% lower (${fmt(ACTIVE_FACTORS.tax*85,2)}% vs. ${fmt(ACTIVE_FACTORS.tax*100,2)}%)`, taxScale: 0.85 },   { label: `If the Property Tax Rate was 15% higher (${fmt(ACTIVE_FACTORS.tax*115,2)}% vs. ${fmt(ACTIVE_FACTORS.tax*100,2)}%)`, taxScale: 1.15 },   { label: `If the Property Tax Rate was 30% higher (${fmt(ACTIVE_FACTORS.tax*130,2)}% vs. ${fmt(ACTIVE_FACTORS.tax*100,2)}%)`, taxScale: 1.30 },
+ let sens = "";  const RATE_INCREMENT = 0.0025; const ROUNDED_BASE_RATE = Math.floor(rateUsed / RATE_INCREMENT) * RATE_INCREMENT;  for(let r = ROUNDED_BASE_RATE - 0.005; r <= ROUNDED_BASE_RATE + 0.005; r += RATE_INCREMENT){    const v = calc(r, num("maxPayment"), num("maxCash"), term);   if(!v) continue;    const d = v.hp - base.hp;  sens += `<tr>
+   <td class="right">If the Interest Rate was ${(r * 100).toFixed(3)}% vs. ${(rateUsed*100).toFixed(3)}%</td>
+
+   <td class="right ${d>=0?"pos":"neg"}">
+     ${d>=0?"+":"−"}$${Math.abs(d).toLocaleString()}
+   </td>
+
+   <td>
+     <table class="sens-mini">
+
+       <tr>
+         <td>Home Price</td>
+         <td class="right">
+           $${v.hp.toLocaleString()}
+         </td>
+       </tr>
+
+       <tr>
+         <td>Loan Amount</td>
+         <td class="right">
+           $${Math.round(v.la).toLocaleString()}
+         </td>
+       </tr>
+
+       <tr>
+         <td>Payment</td>
+         <td class="right">
+           $${fmt(v.pmt)}
+         </td>
+       </tr>
+
+       <tr>
+         <td>Cash Needed</td>
+         <td class="right">
+           $${Math.round(v.dp + v.cc).toLocaleString()}
+         </td>
+       </tr>
+
+     </table>
+   </td>
+
+</tr>`;
+ }  // Optional divider row (clean UX) sens += `<tr><td colspan="3" style="border-top:2px solid #ccc;"></td></tr>`;  const envScenarios = [   { label: `If the Property Tax Rate was 30% lower (${fmt(ACTIVE_FACTORS.tax*70,2)}% vs. ${fmt(ACTIVE_FACTORS.tax*100,2)}%)`, taxScale: 0.70 },   { label: `If the Property Tax Rate was 15% lower (${fmt(ACTIVE_FACTORS.tax*85,2)}% vs. ${fmt(ACTIVE_FACTORS.tax*100,2)}%)`, taxScale: 0.85 },   { label: `If the Property Tax Rate was 15% higher (${fmt(ACTIVE_FACTORS.tax*115,2)}% vs. ${fmt(ACTIVE_FACTORS.tax*100,2)}%)`, taxScale: 1.15 },   { label: `If the Property Tax Rate was 30% higher (${fmt(ACTIVE_FACTORS.tax*130,2)}% vs. ${fmt(ACTIVE_FACTORS.tax*100,2)}%)`, taxScale: 1.30 },
  { label: `If Homeowners Insurance was 30% lower ($${fmt(ACTIVE_FACTORS.hoiBaseAnnual*0.70,0)} vs. $${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)}) ` , hoiScale: 0.70 },   { label: `If Homeowners Insurance was 15% lower ($${fmt(ACTIVE_FACTORS.hoiBaseAnnual*0.85,0)} vs. $${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)}) ` , hoiScale: 0.85 },
 { label: `If Homeowners Insurance was 15% higher<br>($${fmt(ACTIVE_FACTORS.hoiBaseAnnual*1.15,0)} vs. $${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)}) ` , hoiScale: 1.15 },   { label: `If Homeowners Insurance was 30% higher ($${fmt(ACTIVE_FACTORS.hoiBaseAnnual*1.30,0)} vs. $${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)}) ` , hoiScale: 1.30 }, ];
  envScenarios.forEach((s, i) => {    const v = simulateEnv(s, rateUsed, term);   if (!v) return;    const d = v.hp - base.hp;    sens += `<tr>       <td class="right">${s.label}</td>       <td class="right ${d>=0?"pos":"neg"}">         ${d>=0?"+":"−"}$${Math.abs(d).toLocaleString()}       </td>       <td class="right">$${v.hp.toLocaleString()} home price with a $${Math.round(v.la).toLocaleString()} loan amount</td>   </tr>`;    //  INSERT LINE AFTER LAST TAX ROW (index 3)   if (i === 3) {     sens += `<tr><td colspan="3" style="border-top:2px solid #ccc;"></td></tr>`;   }  }); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -661,11 +708,11 @@ const note4 = (base.la === 0)
           In this example, with the 1st payment, the loan balance would decrease by $${fmt(base.pi-(base.la*rateUsed/12))} from the principal portion of the payment. And in every scheduled payment thereafter, the principal portion of the payment would increase.
         </span>
       </span>
-    </span></td><td class="right">$${fmt(base.pi)}</td><td class="right">${base.la > 0 ? `($${fmt(piFactor*1000,2)} per $1,000<br>of loan amount)` : ""}
+    </span></td><td class="right">$${fmt(base.pi)}</td><td class="right">${base.la > 0 ? `($${fmt(piFactor*1000,2)} per $1,000<br>of loan amount)` : ""}
 </td></tr>
     <tr><td>Property Taxes</td><td class="right">$${fmt(base.tax)}</td><td class="right">(${fmt(ACTIVE_FACTORS.tax*100,2)}% of home price<br>${document.getElementById("county").value}, ${ACTIVE_FACTORS.sti})</td></tr>
     <tr><td>Home Insurance</td><td class="right">$${fmt(base.hoi)}</td><td class="right">
-${base.la/base.hp > 0.8 ? ` ($${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)}<br> of loan amount) ` : ` ($${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)}/$${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)} of<br>80% of home price) `}
+${base.la/base.hp > 0.8 ? ` ($${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)}<br> of loan amount) ` : ` ($${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)}/$${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)} of<br>80% of home price) `}
 </td></tr>
     <tr><td>Private Mortgage Insurance (PMI)</td><td class="right">$${fmt(base.pmi)}</td><td class="right">${base.pmiF > 0 ? `(${fmt(base.pmiF*100,2)}% of<br>loan amount)` : ""}</td></tr>
     <tr><th>Total Estimated Payment</th><th class="right">&#8776; $${fmt(base.pmt)}</th><th class="right">For estimates only<br>not actual numbers</th></tr>
@@ -684,16 +731,16 @@ ${base.la/base.hp > 0.8 ? ` ($${fmt(ACTIVE_FACTORS.hoiBaseAnnual,0)} per $${fmt(
     <tr>
   <td>Loan Amount</td>
   <td class="right">- $${base.la.toLocaleString()}</td>
-  <td class="right">${base.la > 0 ? `(${fmt((base.la/base.hp*100),2)}% <br>loan-to-value)` : ""}</td>
+  <td class="right">${base.la > 0 ? `(${fmt((base.la/base.hp*100),2)}% <br>loan-to-value)` : ""}</td>
 </tr>
     <tr>
   <td>Down Payment</td>
   <td class="right">= $${(base.hp-base.la).toLocaleString()}</td>
-  <td class="right">${base.la > 0 ? `(${fmt(((base.hp-base.la)/base.hp*100),2)}%<br> down payment)` : ""}</td>
+  <td class="right">${base.la > 0 ? `(${fmt(((base.hp-base.la)/base.hp*100),2)}%<br> down payment)` : ""}</td>
 </tr>
     <td>Estimated Closing Costs</td>
   <td class="right">+ $${base.cc.toLocaleString()}</td>
-  <td class="right">(${(base.cc/base.hp*100).toFixed(2)}% of<br> home price)</td>
+  <td class="right">(${(base.cc/base.hp*100).toFixed(2)}% of<br> home price)</td>
 </tr>
     <tr><th>Estimated Cash Needed</th><th class="right">&#8776; $${(base.hp-base.la+base.cc).toLocaleString()}</th><th class="right">For estimates only<br>not actual numbers</th></tr>
   </table>
