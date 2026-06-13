@@ -1,4 +1,4 @@
-<title>Home Price Estimator V53.3 ©2026
+<title>Home Price Estimator V53.4 ©2026
 </title>
 <!-- ====================================== -->
 <!-- SECTION: STYLES / UI DESIGN -->
@@ -985,7 +985,10 @@ envScenarios.forEach((s, i) => {
 </td></tr>
     <tr><td>Property Taxes</td><td class="right">$${fmt(base.tax)}</td><td class="right">(${fmt(ACTIVE_FACTORS.tax*100,2)}% of home price<br>${document.getElementById("county").value}, ${ACTIVE_FACTORS.sti})</td></tr>
     <tr>
-<td>${insuranceLabel}</td>
+<td>${Number(propertyType) === 1
+  ? 'Homeowners Insurance'
+  : 'Homeowners Insurance (Condo)'}
+</td>
 <td class="right">$${fmt(base.hoi)}</td>
 <td class="right">
 ${base.la/base.hp > 0.8
