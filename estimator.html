@@ -1,4 +1,4 @@
-<title>Home Price Estimator V53 ©2026
+<title>Home Price Estimator V53.1 ©2026
 </title>
 <!-- ====================================== -->
 <!-- SECTION: STYLES / UI DESIGN -->
@@ -236,7 +236,7 @@ input::placeholder{
 <div class="process-steps">
   <div class="step-pill">1. Enter a comfortable monthly payment</div>
   <div class="step-pill">2. Enter available cash for purchase</div>
-  <div class="step-pill">3. Select a program type</div> 
+  <div class="step-pill">3. Select a property type</div> 
   <div class="step-pill">4. Select a loan type</div>
   <div class="step-pill">5. Select a location</div>
   <div class="step-pill">6. Run Estimation for a home price</div>
@@ -274,8 +274,9 @@ input::placeholder{
   <label>Property Type</label>
   <select id="propertyType">
     <option value="1" selected>House</option>
-    <option value="2">Townhouse</option>
     <option value="3">Condominium</option>
+    <option value="2">Townhouse</option>
+    <option value="4">Planned Unit Development</option>
   </select>
 </div>
 
@@ -1109,4 +1110,3 @@ window.addEventListener("load", function () {
 </script>
 </body>
 </html>
-
