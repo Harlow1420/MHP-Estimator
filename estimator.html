@@ -1,4 +1,4 @@
-<title>Home Price Estimator V53.1 ©2026
+<title>Home Price Estimator V53.2 ©2026
 </title>
 <!-- ====================================== -->
 <!-- SECTION: STYLES / UI DESIGN -->
@@ -993,7 +993,10 @@ ${base.la/base.hp > 0.8
  : ` ($${fmt(annualHoiDisplay,0)}/$${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)} of<br>80% of home price) `}
 </td></tr>
     <tr><td>Private Mortgage Insurance (PMI)</td><td class="right">$${fmt(base.pmi)}</td><td class="right">${base.pmiF > 0 ? `(${fmt(base.pmiF*100,2)}% of<br>loan amount)` : ""}</td></tr>
-    <tr><th>Total Estimated Payment</th><th class="right">&#8776; $${fmt(base.pmt)}</th><th class="right">For estimates only<br>not actual numbers</th></tr>
+    <tr><th>${propertyType === 1
+  ? 'Total Estimated Payment'
+  : 'Total Estimated Payment, excluding any required Association Fee'}
+</th><th class="right">&#8776; $${fmt(base.pmt)}</th><th class="right">For estimates only<br>not actual numbers</th></tr>
   </table>
   ${note1?`<div class="neu" style="margin-top:12px;">${note1}</div>`:""}
 </div>
