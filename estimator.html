@@ -992,14 +992,14 @@ envScenarios.forEach((s, i) => {
     <tr><td>Property Taxes</td><td class="right">$${fmt(base.tax)}</td><td class="right">(${fmt(ACTIVE_FACTORS.tax*100,2)}% of home price<br>${document.getElementById("county").value}, ${ACTIVE_FACTORS.sti})</td></tr>
     <tr>
 <td>${Number(propertyType) === 3
-  ? 'Homeowners Insurance (Condo) <span class="tooltip-icon">ⓘ
+  ? `Homeowners Insurance (Condo)
+      <span class="tooltip-icon">ⓘ
         <span class="tooltip-text">
-          Homeowners  Insurance for a Condominiums Unit is sometimes referred to as an HO6 or HO-6 Policy. It covers the “walls-in” portion of the unit. The rest of the unit should be insured by the Condo Association as part of the collected Association Fees.
+          Homeowners Insurance for a Condominium Unit is sometimes referred to as an HO-6 Policy. It covers the "walls-in" portion of the unit. The remainder of the building is typically insured by the Condominium Association as part of the Association Fees.
         </span>
-      </span>
-  : 'Homeowners Insurance'}
-</td>
-
+      </span>`
+  : 'Homeowners Insurance'
+}</td>
 <td class="right">$${fmt(base.hoi)}</td>
 <td class="right">
 ${base.la/base.hp > 0.8
