@@ -1,4 +1,4 @@
-<title>Home Price Estimator V53.8 ©2026
+<title>Home Price Estimator V53.9 ©2026
 </title>
 <!-- ====================================== -->
 <!-- SECTION: STYLES / UI DESIGN -->
@@ -992,9 +992,14 @@ envScenarios.forEach((s, i) => {
     <tr><td>Property Taxes</td><td class="right">$${fmt(base.tax)}</td><td class="right">(${fmt(ACTIVE_FACTORS.tax*100,2)}% of home price<br>${document.getElementById("county").value}, ${ACTIVE_FACTORS.sti})</td></tr>
     <tr>
 <td>${Number(propertyType) === 3
-  ? 'Homeowners Insurance (Condo)'
+  ? 'Homeowners Insurance (Condo) <span class="tooltip-icon">ⓘ
+        <span class="tooltip-text">
+          Homeowners  Insurance for a Condominiums Unit is sometimes referred to as an HO6 or HO-6 Policy. It covers the “walls-in” portion of the unit. The rest of the unit should be insured by the Condo Association as part of the collected Association Fees.
+        </span>
+      </span>
   : 'Homeowners Insurance'}
 </td>
+
 <td class="right">$${fmt(base.hoi)}</td>
 <td class="right">
 ${base.la/base.hp > 0.8
