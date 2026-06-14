@@ -1,4 +1,4 @@
-<title>Home Price Estimator V53.7 ©2026
+<title>Home Price Estimator V53.8 ©2026
 </title>
 <!-- ====================================== -->
 <!-- SECTION: STYLES / UI DESIGN -->
@@ -903,7 +903,7 @@ const sensitivityAnnualHoi =
 
 const sensitivityInsuranceLabel =
  propertyType === "3"
-   ? "HO-6 Insurance"
+   ? "Condo Insurance"
    : "Homeowners Insurance";
 
 const envScenarios = [
@@ -912,9 +912,9 @@ const envScenarios = [
   { label: `If the Property Tax Rate was 15% higher (${fmt(ACTIVE_FACTORS.tax*115,2)}% vs. ${fmt(ACTIVE_FACTORS.tax*100,2)}%)`, taxScale: 1.15 },
   { label: `If the Property Tax Rate was 30% higher (${fmt(ACTIVE_FACTORS.tax*130,2)}% vs. ${fmt(ACTIVE_FACTORS.tax*100,2)}%)`, taxScale: 1.30 },
  { label: `If ${sensitivityInsuranceLabel} was 30% lower ($${fmt(sensitivityAnnualHoi*0.70,0)} vs. $${fmt(sensitivityAnnualHoi,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)}) ` , hoiScale: 0.70 },
-{ label: `If ${sensitivityInsuranceLabel} was 30% lower ($${fmt(sensitivityAnnualHoi*0.85,0)} vs. $${fmt(sensitivityAnnualHoi,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)}) ` , hoiScale: 0.85 },
-{ label: `If ${sensitivityInsuranceLabel} was 30% lower ($${fmt(sensitivityAnnualHoi*1.15,0)} vs. $${fmt(sensitivityAnnualHoi,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)}) ` , hoiScale: 1.15 },
-  { label: `If ${sensitivityInsuranceLabel} was 30% lower ($${fmt(sensitivityAnnualHoi*1.3,0)} vs. $${fmt(sensitivityAnnualHoi,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)}) ` , hoiScale: 1.3 },
+{ label: `If ${sensitivityInsuranceLabel} was 15% lower ($${fmt(sensitivityAnnualHoi*0.85,0)} vs. $${fmt(sensitivityAnnualHoi,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)}) ` , hoiScale: 0.85 },
+{ label: `If ${sensitivityInsuranceLabel} was 15% higher ($${fmt(sensitivityAnnualHoi*1.15,0)} vs. $${fmt(sensitivityAnnualHoi,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)}) ` , hoiScale: 1.15 },
+  { label: `If ${sensitivityInsuranceLabel} was 30% higher ($${fmt(sensitivityAnnualHoi*1.3,0)} vs. $${fmt(sensitivityAnnualHoi,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)}) ` , hoiScale: 1.3 },
 ];
 
 envScenarios.forEach((s, i) => {
