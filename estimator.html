@@ -520,7 +520,7 @@ print-color-adjust:exact;
 
     <div style="text-align:left;">
         <b>Many online mortgage payment calculators start with a home price and then estimate a house payment, using entered assumptions for down payment, interest rates, taxes, insurance and sometimes PMI.<br><br>
-This calculator works in reverse by starting with "affordability". Give it a try.</b>
+This calculator works in reverse by starting with your affordability—your budget—instead of a home price. Give it a try.</b>
     </div>
 
     <br>
@@ -1780,7 +1780,7 @@ step="1">
 
 <div class="sliderHeader">
 
-<span>Property Taxes (% of home value / year)</span>
+<span>Property Taxes (% of home value per year)</span>
 
 <span class="sliderValue" id="taxSliderValue">
 ${(ACTIVE_FACTORS.tax * (1 + simulator.tax/100) * 100).toFixed(2)}%
@@ -1803,7 +1803,7 @@ $${fmt(
 ACTIVE_FACTORS.tax *
 (1 + simulator.tax/100),
 0
-)}/year on a $300,000 home
+)} per year on a $300,000 home
 </div>
 
 <input
@@ -1823,7 +1823,7 @@ step="1">
 ${Number(propertyType)===3
     ? "HO-6 Insurance"
     : "Home Insurance"}
-(per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)} of dwelling coverage)
+(per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)} of dwelling coverage per year)
 </span>
 
 <span class="sliderValue"
@@ -2142,7 +2142,7 @@ if(taxEquivalent){
     taxEquivalent.textContent =
         "Equivalent to $" +
         fmt(300000 * taxRate, 0) +
-        "/year on a $300,000 home";
+        " per year on a $300,000 home";
 
 }
 
