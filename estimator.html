@@ -559,7 +559,7 @@ This calculator works in reverse by starting with your affordability—your budg
   Comfortable Monthly Housing Payment
           <span class="tooltip-icon">ⓘ
             <span class="tooltip-text">
-              Some properties, such as condominiums, have a homeowners association (HOA) fee.<br><br>If you're considering homes with association fees—for example, with an estimated average of $400/month—and your target maximum housing expense is $2,900/month, you should <b>enter</b> $2,500 as your comfortable monthly payment.<br><br>&nbsp;&nbsp;&nbsp;Comfortable housing expense “including” Association Fee<br>- <u>Estimated average Association Fee</u><br>= <b>Enter</b>: Comfortable Monthly Housing Expense
+              Some properties, such as condominiums, have a homeowners association (HOA) fee.<br><br>If you're considering homes with association fees—for example, with an estimated average of $400 per month—and your target maximum monthly housing expense is $2,900, you should <b>enter</b> $2,500 as your comfortable monthly payment.<br><br>&nbsp;&nbsp;&nbsp;Comfortable housing expense “including” Association Fee<br>- <u>Estimated average Association Fee</u><br>= <b>Enter</b>: Comfortable Monthly Housing Expense
             </span>
           </span>
         </label> 
@@ -630,7 +630,7 @@ This calculator works in reverse by starting with your affordability—your budg
 <!-- ====================================== -->
 <!-- SECTION: DISCLAIMER -->
 <!-- ====================================== -->
-<div class="disclaimer">Not an offer to lend. The Home Price Estimator provides an illustrative estimate for entertainment and context only and not a precise determination. Results are simulations based on assumptions.<br>HP-Estimator.com&copy;2026</div>
+<div class="disclaimer">Not an offer to lend.<br>The Home Price Estimator provides an illustrative estimate for entertainment and context only and not a precise determination. Results are simulations based on assumptions.<br>HP-Estimator.com&copy;2026</div>
 <!-- ====================================== -->
 <!-- SECTION: SCRIPT START -->
 <!-- ====================================== -->
@@ -1605,7 +1605,7 @@ with a Loan Amount of <b>$${original.la.toLocaleString('en-US', {
 <td class="right">
 ${ original.la/ original.hp > 0.8
  ? ` ($${fmt(annualHoiDisplay,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)}<br> of loan amount) `
- : ` ($${fmt(annualHoiDisplay,0)}/$${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)} of<br>80% of home price) `}
+ : ` ($${fmt(annualHoiDisplay,0)} per $${fmt(ACTIVE_FACTORS.hoiBaseCoverage,0)} of<br>80% of home price) `}
 </td></tr>
     <tr><td>Private Mortgage Insurance (PMI)</td><td class="right">+ ${fmt(original.pmi)}</td><td class="right">${base.pmiF > 0 ? `(${fmt(base.pmiF*100,2)}% of<br>loan amount)` : ""}</td></tr>
     <tr><th>${Number(propertyType) === 1
